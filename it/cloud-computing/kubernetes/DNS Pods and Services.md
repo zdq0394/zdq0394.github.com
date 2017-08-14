@@ -9,7 +9,7 @@
 #### Headless Services(without a ClusterIP)
 >my-svc.my-namespace.svc.cluster.local: [{PodIP of the pods selected by the service}]
 
-### SRV Records
+### [SRV Records](https://support.dnsimple.com/articles/srv-record)
 #### Normal Services(ClusterIP)
 > \_my-port-name._my-port-protocol.my-svc.my-namespace.svc.cluster.local: {PORT my-svc.my-namespace.svc.cluster.local}
 
@@ -23,3 +23,7 @@
 
 ### A Records and hostname based on Pod's hostname and subdomain
 >hostname.subdomain.my-namespace.svc.cluster.local: {IP of the POD}
+
+
+## References:
+https://support.dnsimple.com/articles/srv-record/
