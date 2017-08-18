@@ -3,9 +3,8 @@
 
 [交换机](bn001.md)
 
-内容来源：
+内容来源：https://wizardforcel.gitbooks.io/network-basic/content/0.html
 
-https://wizardforcel.gitbooks.io/network-basic/content/0.html
 # Others
 
 
