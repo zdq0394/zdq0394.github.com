@@ -5,6 +5,8 @@
 
 [路由](bn002.md)
 
+[链路聚合](bn003.md)
+
 内容来源：https://wizardforcel.gitbooks.io/network-basic/content/0.html
 
 # Others
