@@ -7,6 +7,8 @@
 
 [链路聚合](bn003.md)
 
+[子网与IP地址](bn004.md)
+
 内容来源：https://wizardforcel.gitbooks.io/network-basic/content/0.html
 
 # Others
