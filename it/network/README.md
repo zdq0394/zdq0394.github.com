@@ -13,6 +13,12 @@
 
 [TCP重传](bn006.md)
 
+[TCP确认机制](bn007.md)
+
+[TCP窗口调整](bn008.md)
+
+
+
 内容来源：https://wizardforcel.gitbooks.io/network-basic/content/0.html
 
 # Others
