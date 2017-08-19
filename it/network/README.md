@@ -9,6 +9,10 @@
 
 [子网与IP地址](bn004.md)
 
+[TCP滑动窗口](bn005.md)
+
+[TCP重传](bn006.md)
+
 内容来源：https://wizardforcel.gitbooks.io/network-basic/content/0.html
 
 # Others
