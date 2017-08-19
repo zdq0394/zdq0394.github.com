@@ -4,4 +4,4 @@ Kubernetes Pods不是持久的（are mortal），并且无法被恢复。虽然P
 
 A Kubernetes Service is an abstraction which defines a logical set of Pods and a policy by which to access them - sometimes called 微服务（a micro-service）。
 
-The set of Pods targeted by a Service is(usually) determined by a ***Label Selector***。
+The set of Pods targeted by a Service is(usually) determined by a ***Label Selector***。这样当外界访问Pod提供的服务时，不必直接访问Pod本身，可以通过Service来访问。Services的IP在生命周期中时不变的，实现了对后端Pod的代理，以此实现了前后端的松耦合。
