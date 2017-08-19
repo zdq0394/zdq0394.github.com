@@ -19,6 +19,12 @@
 
 [Linux网络配置](bn009.md)
 
+[诊断工具PING](bn010.md)
+
+[网络检测：带宽测量](bn011.md)
+
+[网络检测：吞吐量测量](bn012.md)
+
 
 
 内容来源：https://wizardforcel.gitbooks.io/network-basic/content/0.html
