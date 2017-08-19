@@ -19,7 +19,7 @@
 
 [Linux网络配置](bn009.md)
 
-[诊断工具PING](bn010.md)
+[诊断工具ping](bn010.md)
 
 [网络性能检测：带宽测量](bn011.md)
 
@@ -27,7 +27,7 @@
 
 [网络性能检测：流量测量](bn013.md)
 
-
+[tcpdump](bn014.md)
 
 内容来源：https://wizardforcel.gitbooks.io/network-basic/content/0.html
 
