@@ -1,43 +1,44 @@
 # 网络基本功
-[网络传输](bn000.md)
 
-[交换机](bn001.md)
+0. [网络传输](bn000.md)
 
-[路由](bn002.md)
+1. [交换机](bn001.md)
 
-[链路聚合](bn003.md)
+2. [路由](bn002.md)
 
-[子网与IP地址](bn004.md)
+3. [链路聚合](bn003.md)
 
-[TCP滑动窗口](bn005.md)
+4. [子网与IP地址](bn004.md)
 
-[TCP重传](bn006.md)
+5. [TCP滑动窗口](bn005.md)
 
-[TCP确认机制](bn007.md)
+6. [TCP重传](bn006.md)
 
-[TCP窗口调整](bn008.md)
+7. [TCP确认机制](bn007.md)
 
-[Linux网络配置](bn009.md)
+8. [TCP窗口调整](bn008.md)
 
-[诊断工具ping](bn010.md)
+9. [Linux网络配置](bn009.md)
 
-[网络性能检测：带宽测量](bn011.md)
+10. [诊断工具ping](bn010.md)
 
-[网络性能检测：吞吐量测量](bn012.md)
+11. [网络性能检测：带宽测量](bn011.md)
 
-[网络性能检测：流量测量](bn013.md)
+12. [网络性能检测：吞吐量测量](bn012.md)
 
-[tcpdump](bn014.md)
+13. [网络性能检测：流量测量](bn013.md)
 
-[NAT原理与配置](bn015.md)
+14. [tcpdump](bn014.md)
 
-[ICMP and ARP](bn016.md)
+15. [NAT原理与配置](bn015.md)
 
-[DHCP](bn017.md)
+16. [ICMP and ARP](bn016.md)
 
-[DNS](bn018.md)
+17. [DHCP](bn017.md)
 
-[HTTP](bn019.md)
+18. [DNS](bn018.md)
+
+19. [HTTP](bn019.md)
 
 内容来源：https://wizardforcel.gitbooks.io/network-basic/content/0.html
 
