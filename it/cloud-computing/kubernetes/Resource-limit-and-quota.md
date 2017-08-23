@@ -32,8 +32,10 @@ metadata:
     namespace: quota-example
 spec:
     hard:
-        cpu: "20"
-        memory: 1Gi
+        requests.cpu: "2"
+        requests.memory: 2Gi
+        limits.cpu: "20"
+        limits.memory: 20Gi
         persistentvolumeclaims: "10"
         pods: "10"
         replicationcontrollers: "1"
@@ -113,8 +115,11 @@ spec:
         cpu: 250m
         memory: 6Mi
       default:
-        cpu: 250m
+        cpu: 500m
         memory: 100Mi
+      defaultRequest:
+        cpu: 250m
+        memory: 80Mi
       type: Container
 
 ```
@@ -150,3 +155,9 @@ spec:
           memory: 100Mi
 
 ```
+
+## limitrange
+
+* If the Container does not specify its own CPU request and limit, assign the default CPU request and limit to the Container.
+* Verify that the Container specifies a CPU request that is greater than or equal to 200 millicpu.
+* Verify that the Container specifies a CPU limit that is less than or equal to 800 millicpu.
