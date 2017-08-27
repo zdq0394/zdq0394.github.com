@@ -4,6 +4,7 @@
 * [Deployment](Deployment.md)
 * [ReplicaSet](ReplicaSet.md)
 * [StatefulSet](StatefulSet.md)
+* [DaemonSet](DaemonSet.md)
 ### 其它
 * [Services](Services.md)
 * [DNS](DNS-Pods-and-Services.md)
