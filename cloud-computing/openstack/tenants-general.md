@@ -55,7 +55,7 @@ swift_store_multi_tenant = true #设置为 true，使能多租户模式，使得
 swift_store_admin_tenants = 《tenant_id>:<username> <tenant_name>:<username> *:<username》 # openstack租户：swift账号
 ```
 
-## Ceph的隔离型
+## Ceph的隔离
 
 1. 使用Pool做逻辑隔离: 在使用默认的 CRUSH rules 的情况下，一个 Pool 所使用的 OSD 可能分布在不同的存储节点上。这时候，租户–pool–osd其实是逻辑隔离关系。
 2. 定制CRUSH Rules对Pool做物理隔离: Ceph CRUSH Rules 会对数据如何存放在OSD上有直接的影响。因此，定义合适的Rules,可以使得一个Pool的OSD分布在指定的存储节点上。
