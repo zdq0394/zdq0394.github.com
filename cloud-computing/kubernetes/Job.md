@@ -48,5 +48,37 @@ kubectl get pods --show-all
 * 对应[1,.spec.completions]每一个值，都有一个成功完成的Pod，则Job完成。
 
 **并行Job，拥有一个work queue**
+此时不设置.spec.completions，设置.spec.Parallelism
+
+* 每个Pod能够独立的判断它所有的伙伴是否已经结束，整个Job是否结束。
+* 当任何一个Pod成功完成后，不再有新的Pod被创建
+* 当任何一个Pod成功完成后，任何其它Pod都不应该在做任何工作或者有任何输出。它们都应该进入退出过程。
+* 当任何一个Pod成功完成，并且其它所有的Pod都退出后，则整个Job认为成功的完成。
+
+**控制并行性**
+并行性由**.spec.parallel**控制。
+默认值是1；如果设置为0，则表示Job暂停（Paused）。当增加**.spec.parallel**后，则Job恢复。
+
+还可以通过scale命令扩展Jobs。
+
+```sh
+$ kubectl scale  --replicas=$N jobs/myjob
+job "myjob" scaled
+```
+该命令相当于将.spec.parallel设置为10。
+
+实际并行的pods可能会比指定值parallelism多一些或者少一些。 原因如下：
+
+* 对于Fixed Completion Count jobs，实际运行的Pods不会超过remaining completions。过高的.spec.parallelism实际上是被忽略的。 
+* 对于work queue jobs，当任何一个Pod成功完成之后，不会产生新的Pods，现有剩余的Pods可以结束。
+* 控制器没有时间作出反应。
+* 由于某些原因，控制器创建Pod失败，导致Pods数量少于请求的并行数目。
+* The controller may throttle new pod creation due to excessive previous pod failures in the same Job.
+* 当一个pod gracefully shutdown，它需要时间停止。
+
+## Pod和Containers的处理
+
+
+
 
 
