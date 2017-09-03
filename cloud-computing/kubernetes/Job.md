@@ -78,7 +78,51 @@ job "myjob" scaled
 
 ## Pod和Containers的处理
 
+如果设置.spec.template.spec.restartPolicy = "OnFailure"，当container非正常退出后，会在Pod内重新启动一个，Pod仍然运行在当前Node节点上，程序需要自己处理重启问题。
 
+如果设置.spec.template.spec.restartPolicy = "Never"，当container非正常退出后，整个Pod将会fail。Job控制器会重启一个Pod，可能会在一个不同的节点。这是程序需要自己处理临时文件、输出等等问题。
+
+即使设置**.spec.parallelism = 1** 并且 **.spec.completions = 1** 并且 **.spec.template.spec.restartPolicy = "Never"**, 程度也可能运行两次。
+
+如果设置.spec.parallelism并且.spec.completions大于1，程序必须处理并发问题。
+
+## Job的终止和清理
+当一个Job成功完成之后，不会有新的Pod产生，但是Pods也不会被删除。因为已经终止，所以通过命令```kubectl get pods``` 无法查看它们，需要通过命令```kubectl get pods -a```。如此，我们可以继续查看Pod的日志。Job对象也会一直保留，我们可以查看它的状态。必须通过命令显式的删除Job。
+
+如果Pod持续失败，Job控制器会一直持续的创建新的Pod。持续创建是一个好的范式。然而，如果你不想持续的创建，可以设置一个deadline：**spec.activeDeadlineSeconds**。Job终止的时候，状态会显示：DeadlineExceeded。不会有新的Pods被建立，**存在的Pod会被删除**。
+
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi-with-timeout
+spec:
+  activeDeadlineSeconds: 100
+  template:
+    metadata:
+      name: pi
+    spec:
+      containers:
+      - name: pi
+        image: perl
+        command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
+      restartPolicy: Never
+```
+
+## Job范式
+Job可以用来支持Pod可靠的并发执行。
+Job的初衷不是支持紧密协作进程间的并行，像科学计算。Job支持**相对独立的**进程间的并行执行。
+
+在一个复杂的系统中，可能会有work items的多个集合。我们只考虑一个集合：batch job。
+
+**一个workitem一个Job VS 所有workitems一个Job**
+如果workitem非常多，则后者比较好。前者需要创建大量的Job，管理相对复杂。 并且，后者，资源的使用量可以通过```kubectl scale```扩展。
+
+**一个workitem一个Pod vs 一个Pod处理多个的workitems**
+前者不需要改动太多代码即可支持；后者对work items数量非常多的更合适。
+
+**多种方式使用一个workqueue**
+这需要运行一个queue服务，并对现有程序和容器进行变更以使用work queue。
 
 
 
