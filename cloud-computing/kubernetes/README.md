@@ -6,6 +6,7 @@
 * [StatefulSet](StatefulSet.md)
 * [DaemonSet](DaemonSet.md)
 * [Job](Job.md)
+* [CronJob](Cronjob.md)
 ### 其它
 * [Services](Services.md)
 * [DNS](DNS-Pods-and-Services.md)
