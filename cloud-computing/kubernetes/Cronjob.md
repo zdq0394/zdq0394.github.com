@@ -60,3 +60,13 @@ job "hello-1202039034" deleted
 一个cron job每个执行周期**大约**创建一个Job。我们说**大约**意思是在某些条件下可能会创建两个Job或者0个Job。
 
 
+## Concurrnet Policy
+
+字段**.spec.concurrencyPolicy**指明并发策略：
+
+* Allow： 允许并发多个执行，如果前一个执行还没有执行完毕。
+* Forbid： 不允许并发执行，如果前一个执行还没有结束，则跳过本次执行
+* Replace： 取消正在执行的Job，启动一个新的
+
+## Suspend
+字段**.spec.suspend**，如果设置为true，所有后续的执行都会被终止。当前的执行不受影响。
