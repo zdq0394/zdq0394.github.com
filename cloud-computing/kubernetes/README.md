@@ -1,12 +1,13 @@
 # Kubernetes
 ## Kubernetes对象
 ### 控制器
-* [Deployment](Deployment.md)
+* [Deployments](Deployments.md)
 * [ReplicaSet](ReplicaSet.md)
 * [StatefulSet](StatefulSet.md)
 * [DaemonSet](DaemonSet.md)
 * [Job](Job.md)
 * [CronJob](Cronjob.md)
+* [Garbage Collector](Garbage-Collector.md)
 ### 其它
 * [Services](Services.md)
 * [DNS](DNS-Pods-and-Services.md)
