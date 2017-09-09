@@ -13,6 +13,7 @@
 
 ## 配置KVM
 
+通常Linux比较新的发行版（2.6.20+）都包含了KVM内核模块。
 检查是否加载了kvm和kvm_intel模块，如果没有加载可以通过modprobe命令加载。
 
 ```sh
@@ -28,4 +29,14 @@
 ```
 
 ## 编译和安装qemu
+执行如下命令下载qemu源代码和编译
+
+```sh
+# git clone git://git.qemu.org/qemu.git
+# ./configure --enable-kvm --target-list=i386-softmmu --enable-debug
+# make
+```
+configure时，选项较多，至少要指定**--enable-kvm**使得qemu利用kvm进行加速。一般还要**--enable-rbd**以支持ceph块存储。
+
+## 安装libvirt
 
