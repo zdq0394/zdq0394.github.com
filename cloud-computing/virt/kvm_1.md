@@ -33,7 +33,7 @@
 
 ```sh
 # git clone git://git.qemu.org/qemu.git
-# ./configure --enable-kvm --target-list=i386-softmmu --enable-debug
+# ./configure --enable-kvm --target-list=x86_64-softmmu --enable-debug
 # make
 ```
 configure时，选项较多，至少要指定**--enable-kvm**使得qemu利用kvm进行加速。一般还要**--enable-rbd**以支持ceph块存储。
