@@ -1,5 +1,4 @@
 # KVM
-## [KVM概述](kvm_0.md)
 ## [KVM虚拟化](kvm_1.md)
 ## [KVM环境构建](kvm_2.md)
 ## [KVM基本功能](kvm_3.md)
