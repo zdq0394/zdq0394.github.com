@@ -37,7 +37,7 @@ env->kvm_fd = ret;
 run_ret = kvm_vcpu_ioctl(env, KVM_RUN, 0);
 ```
 
-Qemu的使用方式，首先是打开/dev/kvm设备，通过**KVM_Create_VM**创建一个虚拟机对象，然后通过**KVM_CREATE_VCPU**为虚拟机创建vcpu对象，最后通过**KVM_RUN**设置vcpu运行起来。因为是简化的代码，中断芯片的模拟，内存的模拟，寄存器的设置等等都省略了。
+Qemu的使用方式，首先是打开/dev/kvm设备，通过**KVM_CREATE_VM**创建一个虚拟机对象，然后通过**KVM_CREATE_VCPU**为虚拟机创建vcpu对象，最后通过**KVM_RUN**设置vcpu运行起来。因为是简化的代码，中断芯片的模拟，内存的模拟，寄存器的设置等等都省略了。
 
 综上，KVM提供了三种概念，分别通过不同的io_ctl接口来控制：
 * kvm：代表kvm模块本身，用来管理kvm版本信息，创建一个vm。
