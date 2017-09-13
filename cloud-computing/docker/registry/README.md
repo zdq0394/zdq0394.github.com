@@ -5,3 +5,4 @@
 * [Registry notifications](webhooks.md)
 * [Registry storage driver](storage_driver.md)
 * [Garbage collection](garbage_collection.md)
+* [Docker registry token scope and access](docker_registry_token_scope_and_access.md)
