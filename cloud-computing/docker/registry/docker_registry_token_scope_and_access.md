@@ -37,11 +37,11 @@ separator               := /[_.]|__|[-]*/
 ```
 
 ## Resource Provider Use
-Once a resource provider has verified the authenticity of the scope through JWT access token verification, the resource provider must ensure that scope satisfies the request. The resource provider should match the given audience according to name or URI the resource provider uses to identify itself. Any denial based on subject is not defined here and is up to resource provider, the subject is mainly provided for audit logs and any other user-specific rules which may need to be provided but are not defined by the authorization server.
+一旦resource provider通过JWT access token verification验证了authenticity of the scope through，resource provider必须确保scope满足请求。The resource provider应当匹配audience。 resource provider使用name或者URI来认证自身。
 
-The resource provider must ensure that ANY resource being accessed as the result of a request has the appropriate access scope. Both the resource type and resource name must match the accessed resource and an appropriate action scope must be included.
+Resource provider必须确保请求访问的任何资源都有合适的访问权限。 Resource type和resource name必需都匹配，并且包含合适的action scope。
 
-When appropriate authorization is not provided either due to lack of scope or missing token, the resource provider to return a WWW-AUTHENTICATE HTTP header with the realm as the authorization server, the service as the expected audience identifying string, and a scope field for each required resource scope to complete the request.
+如过没有提供认证，resource provider返回WWW-AUTHENTICATE HTTP header和realm：authorization server，当前服务作为期望的audience identifying string，以及一个针对每个资源都有的一个scope字段。
 
 
 ## JWT Access Tokens
