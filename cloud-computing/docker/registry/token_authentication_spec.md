@@ -47,6 +47,50 @@ Www-Authenticate: Bearer realm="https://auth.docker.io/token",service="registry.
 这个请求指出：the registry需要指定的认证服务器auth.docker.io签发的token。客户端（client）需要往https://auth.docker.io/token发请求：包含service和scope。
 
 ## Requesting a Token
+定义从token endpoint获取bearer和refresh token的过程
+### QUERY PARAMETERS
 
+**service**
 
+Resource Porvide，资源服务器，保存有需要保护的资源。
 
+**offline_token**
+
+是否和bearer token一起返回一个refresh token。
+Refresh token允许进一步获取针对同一个主体的不同scope的bearer tokens。Refresh token没有过期时间，对客户端完全透明。
+
+**client_id**
+
+代表client的字符串。该client_id不需要注册到认证服务器。
+
+**scope**
+
+请求的资源
+
+### TOKEN RESPONSE FIELDS
+
+**token**
+
+一个不透明的Bearer token，clients应该在随后的请求中将该token放在Authorization头中。
+
+**access_token**
+
+为了兼容OAuth 2.0。如果两个都出现，必须一致。
+
+**expires_in**
+
+（可选）持续时间（有效时间），以秒为单位，从token签发时间开始。默认时60s。
+
+**issued_at**
+（可选）符合RFC3339-serialized UTC时间标准的签发时间。 
+
+**refresh_token**
+（可选）需要妥善保存，仅当需要获取bearer token时，发往authorization server。
+
+## Using the Bearer token
+
+当client拿到bearer token之后，可以将token放在请求头中，再次向registry发送请求：
+
+``` http
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IkJWM0Q6MkFWWjpVQjVaOktJQVA6SU5QTDo1RU42Ok40SjQ6Nk1XTzpEUktFOkJWUUs6M0ZKTDpQT1RMIn0.eyJpc3MiOiJhdXRoLmRvY2tlci5jb20iLCJzdWIiOiJCQ0NZOk9VNlo6UUVKNTpXTjJDOjJBVkM6WTdZRDpBM0xZOjQ1VVc6NE9HRDpLQUxMOkNOSjU6NUlVTCIsImF1ZCI6InJlZ2lzdHJ5LmRvY2tlci5jb20iLCJleHAiOjE0MTUzODczMTUsIm5iZiI6MTQxNTM4NzAxNSwiaWF0IjoxNDE1Mzg3MDE1LCJqdGkiOiJ0WUpDTzFjNmNueXk3a0FuMGM3cktQZ2JWMUgxYkZ3cyIsInNjb3BlIjoiamxoYXduOnJlcG9zaXRvcnk6c2FtYWxiYS9teS1hcHA6cHVzaCxwdWxsIGpsaGF3bjpuYW1lc3BhY2U6c2FtYWxiYTpwdWxsIn0.Y3zZSwaZPqy4y9oRBVRImZyv3m_S9XDHF1tWwN7mL52C_IiA73SJkWVNsvNqpJIn5h7A2F8biv_S2ppQ1lgkbw
+```
