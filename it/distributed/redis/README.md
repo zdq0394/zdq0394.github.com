@@ -10,6 +10,7 @@
 
 * [Redis命令](commands.md)
 * [Redis键](keys.md)
+* [Redis字符串](strings.md)
 
 
 
