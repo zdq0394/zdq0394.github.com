@@ -14,6 +14,11 @@ $ make
 ```sh
 $ src/redis-server
 ```
+启动的时候，可以增加配置文件，从指定配置文件读取配置，而不是默认配置。
+
+```sh
+$ src/redis-server redis.conf
+```
 
 ### 测试
 ```sh
@@ -23,4 +28,6 @@ OK
 redis> get foo
 "bar"
 ```
+
+##
 
