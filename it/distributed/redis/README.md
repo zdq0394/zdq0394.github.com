@@ -16,5 +16,6 @@
 * [Redis集合](set.md)
 * [Redis有序集合](zset.md)
 * [Redis HyperLogLog](hyperloglog.md)
+* [Redis发布订阅](pubsub.md)
 
 ## Redis高级功能
