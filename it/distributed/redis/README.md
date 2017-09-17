@@ -19,5 +19,6 @@
 * [Redis发布订阅](pubsub.md)
 * [Redis事务](transaction.md)
 * [Redis脚本](scripts.md)
+* [Redis连接](connection.md)
 
 ## Redis高级功能
