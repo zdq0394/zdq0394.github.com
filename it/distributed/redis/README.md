@@ -13,5 +13,6 @@
 * [Redis字符串](strings.md)
 * [Redis哈希](hash.md)
 * [Redis列表](list.md)
+* [Redis集合](set.md)
 
 ## Redis高级功能
