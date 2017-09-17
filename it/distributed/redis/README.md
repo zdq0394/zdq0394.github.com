@@ -28,3 +28,4 @@
 * [Redis安全](security.md)
 * [Redis客户端连接](client_connection.md)
 * [Redis管道技术](pipeline.md)
+* [Redis分区](shard.md)
