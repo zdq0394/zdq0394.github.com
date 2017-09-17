@@ -20,5 +20,6 @@
 * [Redis事务](transaction.md)
 * [Redis脚本](scripts.md)
 * [Redis连接](connection.md)
+* [Redis服务器](server.md)
 
 ## Redis高级功能
