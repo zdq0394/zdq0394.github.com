@@ -27,3 +27,4 @@
 * [Redis数据备份与恢复](backup.md)
 * [Redis安全](security.md)
 * [Redis客户端连接](client_connection.md)
+* [Redis管道技术](pipeline.md)
