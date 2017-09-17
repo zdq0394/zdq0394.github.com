@@ -15,5 +15,6 @@
 * [Redis列表](list.md)
 * [Redis集合](set.md)
 * [Redis有序集合](zset.md)
+* [Redis HyperLogLog](hyperloglog.md)
 
 ## Redis高级功能
