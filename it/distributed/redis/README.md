@@ -8,6 +8,8 @@
 
 ## Redis命令
 
+* [Redis命令](commands.md)
+* [Redis键](keys.md)
 
 
 
