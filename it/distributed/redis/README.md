@@ -23,3 +23,5 @@
 * [Redis服务器](server.md)
 
 ## Redis高级功能
+
+* [Redis数据备份与恢复](backup.md)
