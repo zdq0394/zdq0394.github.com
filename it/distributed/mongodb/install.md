@@ -32,3 +32,10 @@ mongod --dbpath <path to data directory>
 ```
 mongod --fork --logpath=/tmp/mongod.out
 ```
+
+### 测试
+使用mongo命令连接数据库：
+
+```
+mongo
+```
