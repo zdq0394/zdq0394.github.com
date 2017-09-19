@@ -11,5 +11,5 @@
 * zookeeper
 * consul
 * [redis](redis/README.md)
-* [mongodb](mongodb.README.md)
+* [mongodb](mongodb/README.md)
 
