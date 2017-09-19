@@ -42,3 +42,19 @@ MongoDB的find()方法可以传入多个键(key)，每个键(key)以逗号隔开
 >db.col.find({"likes": {$gt:50}, $or: [{"by": "菜鸟教程"},{"title": "MongoDB 教程"}]}).pretty()
 ```
 
+## 条件操作符
+$gt：greater than：  >
+$gte：gt equal：  >=
+$lt：less than：  <
+$lte：lt equal：  <=
+$ne：not equal：  !=
+$eq：equal：  =
+
+使用方式：
+```
+{"likes" : {$gt : 100}}
+{likes : {$gte : 100}}
+{likes : {$lt : 150}}
+{likes : {$lte : 150}}
+{likes : {$lt :200, $gt : 100}}
+```
