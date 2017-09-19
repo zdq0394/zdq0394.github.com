@@ -43,12 +43,12 @@ MongoDB的find()方法可以传入多个键(key)，每个键(key)以逗号隔开
 ```
 
 ## 条件操作符
-$gt：greater than：  >
-$gte：gt equal：  >=
-$lt：less than：  <
-$lte：lt equal：  <=
-$ne：not equal：  !=
-$eq：equal：  =
+* $gt：greater than：  >
+* $gte：gt equal：  >=
+* $lt：less than：  <
+* $lte：lt equal：  <=
+* $ne：not equal：  !=
+* $eq：equal：  =
 
 使用方式：
 ```
@@ -57,4 +57,34 @@ $eq：equal：  =
 {likes : {$lt : 150}}
 {likes : {$lte : 150}}
 {likes : {$lt :200, $gt : 100}}
+```
+
+## $type操作服
+
+$type操作符是基于BSON类型来检索集合中匹配的数据类型，并返回结果。
+MongoDB中可以使用的类型如下表所示：
+* Double	1	 
+* String	2	 
+* Object	3	 
+* Array	4	 
+* Binary data	5	 
+* Undefined	6	已废弃。
+* Object id	7	 
+* Boolean	8	 
+* Date	9	 
+* Null	10	 
+* Regular Expression	11	 
+* JavaScript	13	 
+* Symbol	14	 
+* JavaScript (with scope)	15	 
+* 32-bit integer	16	 
+* Timestamp	17	 
+* 64-bit integer	18	 
+* Min key	255	Query with -1.
+* Max key	127	 
+
+使用方式：如果想获取"books"集合中title为String的数据，可以使用以下命令：
+
+```
+db.books.find({"title" : {$type : 2}})
 ```
