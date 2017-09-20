@@ -9,3 +9,4 @@
 * [MongoDB查询](query.md)
 * [MongoDB排序](query_sort.md)
 * [MongoDB索引](indexes.md)
+* [MongoDB聚合](aggregate.md)
