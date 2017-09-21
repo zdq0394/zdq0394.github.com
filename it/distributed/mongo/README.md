@@ -16,3 +16,4 @@
 
 ## MongoDB进阶
 * [MongoDB关系](relation.md)
+* [MongoDB查询分析](query_analysis.md)
