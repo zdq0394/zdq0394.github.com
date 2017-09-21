@@ -18,3 +18,4 @@
 * [MongoDB关系](relation.md)
 * [MongoDB查询分析](query_analysis.md)
 * [MongoDB原子操作](atomic.md)
+* [MongoDB高级索引](indexa.md)
