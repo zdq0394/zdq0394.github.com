@@ -10,7 +10,7 @@
 * DNS Discovery
 
 我们计划构造如下的集群，配置如下：
-| NAME| ADDRESS | HOSTNAME |
+| NAME | ADDRESS | HOSTNAME |
 | ---- | :---- | :---- |
 | infra0 | 10.0.1.10 | infra0.example.com |
 | infra1 | 10.0.1.11 | infra1.example.com |
