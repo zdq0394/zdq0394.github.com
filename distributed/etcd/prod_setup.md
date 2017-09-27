@@ -277,6 +277,8 @@ infra2.example.com.  300  IN  A  10.0.1.12
 
 etcd集群的节点可以侦听domain names或者IP address，启动过程将解析到**DNS A records**。
 
+**通过domain name**
+
 ```
 $ etcd --name infra0 \
 --discovery-srv example.com \
@@ -310,6 +312,7 @@ $ etcd --name infra2 \
 --listen-peer-urls http://infra2.example.com:2380
 ```
 
+**通过IP address**
 
 ```
 $ etcd --name infra0 \
