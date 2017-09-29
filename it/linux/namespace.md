@@ -227,14 +227,14 @@ ip netns exec netns-demo ip link list
 
 ## User Namespace
 
-User Namespace允许Namespace间可以映射用户和用户组ID，这意味着一个进程在Namespace里面的用户和用户组ID可以与Namespace外面的用户和用户组ID不同。值得一提的是，一个普通进程(Namespace外面的用户ID非0)在Namespace里面的用户和用户组ID可以为0，换句话说这个普通进程在Namespace里面可以拥有root特权的权限。
+User Namespacey允许Namespace间可以映射用户和用户组ID，这意味着一个进程在Namespace里面的用户和用户组ID可以与Namespace外面的用户和用户组ID不同。值得一提的是，一个普通进程(Namespace外面的用户ID非0)在Namespace里面的用户和用户组ID可以为0，换句话说这个普通进程在Namespace里面可以拥有root特权的权限。
 
 当创建一个User Namespace时，有以下几点值得提一下:
 
 1. User Namespace的第一个进程被赋予一系列的权限，可以执行这个Namespace中的一些初始化的工作。
-2. 由于Namespace里面和外面的用户和用户组ID可以不同，当一个进程在Namespace里面执行一些影响整个系统的操作时，会出发系统的权限检查。
-3. 如果这个Namespace没有对用户ID或者组ID进行映射的话，那么getuid()和getgid()会默认返回/proc/sys/kernel/overflowuid和/proc/sys/kernel/overflowgid的值，一般为 65534。
-4. 尽管在Namespace里面的进程被赋予了一系列的权限，但是在Parent Namespace里面是没有权限的。
+2. 由于Namespace里面和外面的用户和用户组ID可以不同，当一个进程在Namespace里面执行一些影响整个系统的操作时，会出发系统的权限检查。
+3. 如果这个Namespace没有对用户ID或者组ID进行映射的话，那么getuid()和getgid()会默认返回/proc/sys/kernel/overflowuid和/proc/sys/kernel/overflowgid的值，一般为 65534。
+4. 尽管在Namespace里面的进程被赋予了一系列的权限，但是在Parent Namespace里面是没有权限的。
 
 通常情况下创建User Namespace后第一步是映射一下Namespae里面和外面的用户和用户组的ID，这一步是通过往/proc/$pid/uid_map和/proc/$pid/gid_map写入映射信息实现的。在这两个文件中，映射信息的格式如下：
 
@@ -244,7 +244,7 @@ ID-inside-ns   ID-outside-ns   length
 
 其中ID-inside-ns和length决定了映射的范围，而ID_outside_ns则需要根据如下两种情况讨论：
 
-* 如果打开uid_map/gid_map的进程和目标进程在同一个Namespace，则这里的ID-outside-ns应该为Parent Namespace中的一个uid/gid，这种情况常见于Child自己设置映射，比如在Child User Namespace的子进程主动往/proc/$pid/uid_map中写入自己的ID映射关系，这个$pid是子进程在Parent User Namespace中的ID。
+* 如果打开uid_map/gid_map的进程和目标进程在同一个Namespace，则这里的ID-outside-ns应该为Parent Namespace中的一个uid/gid，这种情况常见于Child自己设置映射，比如在Child User Namespace的子进程主动往/proc/$pid/uid_map中写入自己的ID映射关系，这个$pid是子进程在Parent User Namespace中的ID。
 * 如果打开uid_map/gid_map的进程和目标进程不在同一个Namespace，则这里的ID-outside-ns则为该进程所在User Namespace中的一个uid/gid，最常见的就是Parent为Child设置映射，比如在Parent User Namespace的进程往/proc/$pid/uid_map中写入子进程的映射信息，这个$pid是子进程在Parent User Namespace中的ID。
 
 除了上述的格式要求之外，对于uid/gid的映射还有几点约束：
