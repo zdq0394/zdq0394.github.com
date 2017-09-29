@@ -94,9 +94,9 @@ int unshare(int flags);
 * CLONE_SYSVSEM: 取消与其他进程共享SYS V信号量。
 * CLONE_NEWIPC: 创建新的IPC Namespace，并将该进程加入进来。
 
-**这里需要注意的是**：unshare()和setns()系统调用对PID Namespace的处理不太相同，当unshare PID namespace时，调用进程会为它的子进程分配一个新的PID Namespace，但是调用进程本身不会被移到新的Namespace中。而且调用进程第一个创建的子进程在新Namespace中的PID为1，并成为新Namespace中的init进程。
+**这里需要注意的是**：unshare()和setns()系统调用对PID Namespace的处理不太相同，当unshare PID namespace时，调用进程会为它的子进程分配一个新的PID Namespace，但是调用进程本身不会被移到新的Namespace中。而且调用进程第一个创建的子进程在新Namespace中的PID为1，并成为新Namespace中的init进程。
 
-setns()系统调用也是类似的，调用者进程并不会进入新的PID Namespace，而是随后创建的子进程会进入。
+setns()系统调用也是类似的，调用者进程并不会进入新的PID Namespace，而是随后创建的子进程会进入。
 
 为什么创建其他的Namespace时unshare()和setns()会直接进入新的Namespace，而唯独PID Namespace不是如此呢？因为调用getpid()函数得到的PID是根据调用者所在的PID Namespace而决定返回哪个PID，进入新的PID namespace会导致PID产生变化。而对用户态的程序和库函数来说，他们都认为进程的PID是一个常量，PID的变化会引起这些进程奔溃。换句话说，一旦程序进程创建以后，那么它的PID namespace的关系就确定下来了，进程不会变更他们对应的PID namespace。
 
@@ -116,8 +116,8 @@ Mount Namespace是历史上第一个支持的Namespace，它通过CLONE_NEWNS来
 
 ### 挂载的概念
 挂载的过程是通过mount系统调用完成的，它有几个参数：一个是已存在的普通文件名，一个是可以直接访问的特殊文件，一个是特殊文件的名字。
-这个特殊文件一般用来关联一些存储卷，这个存储卷可以包含自己的目录层级和文件系统结构。
-mount所达到的效果是：像访问一个普通的文件一样访问位于其他设备上文件系统的根目录，也就是将该设备上目录的根节点挂到了另外一个文件系统的页节点上，达到了给这个文件系统扩充容量的目的。
+这个特殊文件一般用来关联一些存储卷，这个存储卷可以包含自己的目录层级和文件系统结构。
+mount所达到的效果是：像访问一个普通的文件一样访问位于其他设备上文件系统的根目录，也就是将该设备上目录的根节点挂到了另外一个文件系统的页节点上，达到了给这个文件系统扩充容量的目的。
 
 可以通过/proc文件系统查看一个进程的挂载信息，具体做法如下：
 
@@ -137,8 +137,8 @@ mount所达到的效果是：像访问一个普通的文件一样访问位于其
 
 * (1) mount ID: 对于mount操作一个唯一的ID
 * (2) parent ID: 父挂载的mount ID或者本身的mount ID(本身是挂载树的顶点)
-* (3) major:minor: 文件系统所关联的设备的主次设备号
-* (4) root: 文件系统的路径名，这个路径名是挂载点的根
+* (3) major:minor: 文件系统所关联的设备的主次设备号
+* (4) root: 文件系统的路径名，这个路径名是挂载点的根
 * (5) mount point: 挂载点的文件路径名(相对于这个进程的根目录)
 * (6) mount options: 挂载选项
 * (7) optional fields: 可选项，格式 tag:value
@@ -157,7 +157,7 @@ mount所达到的效果是：像访问一个普通的文件一样访问位于其
 * 私有关系(MS_PRIVATE): 不同Namespace的挂载事件是互不影响的(默认选项)。
 * 不可绑定关系(MS_UNBINDABLE): 一个不可绑定的私有挂载，与私有挂载类似，但是不能执行挂载操作。
 
-其中给挂载点设置挂载关系的例子如下：
+其中给挂载点设置挂载关系的例子如下：
 
 ```
 # mount --make-shared /mntS      # 将挂载点设置为共享关系属性
@@ -166,18 +166,18 @@ mount所达到的效果是：像访问一个普通的文件一样访问位于其
 # mount --make-unbindable /mntU  # 将挂载点设置为不可绑定属性
 ```
 
-注意在设置私有关系属性时，在本命名空间下的这个挂载点是Slave，而父命名空间下这个挂载点是Master，挂载传播的方向只能由Master传给Slave。
+注意在设置私有关系属性时，在本命名空间下的这个挂载点是Slave，而父命名空间下这个挂载点是Master，挂载传播的方向只能由Master传给Slave。
 
 ### 绑定挂载
 
-绑定挂载的引入使得mount的其中一个参数不一定要是一个特殊文件，也可以是该文件系统上的一个普通文件目录。Linux中绑定挂载的用法如下：
+绑定挂载的引入使得mount的其中一个参数不一定要是一个特殊文件，也可以是该文件系统上的一个普通文件目录。Linux中绑定挂载的用法如下：
 
 ```
 mount --bind /home/work /home/zdq  
 mount -o bind /home/work /home/zdq  
 
 ```
-其中/home/work是磁盘上的存在的一个目录，而不是一个文件设备(比如磁盘分区)。如果需要将Linux中两个文件目录链接起来，可以通过绑定挂载的方式，挂载后的效果类似于在两个文件目录上建立了硬链接。
+其中/home/work是磁盘上的存在的一个目录，而不是一个文件设备(比如磁盘分区)。如果需要将Linux中两个文件目录链接起来，可以通过绑定挂载的方式，挂载后的效果类似于在两个文件目录上建立了硬链接。
 
 ## UTS Namespace
 UTS Namespace提供了主机名和域名的隔离，也就是struct utsname里的nodename和domainname两个字段。
@@ -198,26 +198,26 @@ PID Namespace对进程PID重新标号，即不同的Namespace下的进程可以�
 mount -t proc proc /proc 
 ```
 
-此外新创建的PID Namespace中的第一个进程PID为1，成为新Namespace的init进程，在Linux中init进程有着特殊的意义。其特殊之处有一下几点：
+此外新创建的PID Namespace中的第一个进程PID为1，成为新Namespace的init进程，在Linux中init进程有着特殊的意义。其特殊之处有一下几点：
 
-1. 在Linux中当一个进程收到一个信号时，内核首先会检查这个进程的信号处理程序，否则会执行默认的行为（比如当收到SIGTERM信号时，默认行为是杀死这个进程），但是对于init进程来说，如果它没有注册信号处理函数，内核并不会执行该信号的缺省行为，也就是什么都不做，比如说当init进程收到SIGTERM信号时，如果没有为init进程注册信号处理函数，那么什么也不会发生，进程直接忽略掉这个信号了。如果信号来自于父节点Namespace的进程发出的，除了SIGKILL(销毁进程)和SIGSTOP(暂停进程)也会被init进程忽略的，但如果发送的是SIGKILL或者SIGSTOP那么子节点的init进程会强制执行，也就是说父节点Namespace的进程有权终止子节点Namespace中的进程。
+1. 在Linux中当一个进程收到一个信号时，内核首先会检查这个进程的信号处理程序，否则会执行默认的行为（比如当收到SIGTERM信号时，默认行为是杀死这个进程），但是对于init进程来说，如果它没有注册信号处理函数，内核并不会执行该信号的缺省行为，也就是什么都不做，比如说当init进程收到SIGTERM信号时，如果没有为init进程注册信号处理函数，那么什么也不会发生，进程直接忽略掉这个信号了。如果信号来自于父节点Namespace的进程发出的，除了SIGKILL(销毁进程)和SIGSTOP(暂停进程)也会被init进程忽略的，但如果发送的是SIGKILL或者SIGSTOP那么子节点的init进程会强制执行，也就是说父节点Namespace的进程有权终止子节点Namespace中的进程。
 
-2. 在Linux中，当一个子进程退出时，它首先会变成一个defunct进程，也称为'僵尸进程'，等待父进程或者系统来进行回收工作。在内核中会维护关于'僵尸进程'的一组信息，从而允许父进程或者系统能够在获取子进程的退出信息。如果父进程已经退出，那些依然运行中的子进程会成为'孤儿进程'，在Linux中由init进程作为所有进程的'父进程'，维护进程树的状态，一旦当某个子进程成为'孤儿进程'之后，init进程就会接管这个子进程，并负责收割这些'僵尸进程'，释放系统资源。
+2. 在Linux中，当一个子进程退出时，它首先会变成一个defunct进程，也称为'僵尸进程'，等待父进程或者系统来进行回收工作。在内核中会维护关于'僵尸进程'的一组信息，从而允许父进程或者系统能够在获取子进程的退出信息。如果父进程已经退出，那些依然运行中的子进程会成为'孤儿进程'，在Linux中由init进程作为所有进程的'父进程'，维护进程树的状态，一旦当某个子进程成为'孤儿进程'之后，init进程就会接管这个子进程，并负责收割这些'僵尸进程'，释放系统资源。
 
 ## Network Namespace
 Network Namespace主要是用来提供关于网络资源的隔离，包括网络设备（网卡、网桥）、IPV4或IPV6协议栈、路由表、防火墙、端口等信息，不同Namespace种可以拥有独立的网络资源。
 
-一个物理网络设备最多只能存在一个Network Namespace中，如果该Namespace被销毁后，这个物理设备不会回到它的Parent Namespace，而是会回到Root Namespace中。
+一个物理网络设备最多只能存在一个Network Namespace中，如果该Namespace被销毁后，这个物理设备不会回到它的Parent Namespace，而是会回到Root Namespace中。
 
 如果需要打通不同Namespace的通信，可以通过创建vnet pair虚拟网络设备对的形式。虚拟网络设备对：有两端，类似于管道，分别放置在不同的Namespace中，从一端传入的数据，可以从另一端读取。
 
-在Linux中也可以通过命令行来创建一个Network Namespace，用法如下：
+在Linux中也可以通过命令行来创建一个Network Namespace，用法如下：
 
 ``` sh
 # ip netns add netns-demo 
 
 ```
-当使用ip命令创建这个Network Namespace时，它会在/var/run/netns下为这个命名空间创建一个绑定挂载，这可以保证即使没有进程运行在这个Namespace下面，但这个Namespace依然存在。也可以通过ip在指定的Namespace中执行命令，操作如下：
+当使用ip命令创建这个Network Namespace时，它会在/var/run/netns下为这个命名空间创建一个绑定挂载，这可以保证即使没有进程运行在这个Namespace下面，但这个Namespace依然存在。也可以通过ip在指定的Namespace中执行命令，操作如下：
 
 ``` sh
 ip netns exec netns-demo ping 127.0.0.1  
@@ -227,7 +227,7 @@ ip netns exec netns-demo ip link list
 
 ## User Namespace
 
-User Namespacey允许Namespace间可以映射用户和用户组ID，这意味着一个进程在Namespace里面的用户和用户组ID可以与Namespace外面的用户和用户组ID不同。值得一提的是，一个普通进程(Namespace外面的用户ID非0)在Namespace里面的用户和用户组ID可以为0，换句话说这个普通进程在Namespace里面可以拥有root特权的权限。
+User Namespace允许Namespace间可以映射用户和用户组ID，这意味着一个进程在Namespace里面的用户和用户组ID可以与Namespace外面的用户和用户组ID不同。值得一提的是，一个普通进程(Namespace外面的用户ID非0)在Namespace里面的用户和用户组ID可以为0，换句话说这个普通进程在Namespace里面可以拥有root特权的权限。
 
 当创建一个User Namespace时，有以下几点值得提一下:
 
@@ -236,7 +236,7 @@ User Namespacey允许Namespace间可以映射用户和用户组ID，这意味�
 3. 如果这个Namespace没有对用户ID或者组ID进行映射的话，那么getuid()和getgid()会默认返回/proc/sys/kernel/overflowuid和/proc/sys/kernel/overflowgid的值，一般为 65534。
 4. 尽管在Namespace里面的进程被赋予了一系列的权限，但是在Parent Namespace里面是没有权限的。
 
-通常情况下创建User Namespace后第一步是映射一下Namespae里面和外面的用户和用户组的ID，这一步是通过往/proc/$pid/uid_map和/proc/$pid/gid_map写入映射信息实现的。在这两个文件中，映射信息的格式如下：
+通常情况下创建User Namespace后第一步是映射一下Namespae里面和外面的用户和用户组的ID，这一步是通过往/proc/$pid/uid_map和/proc/$pid/gid_map写入映射信息实现的。在这两个文件中，映射信息的格式如下：
 
 ``` sh
 ID-inside-ns   ID-outside-ns   length 
