@@ -1,5 +1,5 @@
-# docker
-## docker基础
+# Docker
+## Docker基础
 
 
 
@@ -12,4 +12,4 @@
 ### Docker Registry OAuth
 * [Docker registry token scope and access](registry/docker_registry_token_scope_and_access.md)
 * [Token authentication spec](registry/token_authentication_spec.md)
-* [OAuth2 token authentication](oauth2_token_authentication.md)
+* [OAuth2 token authentication](registry/oauth2_token_authentication.md)
