@@ -1,5 +1,6 @@
 # Docker Registry v2 Authentication
 Docker Registry v2 Authentication 流程如下：
+
 ![](pics/v2_registry_auth.png)
 
 1. 准备往registry进行push/pull操作。
