@@ -13,3 +13,4 @@
 * [Token authentication spec](registry/token_authentication.md)
 * [Docker registry token scope and access](registry/token_scope.md)
 * [OAuth2 token authentication](registry/token_oauth2_authentication.md)
+* [Token authentication implementation](registry/token_authentication_implementation.md)
