@@ -5,6 +5,7 @@
 
 ## Docker Registry
 * [概述](registry/overview.md)
+* [功能简介](registry/functions.md)
 * [Registry as a pull through cache](registry/registry_as_a_pull_through_cache.md)
 * [Registry notifications](registry/webhooks.md)
 * [Registry storage driver](registry/storage_driver.md)
