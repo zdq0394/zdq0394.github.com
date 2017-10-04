@@ -6,9 +6,9 @@
 ## Docker Registry
 * [概述](registry/overview.md)
 * [功能简介](registry/functions.md)
-* [Registry as a pull through cache](registry/registry_as_a_pull_through_cache.md)
-* [Registry notifications](registry/webhooks.md)
-* [Registry storage driver](registry/storage_driver.md)
+* [Registry Mirror](registry/registry_as_a_pull_through_cache.md)
+* [Registry通知系统](registry/webhooks.md)
+* [Registry存储driver](registry/storage_driver.md)
 * [Garbage collection](registry/garbage_collection.md)
 ### Docker Registry OAuth
 * [Token authentication spec](registry/token_authentication.md)
