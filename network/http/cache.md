@@ -88,6 +88,7 @@ Refresh会发布一个附加了Cache-Control请求首部的GET请求，这个请
 
 Refresh的确切行为取决于特定的浏览器、文档以及拦截缓存的配置。
 
+```
 Cache-Control: max-stale 缓存可以随意提供过期的文件
 Cache-Control: max-stale=<s> 
 Cache-Control: min-fresh=<s>
@@ -95,5 +96,6 @@ Cache-Control: max-age=<s> 缓存不能返回缓存时间超过s秒的文档
 Cache-Control: no-cache 除非资源进行了再验证，否则这个客户端不会接受已经缓存的资源
 Cache-Control: no-store 缓存应该尽快从存储器中删除文档的所有痕迹
 Cache-Control: only-if-cached 只有当缓存中有副本存在时，客户端才会获取一份副本
+```
 
 
