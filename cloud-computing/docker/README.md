@@ -1,8 +1,6 @@
 # Docker
 ## Docker基础
 
-
-
 ## Docker Registry
 * [概述](registry/overview.md)
 * [功能简介](registry/functions.md)
@@ -11,6 +9,7 @@
 * [Registry通知系统](registry/webhooks.md)
 * [Registry存储driver](registry/storage_driver.md)
 * [Garbage collection](registry/garbage_collection.md)
+
 ### Docker Registry OAuth
 * [Token authentication spec](registry/token_authentication.md)
 * [Docker registry token scope and access](registry/token_scope.md)
