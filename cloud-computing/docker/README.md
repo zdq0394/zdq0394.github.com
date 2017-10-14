@@ -3,8 +3,8 @@
 
 ## Docker Registry
 * [概述](registry/overview.md)
-* [功能简介](registry/functions.md)
-* [部署Registry服务](registry/deploy_registry_server.md)
+* [全面理解Registry](registry/understanding_the_registry.md)
+* [部署Registry](registry/deploy_registry_server.md)
 * [Registry Mirror](registry/registry_as_a_pull_through_cache.md)
 * [Registry通知系统](registry/webhooks.md)
 * [Registry存储driver](registry/storage_driver.md)
