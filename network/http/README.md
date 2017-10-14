@@ -7,6 +7,7 @@
 ## HTTP架构
 * [Web服务器](web.md)
 * [代理](proxy.md)
+* [缓存](cache.md)
 
 ## HTTPS
 * [HTTPS通信过程](https_comm.md)
