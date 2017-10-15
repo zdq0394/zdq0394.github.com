@@ -11,6 +11,8 @@
 * [缓存](cache.md)
 * [网关、隧道和中继](gateway.md)
 
-## HTTPS
+## 识别、认证与安全
+* [客户端识别与cookie机制](cookie.md)
+* [HTTP认证](auth.md)
 * [HTTPS通信过程](https_comm.md)
 * [HTTPS安全技术](https_techs.md)

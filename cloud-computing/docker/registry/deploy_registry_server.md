@@ -1,5 +1,5 @@
 # 部署Registry服务
-在部署registry之前，需要先安装Docker。一个Registry服务是registry镜像在Docker中运行的一个实例。
+在部署registry之前，需要先安装Docker Engine。一个Registry服务是registry镜像在Docker中运行的一个实例。
 
 ## 运行一个本地Registry
 运行一个本地的测试用的Registry非常简单，[参见](overview.md)。
