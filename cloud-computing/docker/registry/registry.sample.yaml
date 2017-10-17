@@ -1,0 +1,29 @@
+version: 0.1
+log:
+  fields:
+    service: registry
+storage:
+  cache:
+    blobdescriptor: inmemory
+  filesystem:
+    rootdirectory: /var/lib/registry
+http:
+  addr: :5000
+  headers:
+    X-Content-Type-Options: [nosniff]
+health:
+  storagedriver:
+    enabled: true
+    interval: 10s
+    threshold: 3
+notifications:
+  endpoints:
+    - name: md_hook
+      disabled: false
+      url: http://100.100.58.143:8080/v1/events/registry
+      headers:
+      timeout: 500ms
+      threshold: 5
+      backoff: 1s
+      ignoredmediatypes:
+        - application/octet-stream

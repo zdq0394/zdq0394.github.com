@@ -5,6 +5,7 @@
 * [概述](registry/overview.md)
 * [全面理解Registry](registry/understanding_the_registry.md)
 * [部署Registry](registry/deploy_registry_server.md)
+* [详细配置Registry](registry/configure_a_registry.md)
 * [Registry Mirror](registry/registry_as_a_pull_through_cache.md)
 * [Registry通知系统](registry/webhooks.md)
 * [Registry存储driver](registry/storage_driver.md)
