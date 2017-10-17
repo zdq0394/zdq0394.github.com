@@ -1,10 +1,16 @@
 # Work with notifications
-对于Registry中产生的事件（events），Registry支持发送webhook通知。每当有manifest上传（push）和拉取（pull）或者layer上传（push）和拉取（pulls）事件产生时，就会有通知发出。这些动作会被序列化为事件（events）。这些事件会被以**队列**形式存放在一个registry内部的广播系统中：该系统可以按事件顺序排放并且分发事件到一个个的endpoints。
+对于Registry中产生的事件（events），Registry支持发送webhook通知。
+每当有manifest上传（push）和拉取（pull）或者layer上传（push）和拉取（pulls）等类似的事件产生时，就会有通知发出。
+这些动作会被序列化为事件（events），然后事件会以**队列**形式存放在一个registry内部的广播系统中：该系统可以按顺序将事件排队并且将事件分发到一个个的endpoints中。
 
 ![](pics/registry_notifications.png)
 
 ## Endpoints
-通知以HTTP请求的形式发往endpoints。在registry实例中，对每个配置的endpoint都有**独立的队列（queue）**、重试方式和http目标。当一个动作发生后，动作会被转换为一个事件，这个事件会丢到一个内存队列中。当事件到达队列终点时，就会触发一个发往endpoint的http请求，直到请求成功。事件被串行发到各个endpoints，但是无法保证到达顺序。
+通知以HTTP请求的形式发往endpoints。
+在registry实例中，对每个配置的endpoint都有**独立的队列（queue）**、重试方式和http目标。
+当一个动作发生后，动作会被转换为一个事件，这个事件会发送到一个内存队列中。
+当事件到达队列终点时，就会触发一个发往endpoint的http请求，直到请求成功。
+事件被串行发到各个endpoints，但是无法保证到达顺序。
 
 ## Configuration
 为了使registry可以发通知到某个endpoint，需要添加配置：
@@ -31,6 +37,33 @@ Events拥有定义良好的JSON结构，并作为通知的http请求体。也可
 ## Envelope
 
 Envelope包括一个或者多个事件，具有如下结构：
+```
+{
+         "id": "asdf-asdf-asdf-asdf-0",
+         "timestamp": "2006-01-02T15:04:05Z",
+         "action": "push",
+         "target": {
+            "mediaType": "application/vnd.docker.distribution.manifest.v1+json",
+            "length": 1,
+            "digest": "sha256:fea8895f450959fa676bcc1df0611ea93823a735a01205fd8622846041d0c7cf",
+            "repository": "library/test",
+            "url": "http://example.com/v2/library/test/manifests/sha256:c3b3692957d439ac1928219a83fac91e7bf96c153725526874673ae1f2023f8d5"
+         },
+         "request": {
+            "id": "asdfasdf",
+            "addr": "client.local",
+            "host": "registrycluster.local",
+            "method": "PUT",
+            "useragent": "test/0.1"
+         },
+         "actor": {
+            "name": "test-actor"
+         },
+         "source": {
+            "addr": "hostname.local:port"
+         }
+      }
+```
 
 ``` yaml
 {
