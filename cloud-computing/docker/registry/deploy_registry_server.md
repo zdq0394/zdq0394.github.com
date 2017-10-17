@@ -1,14 +1,14 @@
 # 部署Registry服务
-在部署registry之前，需要先安装Docker Engine。一个Registry服务是registry镜像在Docker中运行的一个实例。
+部署registry之前，需要先安装Docker Engine。因为Registry服务是以docker容器方式运行的。
 
 ## 运行一个本地Registry
-运行一个本地的测试用的Registry非常简单，[参见](overview.md)。
+运行一个本地测试用的Registry服务非常简单，[参见](overview.md)。
 
 ## 基本配置
-可以在运行docker run命令时，传递额外的或者更改过的参数来配置registry容器。
+运行docker run命令时，可以通过传递参数来配置registry服务的运行。
 
-### 自动启动registry
-如果要将registry作为永久基础设施的一部分，需要将registry设置为自动重启，可以通过--restart设置。如下：
+### 配置registry自启动
+如果要将registry作为永久基础设施的一部分，需要将registry设置为自动启动，可以通过flag（**--restart**）设置。如下：
 
 ```
 $ docker run -d \
@@ -18,8 +18,14 @@ $ docker run -d \
   registry:2
 ```
 
-### 定制端口
-容器运行在5000端口，但是发布到5001端口。
+### 定制Registry服务端口
+Registry服务默认运行在5000端口。可以通过**-p**进行定制。
+
+```
+-p HOST_PORT:container_port
+```
+
+如下将Registry服务发布到5001端口，容器名字为“registry-test”。
 
 ```
 $ docker run -d \
@@ -28,7 +34,9 @@ $ docker run -d \
   registry:2
 ```
 
-通过注入环境变量**REGISTRY_HTTP_ADDR=0.0.0.0:5001**，容器和发布端口都设置为5001。
+通过注入环境变量**REGISTRY_HTTP_ADDR=0.0.0.0:5001**，可以改变Registry容器的运行端口。
+
+如下将容器运行在5001端口，并且发布到5001端口。
 
 ```
 $ docker run -d \
@@ -38,9 +46,9 @@ $ docker run -d \
   registry:2
 ```
 
-## 定制存储
+## 存储配置
 ### 定制存储地址
-默认，registry data持久化到宿主机文件系统的一个docekr volume中。可以将registry data存储到宿主机文件系统的指定位置。下面的例子将宿主机的目录/mnt/registry加载到容器/var/lib/registry/。
+Registry默认将数据（data）作为**docekr volume**持久化到宿主机文件系统中。也可以将registry data存储到宿主机文件系统的指定位置。下面的例子将宿主机的目录/mnt/registry绑定到容器/var/lib/registry/。
 
 ```
 $ docker run -d \
@@ -53,7 +61,7 @@ $ docker run -d \
 
 ### 定制后台存储机制
 默认，registry将数据存储到本地文件系统，不论是volume还是bind mount宿主机目录。
-其实可以将数据存储到Amazon S3 bucket、Google Cloud Platform或者其它的存储后端。
+通过配置可以将数据存储到Amazon S3 bucket、Google Cloud Platform或者其它的存储后端。
 
 ## 运行安全的registry
 ### 获取证书
@@ -105,4 +113,12 @@ $ docker pull myregistrydomain.com/my-ubuntu
 cat domain.crt intermediate-certificates.pem > certs/domain.crt
 ```
 
-[未完待续]
+## Run Registry as Swarm Service
+
+## 负载均衡配置
+
+## 访问控制配置
+
+## 以Compose file部署Registry容器服务
+
+## 隔离网络配置
