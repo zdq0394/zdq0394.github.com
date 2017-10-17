@@ -64,12 +64,12 @@ $ docker run -d \
 通过配置可以将数据存储到Amazon S3 bucket、Google Cloud Platform或者其它的存储后端。
 
 ## 运行安全的registry
+如果Registry运行在公网上，需要配置TLS。
 ### 获取证书
 本例假设：
-
 * Registry可以在 https://myregistry.domain.com/ 访问。
-* 你的DNS、路由和防火墙设置允许访问host的5000端口。
-* 你已经从一个证书认证中心（CA）获取一个证书。
+* DNS、路由和防火墙设置允许访问host的5000端口。
+* 已经从一个**证书认证中心**（CA）获取一个证书。
 
 **1. 创建一个certs目录**
 
@@ -84,7 +84,7 @@ $ mkdir -p certs
 $ docker stop registry
 ```
 **3. 重启registry，使用TLS certificate**
-该命令将certs/目录bind-mounts到容器中的/certs/目录，并且同构设置环境变量告诉容器domain.crt和domain.key文件的地址。Registry服务运行在80端口。
+该命令将certs/目录bind-mounts到容器中的/certs/目录，并且同时设置环境变量告诉容器domain.crt和domain.key文件的地址。Registry服务运行在80端口。
 
 ```
 $ docker run -d \
@@ -97,7 +97,7 @@ $ docker run -d \
   -p 80:80 \
   registry:2
 ```
-**4. Docker clients can now pull from and push to your registry using its external address**。
+**4. Docker客户端现在可以使用这个外部地址使用pull/push镜像到这个registry**。
 
 ```
 $ docker pull ubuntu:16.04
@@ -114,11 +114,98 @@ cat domain.crt intermediate-certificates.pem > certs/domain.crt
 ```
 
 ## Run Registry as Swarm Service
+**Swarm services**比**standalone containers**提供了好几个优点。
+Swarm services使用声明式模型：只要定义你期望的状态，docker保持你的服务达到期望的状态。
+服务提供自动负载均衡扩展和服务分发能力。服务准许你在secrets中存储敏感数据（TLS certificates）。
 
+存储后端的使用取决于你是使用一个fully-scaled的服务还是一个单节点的服务。
+
+* 如果你使用一个分布式存储driver，比如Amazon S3，你可以使用一个完全多副本的服务。每个woker节点都可以同时写数据而不发生冲突。
+* 如果你使用一个本地volume，每个worker节点将把数据写到自己的存储空间里，每个registry存储一个不同的数据集。 
 ## 负载均衡配置
+你可能想用一个负载均衡器分担负载，终止TLS或者提供高可用。如何建立全面的负载均衡不是本文讨论的重点，但是有些注意点可以使setup过程更顺畅。
+
+其中最最重要的一点就是Registries的负载均衡集群一定要共享资源：
+
+* Storage Driver
+* HTTP Secret
+* Redis Cache (如果配置了的话)
+
+### Important/Required HTTP-Headers
+保证HTTP Headers正确非常重要。对任何/v2/空间下的url请求，响应中首部**Docker-Distribution-API-Version**应该都设置**registry/2.0**，哪怕是4xx响应。该首部可以使docker engine迅速处理**authentication realms**，如果必要的话，回到v1 registries。 确保这些设置正确可以避免fallback问题。
+
+在同样的思想指导下，必须确保向“client-side”发送正确的X-Forwarded-Proto、X-Forwarded-For、and Host首部。否则会使registry重定向到内部的hostnames或者从https降级到http。
+
+当一个/v2/端点被请求时，如果没有携带**凭据**，安全的registry应该返回**401**。响应中要包含**challenge**首部** WWW-Authenticate**：提供认证的方式（basic auth或者token服务）。
+
+如果负载均衡器配置了健康检查，401响应应该配置为healthy，其它响应设置为down。
 
 ## 访问控制配置
+除非registries运行在安全本地网络，否则registries应该总是实现访问控制。
+### Native basic auth
+实现访问限制的最简单的方式是使用basic authentication。
 
+下面的例子通过htpasswd存储secrets，实现了basic authentication：
+
+** 1. 创建一个password文件，包含一个条目testuser，密码是testpassword**
+```
+$ mkdir auth
+$ docker run \
+  --entrypoint htpasswd \
+  registry:2 -Bbn testuser testpassword > auth/htpasswd
+```
+** 2. stop the registry**
+```
+$ docker stop registry
+```
+
+** 3. 以basic authentication方式启动registry**
+```
+$ docker run -d \
+  -p 5000:5000 \
+  --restart=always \
+  --name registry \
+  -v `pwd`/auth:/auth \
+  -e "REGISTRY_AUTH=htpasswd" \
+  -e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" \
+  -e REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd \
+  -v `pwd`/certs:/certs \
+  -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt \
+  -e REGISTRY_HTTP_TLS_KEY=/certs/domain.key \
+  registry:2
+```
+
+** 4. 尝试从registry拉取镜像后者向registry推送镜像，命令应该会失败**
+
+** 5. 登录registry，再次尝试第4步中的操作**
+```
+$ docker login myregistrydomain.com:5000
+
+```
+
+### More advanced authentication
+Registry支持**委托认证**：将认证请求重定向到特殊的、受registry信任的token服务器。
+
+这种方式更复杂，需要自己实现**认证服务**、**授权服务**和**token签发服务**。
 ## 以Compose file部署Registry容器服务
-
-## 隔离网络配置
+```
+registry:
+  restart: always
+  image: registry:2
+  ports:
+    - 5000:5000
+  environment:
+    REGISTRY_HTTP_TLS_CERTIFICATE: /certs/domain.crt
+    REGISTRY_HTTP_TLS_KEY: /certs/domain.key
+    REGISTRY_AUTH: htpasswd
+    REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+    REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+  volumes:
+    - /path/data:/var/lib/registry
+    - /path/certs:/certs
+    - /path/auth:/auth
+```
+可以将以上yaml作为模板，修改/path地址替换为自己的，然后用下面的命令启动：
+```
+$ docker-compose up -d
+```
