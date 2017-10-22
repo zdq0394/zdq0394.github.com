@@ -19,4 +19,5 @@
 
 ## 内容发布与分发
 * [Web主机托管](web_host.md)
+* [重定向与负载均衡](load_balance.md)
 * [日志记录与使用情况跟踪](log_and_trace.md)
