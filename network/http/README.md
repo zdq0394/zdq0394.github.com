@@ -17,6 +17,11 @@
 * [HTTPS通信过程](https_comm.md)
 * [HTTPS安全技术](https_techs.md)
 
+## 实体、编码和国际化
+* [实体和编码](encode.md)
+* [国际化](globalization.md)
+* [内容协商与转码](content_negotiation.md)
+
 ## 内容发布与分发
 * [Web主机托管](web_host.md)
 * [重定向与负载均衡](load_balance.md)
