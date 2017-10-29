@@ -3,11 +3,12 @@
 ### CAP理论概述
 2000年7月，加州大学伯克利分校的Eric Brewer教授在ACM PODC会议上提出CAP猜想。2年后，麻省理工学院的Seth Gilbert和Nancy Lynch从理论上证明了CAP。之后，CAP理论正式成为分布式计算领域的公认定理。
 
-一个分布式系统最多只能同时满足**一致性（Consistency）**、**可用性（Availability）**和**分区容错性（Partition tolerance）**这三项中的两项。
+一个分布式系统最多只能同时满足**一致性(Consistency)**、**可用性(Availability)**和**分区容错性(Partition tolerance)**这三项中的两项。
 
 ![](pics/cap.jpg)
 
 ### CAP定义
+
 **一致性（Consistency）**
 
 一致性指“all nodes see the same data at the same time”，即更新操作成功并返回客户端完成后，所有节点在同一时间的数据完全一致。
