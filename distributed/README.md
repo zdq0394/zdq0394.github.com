@@ -5,6 +5,7 @@
 * [CAP](cap.md)
 * [Data Replication](data-replication.md)
 * [Quorum机制](quorum.md)
+* [一致性hash](consistent-hash.md)
 
 ## 分布式系统
 * [etcd](etcd/README.md)
