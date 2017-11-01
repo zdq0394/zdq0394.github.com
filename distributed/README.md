@@ -9,6 +9,7 @@
 * [事务的隔离等级](tx-isolation.md)
 * [并发控制](concurrency-control.md)
 * [两阶段提交协议](2pc.md)
+* [三阶段提交协议](3pc.md)
 
 ## 分布式系统
 * [etcd](etcd/README.md)
