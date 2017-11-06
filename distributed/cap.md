@@ -5,7 +5,7 @@
 
 ## CAP理论概述
 
-一个分布式系统最多只能同时满足**一致性(Consistency)、可用性(Availability)和分区容错性(Partition tolerance)**这三项中的两项。
+一个分布式系统最多只能同时满足***一致性、可用性和分区容错性**这三项中的两项。
 
 ![](pics/cap.jpg)
 
