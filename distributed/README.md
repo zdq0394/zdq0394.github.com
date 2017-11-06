@@ -9,6 +9,7 @@
 * [事务并发控制](tx-concurrency-control.md)
 * [两阶段提交协议](2pc.md)
 * [三阶段提交协议](3pc.md)
+* [Write Ahead Log](wal.md)
 
 ## 分布式系统
 * [etcd](etcd/README.md)
