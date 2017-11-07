@@ -1,6 +1,6 @@
 # devicemapper
 ## devicemapper简介
-Device Mapper是Linux系统中基于内核的**高级卷管理技术框架**。
+[Device Mapper](../../../linux/devicemapper.md)是Linux系统中基于内核的**高级卷管理技术框架**。
 Docker的devicemapper存储驱动就是基于该框架的**精简置备**和**快照功能**来实现镜像和容器的管理。
 
 **devicemapper驱动**将每一个Docker镜像和容器存储在它自身的具有**精简置备(thin-provisioned)**、**写时拷贝(copy-on-write)**和**快照功能(snapshotting)的虚拟设备**上。由于Device Mapper技术是在**块(block)层面**而非文件层面，所以Docker Engine的devicemapper存储驱动使用的是**块设备**来存储数据而非文件系统。
