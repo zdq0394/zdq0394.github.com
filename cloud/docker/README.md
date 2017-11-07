@@ -2,8 +2,8 @@
 ## Docker基础 
 
 ## Docker存储
-* [aufs](aufs.md)
-* [devicemapper](devicemapper.md)
+* [aufs](storage/aufs.md)
+* [devicemapper](storage/devicemapper.md)
 
 ## Docker Registry
 * [概述](registry/overview.md)
