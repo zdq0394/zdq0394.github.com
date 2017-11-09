@@ -1,11 +1,15 @@
 # devicemapper
-## devicemapper简介
+## Device Mapper简介
 [Device Mapper](../../../linux/devicemapper.md)是Linux系统中基于内核的**高级卷管理技术框架**。
-Docker的devicemapper存储驱动就是基于该框架的**精简置备**和**快照功能**来实现镜像和容器的管理。
+它是在内核中支持逻辑卷管理的通用设备映射机制，它为实现用于存储资源管理的块设备驱动提供了一个高度模块化的内核架构，它包含三个重要的对象概念：Mapped Device、Mapping Table、Target device。
 
-**devicemapper驱动**将每一个Docker镜像和容器存储在它自身的具有**精简置备(thin-provisioned)**、**写时拷贝(copy-on-write)**和**快照功能(snapshotting)的虚拟设备**上。由于Device Mapper技术是在**块(block)层面**而非文件层面，所以Docker Engine的devicemapper存储驱动使用的是**块设备**来存储数据而非文件系统。
+Docker的**devicemapper存储驱动**就是基于该框架的**精简置备(thin-provisioned)**和**快照功能(snapshotting)**来实现镜像和容器的管理。
+
+**devicemapper驱动**将每一个Docker镜像和容器存储在自身具有**精简置备(thin-provisioned)**、**写时拷贝(copy-on-write)**和**快照功能(snapshotting)**的虚拟设备上。
+由于Device Mapper技术是在**块(block)层面**而非文件层面，所以Docker Engine的devicemapper存储驱动使用的是**块设备**来存储数据而非文件系统。
 
 devicemapper也属于**块级存储方案**，有着thin provisioning和copy-on-write的特点。
+
 * thin provisioning: 自动精简配置（与此相对的传统的存储配置模型被称为厚存储配置Fat provisioning），简单的说就是在需要的时候分配所需的最小空间（与此相对，传统的存储空间的分配都是超过目前的需求的，从而导致的一个问题就是存储利用率低下）。
 * copy-on-write：写时复制技术，简单理解就是内容发生变化才进行复制。
 

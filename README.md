@@ -1,5 +1,6 @@
 # 学习笔记
 ## 基础学习
+* [Linux](linux/README.md)
 * [网络](network/README.md)
 * [HTTP](network/http/README.md)
 * [分布式计算](distributed/README.md)
