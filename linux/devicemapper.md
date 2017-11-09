@@ -77,7 +77,7 @@ struct linear_c {
 ### 内核中建立过程
 
 下面结合具体的代码简要介绍下在内核中创建一个mapped device的过程：
-1. 根据内核向用户空间提供的ioctl接口传来的参数，用dm-ioctl.c文件中的dev_create函数创建相应的mapped device结构。这个过程很简单，主要是向内核申请必要的内存资源，包括mapped device和为进行IO操作预申请的内存池，通过内核提供的blk_queue_make_request函数注册该mapped device对应的请求队列dm_request。并将该mapped device作为磁盘块设备注册到内核中。
+1. 根据内核向用户空间提供的ioctl接口传来的参数，用dm-ioctl.c文件中的dev_create函数创建相应的mapped device结构。这个过程很简单，主要是向内核申请必要的内存资源，包括mapped device和为进行IO操作预申请的内存池，通过内核提供的blk_queue_make_request函数注册该mapped device对应的请求队列dm_request。**并将该mapped device作为磁盘块设备注册到内核中**。
 2. 调用dm_hash_insert将创建好的mapped device插入到device mapper中的一个全局hash表中，该表中保存了内核中当前创建的所有mapped device。
 3. 用户空间命令通过ioctl调用table_load函数，该函数根据用户空间传来的参数构建指定mapped device的映射表和所映射的target device。该函数先构建相应的dm_table、dm_target结构，再调用dm-table.c中的dm_table_add_target函数根据用户传入的参数初始化这些结构，并且根据参数所指定的target类型，调用相应的target类型的构建函数ctr在内存中构建target device对应的结构，然后再根据所建立的dm_target结构更新dm_table中维护的B树。上述过程完毕后，再将建立好的dm_table添加到mapped device的全局hash表对应的hash_cell结构中。
 4. 最后通过ioctl调用do_resume函数建立mapped device和映射表之间的绑定关系，事实上该过程就是通过dm_swap_table函数将当前dm_table结构指针值赋予mapped_device相应的map域中，然后再修改mapped_device表示当前状态的域。
@@ -85,19 +85,32 @@ struct linear_c {
 通过上述的4个主要步骤，device mapper在内核中就建立一个可以提供给用户使用的mapped device逻辑块设备。
 
 ### IO流
-Device mapper本质功能就是根据映射关系和target driver描述的IO处理规则，**将IO请求从逻辑设备mapped device转发相应的target device上**。
-Device mapper处理所有从内核中块一级IO子系统的generic_make_request和submit_bio接口中定向到mapped device的所有块读写IO请求。
-IO请求在device mapper的设备树中通过请求转发从上到下地进行处理。当一个bio请求在设备树中的mapped deivce向下层转发时，一个或者多个bio的克隆被创建并发送给下层target device。然后相同的过程在设备树的每一个层次上重复，只要设备树足够大理论上这种转发过程可以无限进行下去。在设备树上某个层次中，target driver结束某个bio请求后，将表示结束该bio请求的事件上报给它上层的mapped device，该过程在各个层次上进行直到该事件最终上传到根mapped device的为止，然后device mapper结束根mapped device上原始bio请求，结束整个IO请求过程。
+Device mapper本质功能就是**根据映射关系和target driver描述的IO处理规则**，**将IO请求从逻辑设备mapped device转发到相应的target device上**。
 
-Bio在device mapper的设备树进行逐层的转发时，最终转发到一个或多个叶子target节点终止。因为一个bio请求不可以跨多个target device(亦即物理空间段)， 因此在每一个层次上，device mapper根据用户预先告知的mapped device的target映射信息克隆一个或者多个bio，将bio进行拆分后转发到对应的target device上。这些克隆的bio先交给mapped device上对应的target driver上进行处理，根据target driver中定义的IO处理规则进行IO请求的过滤等处理，然后再提交给target device完成。上述过程在dm.c文件中的dm_request函数中完成。Target driver可以对这些bio做如下处理：
+Device mapper处理所有从内核中块一级IO子系统的generic_make_request和submit_bio接口中定向到mapped device的所有块读写IO请求。
+
+IO请求在device mapper的设备树中通过请求转发从上到下地进行处理。
+当一个bio请求在设备树中的mapped deivce向下层转发时，一个或者多个bio的克隆被创建并发送给下层target device。
+然后相同的过程在设备树的每一个层次上重复，只要设备树足够大理论上这种转发过程可以无限进行下去。
+在设备树上某个层次中，target driver结束某个bio请求后，将表示结束该bio请求的事件上报给它上层的mapped device。
+该过程在各个层次上进行直到该事件最终上传到根mapped device的为止。
+然后device mapper结束根mapped device上原始bio请求，结束整个IO请求过程。
+
+Bio在device mapper的设备树进行逐层的转发时，最终转发到一个或多个叶子target节点终止。
+因为**一个bio请求不可以跨多个target device(亦即物理空间段)**， 因此在每一个层次上，device mapper根据用户预先告知的mapped device的target映射信息克隆一个或者多个bio，将bio进行拆分后转发到对应的target device上。
+这些克隆的bio先交给mapped device上对应的target driver上进行处理，根据target driver中定义的IO处理规则进行IO请求的过滤等处理，然后再提交给target device完成。
+
+上述过程在dm.c文件中的dm_request函数中完成。Target driver可以对这些bio做如下处理：
 1. 将这些bio在本驱动内部排队等待以后进行处理。
 2. 将bio重新定向到一个或多个target device上或者每个target device上的不同扇区。
 3. 向device mapper返回error状态。
 IO请求就按照上文中描述的过程在图2中所示的设备树中逐层进行处理，直到IO请求结束。
 
 ### 小结
-Device mapper在内核中向外提供了一个从逻辑设备到物理设备的映射架构，只要用户在用户空间制定好映射策略，按照自己的需要编写处理具体IO请求的target driver插件，就可以很方便的实现一个类似LVM的逻辑卷管理器。
+Device mapper在内核中向外提供了一个**从逻辑设备到物理设备的映射架构**，只要用户在用户空间制定好映射策略，按照自己的需要编写处理具体IO请求的target driver插件，就可以很方便的实现一个类似LVM的逻辑卷管理器。
+
 Device mapper以ioctl的方式向外提供接口，用户通过用户空间的device mapper库，向device mapper的字符设备发送ioctl命令，完成向内的通信。
+
 Device mapper还通过ioctl提供向往的事件通知机制，允许target driver将IO相关的某些事件传送到用户空间。
 
 ## 用户空间部分
@@ -125,7 +138,8 @@ Target driver主要定义对IO请求的处理规则，在device mapper中对targ
 * Target 处理用户消息的方法
 
 用户可以根据具体需求选择性地实现上述方法，但**一般最少要实现前3种方法**，否则在device mapper下不能够正常的工作。
-linear target driver就只实现了前3种方法和方法7，它完成逻辑地址空间到物理地址空间的线性映射，可以将多个物理设备以线性连接的方式组成一个逻辑设备，通过linear target driver将/dev/sda、/dev/sdb、/dev/sdc的三段连续空间组成了一个大的逻辑块设备。
+
+**linear target drive**就只实现了前3种方法和方法7，它完成逻辑地址空间到物理地址空间的线性映射，可以将多个物理设备以线性连接的方式组成一个逻辑设备，通过linear target driver将/dev/sda、/dev/sdb、/dev/sdc的三段连续空间组成了一个大的逻辑块设备。
 Linear target的实现很简单，它的创建和删除方法主要完成申请和释放描述linear target device所用结构的内存资源；
 IO映射处理方法的实现更是简单，如下代码所示：
 
