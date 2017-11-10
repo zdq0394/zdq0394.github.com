@@ -1,21 +1,54 @@
 # devicemapper
 ## Device Mapper简介
 [Device Mapper](../../../linux/devicemapper.md)是Linux系统中基于内核的**高级卷管理技术框架**。
-它是在内核中支持逻辑卷管理的通用设备映射机制，它为实现用于存储资源管理的块设备驱动提供了一个高度模块化的内核架构，它包含三个重要的对象概念：Mapped Device、Mapping Table、Target device。
+它是内核中支持逻辑卷管理的通用设备映射机制，为实现**块设备驱动**提供了一个高度模块化的内核架构，包含三个重要的对象概念：Mapped Device、Mapping Table、Target device。
 
-Docker的**devicemapper存储驱动**就是基于该框架的**精简置备(thin-provisioned)**和**快照功能(snapshotting)**来实现镜像和容器的管理。
+## Docker的devicemapper驱动
+Docker的**devicemapper**存储驱动基于该框架的**thin-provisioning**和**snapshotting**功能来实现镜像和容器的管理。
 
-**devicemapper驱动**将每一个Docker镜像和容器存储在自身具有**精简置备(thin-provisioned)**、**写时拷贝(copy-on-write)**和**快照功能(snapshotting)**的虚拟设备上。
-由于Device Mapper技术是在**块(block)层面**而非文件层面，所以Docker Engine的devicemapper存储驱动使用的是**块设备**来存储数据而非文件系统。
+**devicemapper驱动**将每一个Docker镜像和容器存储在自身具有**精简置备(thin-provisioned)**、**写时拷贝(copy-on-write)**和**快照功能(snapshotting)**的**虚拟设备**上。
 
-devicemapper也属于**块级存储方案**，有着thin provisioning和copy-on-write的特点。
+由于Device Mapper技术是在**块(block)层面**而非文件层面，所以Docker Engine的devicemapper存储驱动使用的是**块设备**来存储数据而非文件系统，有着thin provisioning和copy-on-write的特点。
 
-* thin provisioning: 自动精简配置（与此相对的传统的存储配置模型被称为厚存储配置Fat provisioning），简单的说就是在需要的时候分配所需的最小空间（与此相对，传统的存储空间的分配都是超过目前的需求的，从而导致的一个问题就是存储利用率低下）。
+* thin provisioning: 自动精简配置，简单的说就是在需要的时候分配所需的最小空间（与此相对的传统的存储配置模型被称为厚存储配置Fat provisioning，存储空间的分配都是超过目前的需求的，从而导致的一个问题就是存储利用率低下）。
 * copy-on-write：写时复制技术，简单理解就是内容发生变化才进行复制。
 
-## devicemapper模式下镜像的分层和共享
+![](pics/f_t_provision.png)
+
+## How the devicemapper storage driver works
+### 查看
+使用**lsblk**命令可以从操作系统的角度查看**设备及其pools**：
+
+``` sh 
+$ sudo lsblk
+
+NAME                    MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+xvda                    202:0    0    8G  0 disk
+└─xvda1                 202:1    0    8G  0 part /
+xvdf                    202:80   0  100G  0 disk
+├─docker-thinpool_tmeta 253:0    0 1020M  0 lvm
+│ └─docker-thinpool     253:2    0   95G  0 lvm
+└─docker-thinpool_tdata 253:1    0   95G  0 lvm
+  └─docker-thinpool     253:2    0   95G  0 lvm
+```
+使用**mount**命令可以查看Docker正在使用的monut-point：
+``` sh
+$ mount |grep devicemapper
+/dev/xvda1 on /var/lib/docker/devicemapper type xfs (rw,relatime,seclabel,attr2,inode64,noquota)
+```
+
+当使用**devicemapper**时，Docker把镜像和层的内容存储在thinpool中，然后挂载到/var/lib/docker/devicemapper/的子目录下暴露给容器使用。
+
+### 磁盘上的镜像和容器层
+/var/lib/docker/devicemapper/metadata/目录下包含的是Devicemapper的配置本身和每个镜像和容器层的元信息。
+驱动devicemapper使用snapshots，metadata也包含snapshots的信息。文件是JSON格式的。
+
+/var/lib/devicemapper/mnt/目录包含每个镜像和容器层的mount point。Image layerd mount points are empty, but a container’s mount point shows the container’s filesystem as it appears from within the container。
+
+### 镜像的分层和共享
 使用devicemapper存储生成镜像大致按照下面的流程： 
-1. devicemapper驱动从块设备创建一个小的存储池（a thin pool） 
+1. devicemapper驱动从块设备创建一个小
+的存储池（a thin pool） 
 2. 创建一个带有文件系统，如extfs等，的基础设备（base device） 
 3. 每个新的镜像（或镜像层）都是base device的一个快照（snapshot）
 
@@ -30,7 +63,7 @@ devicemapper存储方式下，**容器层都是从镜像生成的快照**，快�
 **每个镜像的最下面一层的镜像则是池中base device的快照**。
 需要注意的是，base device属于Device Mapper的一部分，并不是docker的镜像层。
 
-## devicemapper模式下的读写
+## 读写
 ### 读
 官网上读操作的说明如下：
 
