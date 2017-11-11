@@ -46,36 +46,50 @@ $ mount |grep devicemapper
 /var/lib/devicemapper/mnt/目录包含每个镜像和容器层的mount point。Image layerd mount points are empty, but a container’s mount point shows the container’s filesystem as it appears from within the container。
 
 ### 镜像的分层和共享
+驱动devicemapper使用专用的块存储而不是格式化的文件系统，并且在copy-on-write (CoW)操作中为了最大化性能，在块层面操作文件。
+#### Snapshots
+驱动devicemapper的另一个特征是它使用snapshots（有时也称为thin devices或者虚拟设备），快照仅仅存储每个层的擦差异部分，所有非常小非常轻量。
+
+Snapshots提供很多的优点：
+* 容器间共享的layers只存储一份，除非它是可写的。
+* Snapshots是copy-on-write策略的实现。仅当一个容器要**改变或者删除**一个文件时，这个文件才会被拷贝到容器的读写层中。
+* 因为devicemapper工作在块层面，所有一个读写层的多个块可以同时修改。
+* Snapshots可以使用OS层面的back工具进行备份。复制/var/lib/docker/devicemapper/就可以了。
+
+#### Devicemapper workflow
+当以devicemapper作为storage driver启动Docker时，所有镜像和容器层相关的对象都存储在/var/lib/docker/devicemapper/，该目录backed by一个或者多个块设备：loopback设备（仅作测试）或者物理磁盘。
+* Base device是最底层的对象，thin pool自身，可以通过docker info命令检查。它包含一个文件系统。Base device是所有镜像和容器层的起点。Base device是一个Device Mapper的实现，不是一个Docker层。
+* 关于base device和镜像或者容器层的元数据以JSON格式保存在目录/var/lib/docker/devicemapper/metadata/。这些层是Copy-on-Write的快照。
+* 每个容器的可写层mount到/var/lib/docker/devicemapper/mnt/目录下的一个挂载点上。每个只读的镜像层和停止运行的容器层都有一个空的目录。
+
+每个镜像层都是它下层的一个快照。每个镜像的最底一层是pool中的base device的快照。当运行一个容器时，容器是它运行的镜像的一个快照。下图中主机上运行了了2个容器，一个是ubuntu容器一个是busybox容器。
+
+![](pics/devicemapper_layer.png)
+
 使用devicemapper存储生成镜像大致按照下面的流程： 
-1. devicemapper驱动从块设备创建一个小
-的存储池（a thin pool） 
+1. devicemapper驱动从块设备创建一个小的存储池（a thin pool） 
 2. 创建一个带有文件系统，如extfs等，的基础设备（base device） 
 3. 每个新的镜像（或镜像层）都是base device的一个快照（snapshot）
 
 devicemapper存储方式下，**容器层都是从镜像生成的快照**，快照里存储着所有对容器的更新。当数据被写入容器的时候，devicemapper按需从池中分配空间。
-
-下面是官方文档中的一个说明图：
-
-![](devicemapper_layer.jpg)
 
 从上图可以看出，
 **每个镜像层都是它下面一层的快照**。
 **每个镜像的最下面一层的镜像则是池中base device的快照**。
 需要注意的是，base device属于Device Mapper的一部分，并不是docker的镜像层。
 
-## 读写
-### 读
+## How container reads and writes work with devicemappe
+### 读文件
 官网上读操作的说明如下：
 
-![](devicemapper_read.jpg)
+![](pics/devicemapper_read.jpg)
 
-1. 应用请求读取容器中的0x44f块区
-因为容器是镜像的一个简单快照，并没有数据，只有一个指针，指向镜像层存储数据的地方。 
+1. 应用请求读取容器中的0x44f块区，因为容器是镜像的一个简单快照，并没有数据，只有一个指针，指向镜像层存储数据的地方。 
 2. 存储驱动根据指针，到镜像快照的a005e镜像层寻找0xf33块区 
 3. devicemapper从镜像快照拷贝0xf33的内容到容器的内存中 
 4. 存储驱动最后将数据返回给请求的应用
 
-### 写
+### 写文件
 当对容器中的大文件做一个小的改动的时候，devicemapper不会复制这整个文件，而是**只拷贝被修改的块区**。
 每个块区的大小为64KB。
 * 写新数据: 例如，写56KB大小的新数据到一个容器：
