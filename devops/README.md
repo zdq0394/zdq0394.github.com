@@ -4,4 +4,4 @@
 * [GitHub oauth app](github-oauth-app.md)
 
 ## Jenkins API
-* [Jenkins Credentials API](jenkins_api_credentials.md)
+* [Jenkins Access API](jenkins_access_api.md)
