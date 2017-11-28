@@ -6,7 +6,7 @@
 
 参数是JSON格式
 
-`
+``` json
 {
 		"": "0",
 		"credentials": {
@@ -18,7 +18,7 @@
 		"$class": "com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl"
 		}
 }
-`
+```
 
 ### 删除Credentials
 
