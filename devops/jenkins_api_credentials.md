@@ -5,6 +5,7 @@
 `POST /credentials/store/system/domain/_/createCredentials`
 
 参数是JSON格式
+
 `
 {
 		"": "0",
