@@ -1,7 +1,7 @@
 # devops
 
 ## GitHub集成
-* [github oauth app](github-oauth-app.md)
+* [GitHub oauth app](github-oauth-app.md)
 
 ## Jenkins API
-* [jenkins Credentials API](jenkins_api_credentials.md)
+* [Jenkins Credentials API](jenkins_api_credentials.md)
