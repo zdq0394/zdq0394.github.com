@@ -7,6 +7,7 @@
 * [分布式计算](distributed/README.md)
 
 ## 云计算
+* [虚拟化](cloud/virt/README.md)
 * [Docker](cloud/docker/README.md)
 * [Kubernetes](cloud/kubernetes/README.md)
 * [Ceph](cloud/ceph/README.md)
