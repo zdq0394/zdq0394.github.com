@@ -8,6 +8,7 @@
 
 ## 基础
 * [Ceph协议](protocol.md)
+* [Ceph客户端](client.md)
 
 ## 部署和调优
 * [Ceph简单安装](https://github.com/zdq0394/scripts/blob/master/iaas/ceph/README.md)
