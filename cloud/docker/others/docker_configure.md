@@ -24,3 +24,5 @@ LimitCORE=infinity
 [Install]
 WantedBy=multi-user.target
 ```
+
+## Centos
