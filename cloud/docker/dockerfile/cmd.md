@@ -15,5 +15,8 @@ exec形式不会调用shell命令，所以不会执行shell中的变量替换比
 ```Dockerfile
 CMD ["sh", "-c", "echo $HOME"]
 ```
+无论是shell形式，还是exec形式，CMD设置的命令都会在运行镜像的时候执行。
+
+当使用shell形式时，整个命令包括参数作为一个字符串在“/bin/sh -c”中执行。
 
 
