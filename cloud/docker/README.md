@@ -4,6 +4,7 @@
 
 ## Dockerfile
 * [Entrypoint](dockerfile/entrypoint.md)
+* [CMD](dockerfile/cmd.md)
 
 
 ## Docker存储
