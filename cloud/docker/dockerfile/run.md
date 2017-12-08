@@ -16,3 +16,7 @@ EXEC形式的RUN指令不会调用shell，所以也不会执行shell中的变量
 RUN ["sh", "-c", "echo $HOME"]
 ```
 
+RUN指令的cache在下一次build时不会自动失效。比如指令**RUN apt-get dist-upgrade -y**的cache可以在下一次build时服用。
+可以使用**--no-cache**清除缓存：**docker build --no-cache**
+
+
