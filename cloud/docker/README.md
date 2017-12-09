@@ -3,11 +3,16 @@
 * [docker概述](base/overview.md)
 
 ## Dockerfile
+* [概述](dockerfile/df.md)
 * [FROM](dockerfile/from.md)
-* [Entrypoint](dockerfile/entrypoint.md)
-* [CMD](dockerfile/cmd.md)
 * [RUN](dockerfile/run.md)
-
+* [CMD](dockerfile/cmd.md)
+* [LABEL](dockerfile/label.md)
+* [EXPOSE](dockerfile/expose.md)
+* [ENV](dockerfile/env.md)
+* [ADD](dockerfile/add.md)
+* [COPY](dockerfile/copy.md)
+* [Entrypoint](dockerfile/entrypoint.md)
 
 ## Docker存储
 * [aufs](storage/aufs.md)
