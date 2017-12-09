@@ -10,10 +10,11 @@
 * [LABEL](dockerfile/label.md)
 * [EXPOSE](dockerfile/expose.md)
 * [ENV](dockerfile/env.md)
-* [ADD](dockerfile/add.md)
-* [COPY](dockerfile/copy.md)
+* [ADD和COPY](dockerfile/add_and_copy.md)
 * [Entrypoint](dockerfile/entrypoint.md)
-
+* [Volume](dockerfile/volume.md)
+* [USER和WORKDIR](dockerfile/user_and_workdir.md)
+* [ARG](dockerfile/arg.md)
 ## Docker存储
 * [aufs](storage/aufs.md)
 * [devicemapper](storage/devicemapper.md)
