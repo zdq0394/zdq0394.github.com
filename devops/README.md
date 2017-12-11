@@ -5,3 +5,4 @@
 
 ## Jenkins API
 * [Jenkins Access API](jenkins-access-api.md)
+* [Jenkins性能提升](jenkins-perf.md)
