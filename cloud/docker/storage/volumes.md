@@ -161,7 +161,9 @@ $ docker run -d \
 ```
 
 ### Use a volume driver
+
 **初始化**
+
 首先在宿主机上安装**vieux/sshfs**
 ```sh
 $ docker plugin install --grant-all-permissions vieux/sshfs
