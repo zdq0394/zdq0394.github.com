@@ -22,9 +22,9 @@
 
 ## Docker存储
 * [Docker数据存储](storage/overview.md)
-- * [Volumes使用](storage/volumes.md)
-- * [Bind mounts使用](storage/bindmounts.md)
-- * [tmpfs使用](storage/tmpfs.md)
+    * [Volumes使用](storage/volumes.md)
+    * [Bind mounts使用](storage/bindmounts.md)
+    * [tmpfs使用](storage/tmpfs.md)
 * [aufs](storage/aufs.md)
 * [devicemapper](storage/devicemapper.md)
 
