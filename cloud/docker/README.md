@@ -31,7 +31,7 @@
     * [devicemapper](storage/devicemapper.md)
     * [btrfs](storage/btrfs.md)
     * [overlayfs](storage/overlay.md)
-    * [zfs](storage/zfs.md)(
+    * [zfs](storage/zfs.md)
     * [vfs](storage/vfs.md)
 
 ## Docker Registry
