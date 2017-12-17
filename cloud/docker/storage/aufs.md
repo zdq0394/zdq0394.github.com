@@ -55,7 +55,7 @@ AUFS uses the Copy-on-Write (CoW) strategy to maximize storage efficiency and mi
 * **文件既存在于container layer又存在于image layer**: 从容器层读取文件。容器层中的文件**隐藏**了同名的镜像层中的文件。
 
 ### 修改文件或者目录
-* ** Writing to a file for the first time**：**aufs driv·er**执行`copy_up`操作，将文件从某个镜像层拷贝到容器层，然后容器将变更写到容器层中的文件副本。 
+* **Writing to a file for the first time**：**aufs driv·er**执行`copy_up`操作，将文件从某个镜像层拷贝到容器层，然后容器将变更写到容器层中的文件副本。 
 * **Deleting files and directories**
     * 如果删除文件，容器层中会创建一个whiteout文件。位于镜像层中的文件不会被删除，镜像层是只读的。whiteout文件会让文件变的对容器不可用。
     * 如果删除目录，容器层中会创建一个opaque文件。同样opaque文件可以隐藏镜像中的指定目录。
