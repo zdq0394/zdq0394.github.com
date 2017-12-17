@@ -1,8 +1,23 @@
-# aufs
-AUFS是一种**Union File System**，所谓UnionFS就是**把不同物理位置的目录合并mount到同一个目录中**。
+# aufs Storage Driver
+AUFS是**Union File System**。
 
-UnionFS的一个最主要的应用是，把一张CD/DVD和一个硬盘目录给联合mount在一起，然后，你就可以对这个只读的CD/DVD上的文件进行修改。当然，修改的文件存于硬盘上的目录里。
+## 配置AUFS
+当启动Docker时，如果**AUFS driver**已经加载到内核，并且没有其它的storage driver，Docker会默认使用AUFS。
+1. 使用下面的命令可以查看系统是否支持AUFS
+```sh
+$ grep aufs /proc/filesystems
 
-AUFS又叫Another UnionFS，后来叫Alternative UnionFS，后来可能觉得不够霸气，叫成Advance UnionFS。
+nodev   aufs
+```
+2. 查看当前Docker的storage driver：
+```sh
+$ docker info
 
-
+<truncated output>
+Storage Driver: aufs
+ Root Dir: /var/lib/docker/aufs
+ Backing Filesystem: extfs
+ Dirs: 0
+ Dirperm1 Supported: true
+<truncated output>
+```
