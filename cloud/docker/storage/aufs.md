@@ -191,7 +191,7 @@ json字段parent指出了上一层的id。如此一次可以找下去。直到�
 ### AUFS文件系统
 **/var/lib/docker/aufs**目录下有3个子目录组成：
 ```sh
-root@vm-dq-test:/var/lib/docker/aufs# ls -la
+root@local:/var/lib/docker/aufs# ls -la
 total 20
 drwxr-xr-x  5 root root 4096 Dec 19 10:01 .
 drwx------  9 root root 4096 Dec 19 10:26 ..
