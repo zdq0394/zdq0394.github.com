@@ -5,27 +5,27 @@ Device Mapper是Linux2.6内核中支持**逻辑卷管理**的**通用设备映�
 
 ![](pics/devicemapper_1.gif)
 
-在内核中Device Mapper通过一个一个模块化的**target driver插件**实现**对IO请求的过滤或者重新定向**等工作。
-当前已经实现的target driver插件包括软raid、软加密、逻辑卷条带、多路径、镜像、快照等。
+在内核中，Device Mapper通过一个个模块化的**target driver插件**实现**对IO请求的过滤或者重新定向**等工作。
+当前已经实现的target driver插件包括**软raid**、**软加密**、**逻辑卷条带**、**多路径**、**镜像**、**快照**等。
 图中linear、mirror、snapshot、multipath表示的就是这些target driver。
 
 Device mapper进一步体现了在Linux内核设计中**策略和机制**分离的原则，将所有与策略相关的工作放到**用户空间**完成，内核中主要提供完成这些策略所需要的机制。
 
-Device mapper用户空间相关部分主要负责配置具体的策略和控制逻辑，比如逻辑设备和哪些物理设备建立映射，怎么建立这些映射关系等等。
+Device mapper用户空间相关部分主要负责配置具体的策略和控制逻辑，比如逻辑设备和哪些物理设备建立映射，怎么建立这些映射关系等。
 而具体过滤和重定向IO请求的工作由内核中相关代码完成。
 因此整个device mapper机制由两部分组成：
 1. 内核空间的device mapper驱动。
 2. 用户空间的device mapper库以及它提供的dmsetup工具。
 
 ## 内核部分
-Device mapper的内核相关代码已经作为Linux 2.6内核发布版的一部分集成到内核源码中了。
-相关代码在内核源码的driver/md/目录中，其代码文件可以划分为实现device mapper内核中基本架构的文件和实现具体映射工作的target driver插件文件两部分。
+Device Mapper的内核相关代码已经作为Linux 2.6内核发布版的一部分集成到内核源码中了。
+相关代码在内核源码的driver/md/目录中，其代码文件可以划分为实现device mapper内核中基本架构的文件和实现具体映射工作的target driver文件两部分。
 
 ### 重要概念
-Device mapper在内核中是作为一个**块设备驱动**被注册的。它包含三个重要的对象概念：
+Device Mapper在内核中是作为一个**块设备驱动**被注册的。它包含三个重要的对象概念：
 
 * **mapped device**
-* **映射表**
+* **map table**
 * **target device**。
 
 Mapped device是一个**逻辑抽象概念**，可以理解为**内核向外提供的逻辑设备**。
@@ -36,26 +36,26 @@ Mapped device是一个**逻辑抽象概念**，可以理解为**内核向外提�
 
 Target device表示的是mapped device所映射的物理空间段，对mapped device所表示的逻辑设备来说，就是该逻辑设备映射到的一个物理设备。
 
-Device mapper中这三个对象和target driver插件一起构成了一个**可迭代的设备树**。
+Device Mapper中这三个对象和target driver插件一起构成了一个**可迭代的设备树**。
 在该树型结构中的顶层根节点是最终作为逻辑设备向外提供的mapped device，叶子节点是target device所表示的底层物理设备。
 
 最小的设备树由单个mapped device和target device组成。
 
-* **每个target device都是被mapped device独占的，只能被一个mapped device使用**。
-* **一个mapped device可以映射到一个或者多个target device上**。
-* **一个mapped device又可以作为它上层mapped device的target device被使用**，该层次在理论上可以在device mapper架构下无限迭代下去。
+* **每个target device都是被mapped device独占的，只能被一个mapped device使用。**
+* **一个mapped device可以映射到一个或者多个target device上。**
+* **一个mapped device可以作为它上层mapped device的target device被使用，**该层次在理论上可以在device mapper架构下无限迭代下去。
 
 ![](pics/devicemapper_2.gif)
 
-在上图中可以看到mapped device 1通过映射表和a、b、c三个target device建立了映射关系。
-而target device a又是通过mapped device 2演化过来，mapped device 2通过映射表和target device d建立映射关系。
+从上图中可以看到**mapped device 1**通过**映射表**和a、b、c三个**target device**建立了映射关系。
+而target device a又是通过mapped device 2演化过来，**mapped device 2**通过映射表和**target device d**建立映射关系。
 
 进一步看一下上述三个对象在代码中的具体实现。
 1. dm.c文件定义的mapped_device结构用于表示mapped device，它主要包括该**mapped device相关的锁**，**注册的请求队列**和一些**内存池**以及**指向它所对应映射表的指针**等域。
-2. Mapped device对应的映射表是由dm_table.c文件中定义的dm_table结构表示的，该结构中包含一个dm_target结构数组，dm_target结构具体描述了mapped_device到它某个target device的映射关系。
-3. 而在dm_table结构中将这些dm_target按照B树的方式组织起来方便IO请求映射时的查找操作。
+2. Mapped device对应的映射表是由dm_table.c文件中定义的dm_table结构表示的，该结构中包含一个**dm_target结构数组，dm_target结构具体描述了mapped_device到它某个target device的映射关系**。
+3. dm_table结构中将这些dm_target按照B树的方式组织起来方便IO请求映射时的查找操作。
 
-Dm_target结构具体记录该结构对应target device所映射的mapped device逻辑区域的开始地址和范围，同时还包含指向具体target device相关操作的target_type结构的指针。
+dm_target结构具体记录该结构对应target device所映射的**mapped device逻辑区域的开始地址和范围**，同时还包含指向具体target device相关操作的target_type结构的指针。
 
 Target_type结构主要包含了target device对应的target driver插件的名字、定义的构建和删除该类型target device的方法、该类target device对应的IO请求重映射和结束IO的方法等。
 
