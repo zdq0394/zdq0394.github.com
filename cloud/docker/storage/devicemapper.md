@@ -52,7 +52,7 @@ xvdf                    202:80   0  100G  0 disk
 ### Reading files
 使用`devicemapper`，读操作at the block level。
 
-![](dm_container.jpg)
+![](pics/dm_container.jpg)
 
 容器中的应用发起了对块`0x44f`的读请求。由于container只不过是镜像的一个thin snapshot，所以它没有这个block，却有一个指针指向这个块——包含该块的最近的镜像层。容器从这里读取该块到容器的内存中。
 
