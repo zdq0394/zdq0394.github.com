@@ -63,4 +63,4 @@ xvdf                    202:80   0  100G  0 disk
 
 **Deleting a file or directory**：当一个文件被删除后，`devicemapper`截获随后的读请求并返回**文件不存在**。
 
-**Writing and then deleting a file**：If a container writes to a file and later deletes the file, all of those operations happen in the container’s writable layer. In that case, if you are using direct-lvm, the blocks are freed. If you use loop-lvm, the blocks may not be freed. This is another reason not to use loop-lvm in production.
+**Writing and then deleting a file**：If a container writes to a file and later deletes the file, all of those operations happen in the container’s writable layer. In that case, if you are using direct-lvm, the blocks are freed. If you use loop-lvm, the blocks may not be freed. This is another reason not to use loop-lvm in production。

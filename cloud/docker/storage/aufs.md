@@ -77,7 +77,7 @@ To summarize some of the performance related aspects already mentioned：
 * Solid State Devices (SSD) provide faster reads and writes than spinning disks.
 * Use volumes for write-heavy workloads: Volumes provide the best and most predictable performance for write-heavy workloads. This is because they bypass the storage driver and do not incur any of the potential overheads introduced by thin provisioning and copy-on-write. Volumes have other benefits, such as allowing you to share data among containers and persisting even when no running container is using them.
 
-## Ubuntu 14.04下的Docker
+## Ubuntu 14.04下的Docker AUFS存储
 查看docker目录，可见如下内容：
 ```sh
 root@local:/var/lib/docker# ls
