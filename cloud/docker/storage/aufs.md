@@ -178,12 +178,104 @@ drwx------ 21 root root 4096 Dec 19 10:34 ..
 
 json:
 ```json
-{"id":"c7d952921cec16e2213a30b7e9251ae41d3388f8bb47a55115373eb8f5f86c0d","parent":"cdae54488c335c13449ff5144e0314e70a800e123d8040d75cb232a9ac9d15f3","created":"2017-12-12T07:15:58.901779813Z","container":"cf72799c32e80417751c6657f680d42cef1f5a03befe10074860e9fdfa8d9709","container_config":{"Hostname":"cf72799c32e8","Domainname":"","User":"","Memory":0,"MemorySwap":0,"CpuShares":0,"Cpuset":"","AttachStdin":false,"AttachStdout":false,"AttachStderr":false,"PortSpecs":null,"ExposedPorts":{"6379/tcp":{}},"Tty":false,"OpenStdin":false,"StdinOnce":false,"Env":["PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","GOSU_VERSION=1.10","REDIS_VERSION=4.0.6","REDIS_DOWNLOAD_URL=http://download.redis.io/releases/redis-4.0.6.tar.gz","REDIS_DOWNLOAD_SHA=769b5d69ec237c3e0481a262ff5306ce30db9b5c8ceb14d1023491ca7be5f6fa"],"Cmd":["/bin/sh","-c","#(nop) ","CMD [\"redis-server\"]"],"Image":"sha256:03e433d6dc5431c878f412f8a65064556876c6dbad3393bd2d9cfff6ee66b794","Volumes":{"/data":{}},"WorkingDir":"/data","Entrypoint":["docker-entrypoint.sh"],"NetworkDisabled":false,"MacAddress":"","OnBuild":[],"Labels":{}},"docker_version":"17.06.2-ce","config":{"Hostname":"","Domainname":"","User":"","Memory":0,"MemorySwap":0,"CpuShares":0,"Cpuset":"","AttachStdin":false,"AttachStdout":false,"AttachStderr":false,"PortSpecs":null,"ExposedPorts":{"6379/tcp":{}},"Tty":false,"OpenStdin":false,"StdinOnce":false,"Env":["PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","GOSU_VERSION=1.10","REDIS_VERSION=4.0.6","REDIS_DOWNLOAD_URL=http://download.redis.io/releases/redis-4.0.6.tar.gz","REDIS_DOWNLOAD_SHA=769b5d69ec237c3e0481a262ff5306ce30db9b5c8ceb14d1023491ca7be5f6fa"],"Cmd":["redis-server"],"Image":"sha256:03e433d6dc5431c878f412f8a65064556876c6dbad3393bd2d9cfff6ee66b794","Volumes":{"/data":{}},"WorkingDir":"/data","Entrypoint":["docker-entrypoint.sh"],"NetworkDisabled":false,"MacAddress":"","OnBuild":[],"Labels":null},"architecture":"amd64","os":"linux","Size":0}
+{
+    "id":"c7d952921cec16e2213a30b7e9251ae41d3388f8bb47a55115373eb8f5f86c0d","parent":"cdae54488c335c13449ff5144e0314e70a800e123d8040d75cb232a9ac9d15f3",
+    "created":"2017-12-12T07:15:58.901779813Z","container":"cf72799c32e80417751c6657f680d42cef1f5a03befe10074860e9fdfa8d9709",
+    "container_config":
+    {
+        "Hostname":"cf72799c32e8",
+        "Domainname":"",
+        "User":"",
+        "Memory":0,
+        "MemorySwap":0,
+        "CpuShares":0,
+        "Cpuset":"",
+        "AttachStdin":false,
+        "AttachStdout":false,
+        "AttachStderr":false,
+        "PortSpecs":null,
+        "ExposedPorts":{"6379/tcp":{}},
+        "Tty":false,
+        "OpenStdin":false,
+        "StdinOnce":false,
+        "Env":["PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","GOSU_VERSION=1.10","REDIS_VERSION=4.0.6","REDIS_DOWNLOAD_URL=http://download.redis.io/releases/redis-4.0.6.tar.gz","REDIS_DOWNLOAD_SHA=769b5d69ec237c3e0481a262ff5306ce30db9b5c8ceb14d1023491ca7be5f6fa"],
+        "Cmd":["/bin/sh","-c","#(nop) ","CMD [\"redis-server\"]"],"Image":"sha256:03e433d6dc5431c878f412f8a65064556876c6dbad3393bd2d9cfff6ee66b794",
+        "Volumes":{"/data":{}},
+        "WorkingDir":"/data",
+        "Entrypoint":["docker-entrypoint.sh"],
+        "NetworkDisabled":false,
+        "MacAddress":"",
+        "OnBuild":[],
+        "Labels":{}
+    },
+    "docker_version":"17.06.2-ce",
+    "config":{
+        "Hostname":"",
+        "Domainname":"",
+        "User":"",
+        "Memory":0,
+        "MemorySwap":0,
+        "CpuShares":0,
+        "Cpuset":"",
+        "AttachStdin":false,
+        "AttachStdout":false,
+        "AttachStderr":false,
+        "PortSpecs":null,
+        "ExposedPorts":{"6379/tcp":{}},
+        "Tty":false,
+        "OpenStdin":false,
+        "StdinOnce":false,
+        "Env":["PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin","GOSU_VERSION=1.10","REDIS_VERSION=4.0.6","REDIS_DOWNLOAD_URL=http://download.redis.io/releases/redis-4.0.6.tar.gz","REDIS_DOWNLOAD_SHA=769b5d69ec237c3e0481a262ff5306ce30db9b5c8ceb14d1023491ca7be5f6fa"],
+        "Cmd":["redis-server"],
+        "Image":"sha256:03e433d6dc5431c878f412f8a65064556876c6dbad3393bd2d9cfff6ee66b794",
+        "Volumes":{"/data":{}},
+        "WorkingDir":"/data",
+        "Entrypoint":["docker-entrypoint.sh"],
+        "NetworkDisabled":false,
+        "MacAddress":"",
+        "OnBuild":[],
+        "Labels":null
+    },
+    "architecture":"amd64",
+    "os":"linux",
+    "Size":0
+}
 ```
 json字段parent指出了上一层的id。如此一次可以找下去。直到最后一层。
 
 ``` json
-{"id":"2e4125888032d525ea7911decb974240d77d5946a00262bbabf6a765b28351c4","created":"2017-12-12T01:41:34.77099551Z","container_config":{"Hostname":"","Domainname":"","User":"","Memory":0,"MemorySwap":0,"CpuShares":0,"Cpuset":"","AttachStdin":false,"AttachStdout":false,"AttachStderr":false,"PortSpecs":null,"ExposedPorts":null,"Tty":false,"OpenStdin":false,"StdinOnce":false,"Env":null,"Cmd":["/bin/sh -c #(nop) ADD file:e7ac45803c3ab9b7023933b75f5a88eda1f3edca97c7e462401860777cf312f7 in / "],"Image":"","Volumes":null,"WorkingDir":"","Entrypoint":null,"NetworkDisabled":false,"MacAddress":"","OnBuild":null,"Labels":null},"Size":79146752}
+{
+    "id":"2e4125888032d525ea7911decb974240d77d5946a00262bbabf6a765b28351c4",
+    "created":"2017-12-12T01:41:34.77099551Z",
+    "container_config":
+        {
+            "Hostname":"",
+            "Domainname":"",
+            "User":"",
+            "Memory":0,
+            "MemorySwap":0,
+            "CpuShares":0,
+            "Cpuset":"",
+            "AttachStdin":false,
+            "AttachStdout":false,
+            "AttachStderr":false,
+            "PortSpecs":null,
+            "ExposedPorts":null,
+            "Tty":false,
+            "OpenStdin":false,
+            "StdinOnce":false,
+            "Env":null,
+            "Cmd":["/bin/sh -c #(nop) ADD file:e7ac45803c3ab9b7023933b75f5a88eda1f3edca97c7e462401860777cf312f7 in / "],"Image":"",
+            "Volumes":null,
+            "WorkingDir":"",
+            "Entrypoint":null,
+            "NetworkDisabled":false,
+            "MacAddress":"",
+            "OnBuild":null,
+            "Labels":null
+        },
+    "Size":79146752
+}
 ```
 
 最后一层没有parent字段，结束。
