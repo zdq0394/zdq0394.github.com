@@ -19,10 +19,19 @@ Storage Driver控制和管理宿主机上的镜像和容器。
 ## Supported backing filesystems
 对Docker来说，backing filesystem就是`/var/lib/docker`目录所在的文件系统。
 有些storage driver需要特定的backing filesystem。
-
 * overlay,overlay2：ext4, xfs
 * aufs：ext4, xfs
 * devicemapper：direct-lvm
 * btrfs：btrfs
 * zfs：zfs
-* 
+
+## Suitability for your workload
+* aufs，overlay，和overlay2都是在file level操作，而不是block level。对内存的使用效率高，但是对于write-heavy的应用，容器的writable layer增长过快。 
+* Block-level的storage drivers，比如devicemapper，btrfs和zfs在write-heavy workloads方面表现比较好，当然最好还是使用docker volumes。
+* 对于很多small writes的容器，或者容器的层数很多，overlay比overlay2表现要好。
+* btrfs和zfs都需要大量内存。
+* zfs更适合高密度负载的场景，比如PaaS。
+
+## Stability
+aufs、overlay和devicemapper稳定性更好。
+
