@@ -25,14 +25,14 @@
     * [Volumes使用](storage/mnt_volumes.md)
     * [Bind mounts使用](storage/mnt_bindmounts.md)
     * [tmpfs使用](storage/mnt_tmpfs.md)
-* [Drivers概述](storage/sd_drivers.md)
-* [如何选择driver](storage/sd_selecct.md)
+* [Storage Drivers概述](storage/sd_drivers.md)
     * [aufs](storage/sd_aufs.md)
     * [devicemapper](storage/sd_devicemapper.md)
     * [btrfs](storage/sd_btrfs.md)
     * [overlayfs](storage/sd_overlay.md)
     * [zfs](storage/sd_zfs.md)
     * [vfs](storage/sd_vfs.md)
+* [如何选择Storage driver](storage/sd_select.md)
 
 ## Docker Registry
 * [概述](registry/overview.md)
