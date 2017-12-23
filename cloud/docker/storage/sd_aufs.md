@@ -40,11 +40,6 @@ AUFS uses the Copy-on-Write (CoW) strategy to maximize storage efficiency and mi
 * **Renaming directories**: **Calling rename(2) for a directory is not fully supported on AUFS**。It returns EXDEV (“cross-device link not permitted”), even when both of the source and the destination path are on a same AUFS layer, unless the directory has no children。
 
 ## AUFS and Docker performance
-To summarize some of the performance related aspects already mentioned：
-* AUFS不如overlay2高效。不过对于PaaS等容器密度很高的场景是一个不错的选择。This is because AUFS efficiently shares images between multiple running containers, enabling fast container start times and minimal use of disk space.
+* AUFS不如overlay2高效。不过对于PaaS等容器密度很高的场景是一个不错的选择。因为AUFS可以在多个容器之间共享images，空间效率高，容器启动速度很快，占用空间很小。
 * The underlying mechanics of how AUFS shares files between image layers and containers uses the page cache very efficiently.
-* The AUFS storage driver can introduce significant latencies into container write performance. This is because the first time a container writes to any file, the file has to be located and copied into the containers top writable layer. These latencies increase and are compounded when these files exist below many image layers and the files themselves are large.
-
-### Performance best practices
-* Solid State Devices (SSD) provide faster reads and writes than spinning disks.
-* Use volumes for write-heavy workloads: Volumes provide the best and most predictable performance for write-heavy workloads. This is because they bypass the storage driver and do not incur any of the potential overheads introduced by thin provisioning and copy-on-write. Volumes have other benefits, such as allowing you to share data among containers and persisting even when no running container is using them.
+* 容器的写性能延迟高。This is because the first time a container writes to any file, the file has to be located and copied into the containers top writable layer. These latencies increase and are compounded when these files exist below many image layers and the files themselves are large。

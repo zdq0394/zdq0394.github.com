@@ -32,8 +32,8 @@
     * [overlayfs](storage/sd_overlay.md)
     * [zfs](storage/sd_zfs.md)
     * [vfs](storage/sd_vfs.md)
-* [Storage Driver实践分析]
-    * [Ubuntu 14.04下的Docker AUFS存储](storage/sd_aufs_ubuntu_14_04.md)
+* Storage Driver实践分析
+    * [Ubuntu 14.04下的Docker AUFS存储](storage/action_aufs_ubuntu_14_04.md)
 * [如何选择Storage driver](storage/sd_select.md)
 
 ## Docker Registry
