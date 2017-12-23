@@ -49,9 +49,16 @@ Each container’s writable layer is a ZFS clone which shares all its data with 
 ![pics/zpool_blocks.jpg]
 
 ### Writting files
-* **Writing a new file**: space is allocated on demand from the underlying zpool and the blocks are written directly into the container’s writable layer.
-* **Modifying an existing file**: space is allocated only for the changed blocks, and those blocks are written into the container’s writable layer using a copy-on-write (CoW) strategy. This minimizes the size of the layer and increases write performance.
+* **Writing a new file**: space is **allocated on demand** from the underlying zpool and the blocks are written directly into the container’s writable layer.
+* **Modifying an existing file**: space is allocated **only for the changed blocks**, and those blocks are written into the container’s writable layer using a copy-on-write (CoW) strategy. This minimizes the size of the layer and increases write performance.
 * **Deleting a file or directory**:
     * When you delete a file or directory that exists in a lower layer, the ZFS driver masks the existence of the file or directory in the container’s writable layer, even though the file or directory still exists in the lower read-only layers.
     * If you create and then delete a file or directory within the container’s writable layer, the blocks are reclaimed by the zpool.
+
 ## ZFS and Docker performance
+使用`zfs`作为storage driver，一下几点会影响Docker的性能：
+* Memory： 对ZFS性能影响比较大。ZFS是为拥有大内存的大型的企业级服务器设计的。
+* ZFS Features： de-duplication，这个特性会节省磁盘空间，但是非常耗费内存。建议disable。
+* ZFS Caching：ZFS把disk blocks缓存在内存中：Adaptive Replacement Cache(ARC)。ZFS中，一个cached copy of block会被多个clones共享，也就是多个容器会共享一个cached copy of block。适合PaaS这种高密度的场景。
+* Fragmentation： Fragmentation is a natural byproduct of copy-on-write filesystems like ZFS。
+* Use the native ZFS driver for Linux：The ZFS FUSE implementation is not recommended, due to poor performance。
