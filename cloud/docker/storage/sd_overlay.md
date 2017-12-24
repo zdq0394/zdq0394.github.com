@@ -1,6 +1,6 @@
 # Storage Driver overlay/overlay2
 OverlayFS是一个现代的`union filesystem`。
-与AUFSwen文件系统相似，但是比AUFS实现更简单、性能更好。
+与`AUFS`文件系统相似，但是比AUFS实现更简单、性能更好。
 
 ## How the `overlay` driver works
 OverlayFS layers `two directories` on a single Linux host and presents them as `a single directory`。

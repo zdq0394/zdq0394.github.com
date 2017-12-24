@@ -1,18 +1,16 @@
 # devicemapper
-## Device Mapper简介
 [Device Mapper](../../../linux/devicemapper.md)是Linux系统中基于内核的**高级卷管理技术框架**。
 它是内核中支持逻辑卷管理的**通用设备映射机制**，为实现**块设备驱动**提供了一个高度模块化的内核架构，包含三个重要的对象概念：Mapped Device、Mapping Table、Target device。
-Docker的**devicemapper**存储驱动基于该框架的**thin-provisioning**和**snapshotting**功能来实现对镜像和容器的管理。
 
-* Device Mapper： Linux Kernel Framework
-* devicemapper： Docker Storage Driver
+Docker的**devicemapper storage driver**基于该框架的**thin-provisioning**和**snapshotting**功能来实现对镜像和容器的管理。
 
-Docker Engine的**devicemapper存储驱动**使用专用**块设备**来存储数据而非文件系统。块设备可以通过增加物理磁盘扩展，比通过操作系统在文件层面性能更好。
-
+Docker Engine的**devicemapper**使用专用**块设备**来存储数据而非文件系统。
+`devicemapper`工作在`block level`，而不是`file level`。
+块设备可以通过增加物理磁盘扩展。
 
 ## How the `devicemapper` storage driver works
 ```sh
-$ sudo lsblk
+$ lsblk
 
 NAME                    MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
 xvda                    202:0    0    8G  0 disk
@@ -27,9 +25,11 @@ xvdf                    202:80   0  100G  0 disk
 
 ### Image and Container Layers on-disk
 `/var/lib/docker/devicemapper/metadata`目录包含关于Devicemapper配置本身和每个镜像和容器层的元数据。
-`devicemapper`驱动使用snapshots，元数据信息包含snapshots。文件是JSON格式的。
+`devicemapper`驱动使用snapshots，元数据信息包含snapshots。
+文件是JSON格式的。
 
-`/var/lib/docker/devicemapper/mnt`目录包含每个镜像和容器层的mount point。镜像layer的mount points是空的，容器的mount point显示容器本身的文件系统，和从容器内部看是一样的。
+`/var/lib/docker/devicemapper/mnt`目录包含每个镜像和容器层的mount point。
+镜像layer的mount points是空的，容器的mount point显示容器本身的文件系统，和从容器内部看是一样的。
 
 ### Image layering and sharing
 `devicemapper`使用block devices，而不是filesystems，它在块而不是文件这个层次操作。
