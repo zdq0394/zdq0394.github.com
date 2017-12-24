@@ -5,8 +5,6 @@ Btrfs已经进入内核。
 
 Docker的**btrfs storage driver**利用了很多Btrfs的特性——**block-level operations**, **thin provisioning**, **copy-on-write snapshots**, 和**ease of administration**——进行镜像和容器的管理。
 可以非常容易的将多个物理块设备合成一个Btrfs文件系统。
-* Btrfs：文件系统
-* btrfs：Docker storage driver
 
 ## Manager a Btrfs Volume
 Btrfs的一个优点就是易于管理，不需要unmount文件系统，也不必重启Docker。
