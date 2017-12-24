@@ -29,7 +29,7 @@
     * [aufs](storage/sd_aufs.md)
     * [devicemapper](storage/sd_devicemapper.md)
     * [btrfs](storage/sd_btrfs.md)
-    * [overlayfs](storage/sd_overlay.md)
+    * [overlay](storage/sd_overlay.md)
     * [zfs](storage/sd_zfs.md)
     * [vfs](storage/sd_vfs.md)
 * Storage Driver实践分析

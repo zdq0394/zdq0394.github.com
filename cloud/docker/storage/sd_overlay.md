@@ -136,7 +136,6 @@ l:
 * merged：包含的是本层和所有底层的union
 * work： 被OverlayFS内部使用的目录
 
-
 ## How container reads and writes work with overlay or overlay2
 ### Reading files
 * **The file does not exist in the container layer**：从image(lowerdir)读取，性能损失很小。
@@ -146,9 +145,19 @@ l:
 ### Modifying files or directories
 **Writing to a file for the first time**
 
+`overlay/overlay2` driver执行`copy_up`：将文件从`image(lowerdir)`拷贝到`container(upperdir)`。
+容器然后将变更写到容器层的副本中。
+
+OverlayFS works at the `file level` rather than the `block level`。
+
 **Deleting files and directories**
 
+* whiteout file
+* opaque directory
+
 **Renaming directories**
+
+Calling rename(2) for a directory is allowed only when both the source and the destination path are on the top layer. Otherwise, it returns EXDEV error (“cross-device link not permitted”). 
 
 ## OverlayFS and Docker Performance
 `overlay`和`overlay2` storage driver都比`aufs`性能好。
