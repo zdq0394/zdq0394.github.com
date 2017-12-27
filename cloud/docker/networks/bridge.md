@@ -116,6 +116,8 @@ NIC statistics:
             "LinkLocalIPv6PrefixLen": 0,
             "Ports": {},
             "SandboxKey": "/var/run/docker/netns/467c0ddd4651",
+            
+}
 ...
 ```
 容器的SandboxID，以及目录。
