@@ -116,8 +116,35 @@ NIC statistics:
             "LinkLocalIPv6PrefixLen": 0,
             "Ports": {},
             "SandboxKey": "/var/run/docker/netns/467c0ddd4651",
-            
-}
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "3752b4fd65119102960b1aabc7b01d788189f1a04be936300e21d2d91d906fe4",
+            "Gateway": "172.17.0.1",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "172.17.0.2",
+            "IPPrefixLen": 16,
+            "IPv6Gateway": "",
+            "MacAddress": "02:42:ac:11:00:02",
+            "Networks": {
+                "bridge": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "NetworkID": "7d1db683c0704cfbb0be3fbf5c636ab63fbc2eee3a5ca58aa3ba8d9a67607808",
+                    "EndpointID": "3752b4fd65119102960b1aabc7b01d788189f1a04be936300e21d2d91d906fe4",
+                    "Gateway": "172.17.0.1",
+                    "IPAddress": "172.17.0.2",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "MacAddress": "02:42:ac:11:00:02",
+                    "DriverOpts": null
+                }
+            }
+        }
+
 ...
 ```
 容器的SandboxID，以及目录。
