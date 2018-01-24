@@ -1,16 +1,18 @@
 # Kubernetes
+## Kubernetes组件
+
 ## Kubernetes对象
 ### 控制器
-* [Deployments](Deployments.md)
-* [ReplicaSet](ReplicaSet.md)
-* [StatefulSet](StatefulSet.md)
-* [DaemonSet](DaemonSet.md)
-* [Job](Job.md)
-* [CronJob](Cronjob.md)
-* [Garbage Collector](Garbage-Collector.md)
+* [Deployments](usage/Deployments.md)
+* [ReplicaSet](usage/ReplicaSet.md)
+* [StatefulSet](usage/StatefulSet.md)
+* [DaemonSet](usage/DaemonSet.md)
+* [Job](usage/Job.md)
+* [CronJob](usage/Cronjob.md)
+* [Garbage Collector](usage/Garbage-Collector.md)
+* [Services](usage/Services.md)
+* [DNS](usage/DNS-Pods-and-Services.md)
 
 ### 其它
-* [Services](Services.md)
-* [DNS](DNS-Pods-and-Services.md)
-* [Pod设置时区](Pod-timezone.md)
-* [Pod的命令设置](Define-a-Command-and-arguments-for-a-container.md)
+* [Pod设置时区](others/Pod-timezone.md)
+* [Pod的命令设置](others/Define-a-Command-and-arguments-for-a-container.md)
