@@ -76,3 +76,4 @@ Admission Control Modules是一个software modules，可以修改或拒绝请求
 除了拒绝请求之外，admission controllers还可以设置字段的默认值。
 
 一旦请求通过所有的admission controllers，它会由API Object相关的验证过程进行验证，然后写入到Kubernetes的object store中。
+

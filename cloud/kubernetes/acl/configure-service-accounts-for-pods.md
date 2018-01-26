@@ -68,3 +68,8 @@ serviceaccount "build-robot" created
 **每当一个新的service account创建后，会自动创建一个与之相关的token secret**。
 
 当创建Pod时，可以通过`spec.serviceAccountName`来指定Pod要使用的service account。指定的service account必须已经存在。
+
+## Manually create a service account API token
+Ignore
+## Add ImagePullSecrets to a service account
+Ignore
