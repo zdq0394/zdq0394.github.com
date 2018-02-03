@@ -12,5 +12,8 @@
 * [Kubernetes](cloud/kubernetes/README.md)
 * [Ceph](cloud/ceph/README.md)
 
+## 大数据
+* [Ray](https://github.com/zdq0394/ray2018)
+
 ## 运维
 * [devops](devops/README.md)
