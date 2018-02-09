@@ -31,6 +31,7 @@ API Object序列化后的apiVersion字段也指定了API Group。
 * Ingress
 * Jobs
 * ReplicaSets
+
 可以在启动API Server时，通过flag `--runtime-config`来决定是否开启某个Resource。
 --runtime-config=extensions/v1beta1/deployments=false,extensions/v1beta1/jobs=false
 
