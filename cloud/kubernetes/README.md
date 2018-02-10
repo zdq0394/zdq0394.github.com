@@ -3,9 +3,9 @@
 
 ## Kubernetes API
 * [API概述](api/api_overview.md)
-* [API访问控制](controlling-access-to-the-kubernetes-api.md)
-* [认证](authentication.md)
-* [授权](authorization-overview.md)
+* [API访问控制](acl/controlling-access-to-the-kubernetes-api.md)
+* [认证](acl/authentication.md)
+* [授权](acl/authorization-overview.md)
 
 ## Kubernetes对象
 ### 控制器
