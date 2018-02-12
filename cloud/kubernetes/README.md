@@ -5,6 +5,7 @@
 * [User Guide to Service accounts](serviceaccounts/user-guide-to-sa.md)
 * [Admin Guide to Service accounts](serviceaccounts/admin-guide-to-sa.md)
 * [API概述](api/api_overview.md)
+* [API概念](api/api_concepts.md)
 * [API访问控制](acl/controlling-access-to-the-kubernetes-api.md)
 * [认证](acl/authentication.md)
 * [授权](acl/authorization-overview.md)

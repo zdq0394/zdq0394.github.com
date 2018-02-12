@@ -30,6 +30,7 @@ Token Controller异步执行。
 * 观察secret的删除，如果需要的化，从相关的service account中清除对secret的引用。
 
 **重点**
+
 启动controller-manager时，通过`--service-account-private-key-file`指定一个private key file给token controller。
 这个private key file用来对生成的service account token签名。
 
