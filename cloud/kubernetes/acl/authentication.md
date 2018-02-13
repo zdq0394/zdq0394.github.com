@@ -1,10 +1,13 @@
 # 认证
-## Kubernetes中的users
+## Kubernetes中的用户（users）
 Kubernetes集群有**两种**类型的用户（users）。
-* Service accounts：由kubernetes管理，可以通过API call，比如kubectl命令，直接创建service account。并且service accounts被绑定到一个namespace中。
-* normal users：由外部独立的服务来管理，在kubernetes种没有相应的对象来描述normal user，也不能通过API call添加一个normal user到kubernetes集群中。
+* **Service accounts**：由kubernetes管理，可以通过API调用，比如kubectl命令，直接创建service accounts，并且service accounts会被绑定到一个namespace中。
+* **normal users**：由外部独立的服务来管理，在kubernetes中没有相应的对象来描述normal user，也不能通过API调用添加normal user到kubernetes集群中。
 
-一个API请求要么是被一个normal user调用，要么是被一个service account调用，要么是匿名的。
+一个API请求可以被：
+* 一个normal user调用；
+* 一个service account调用；
+* 匿名调用。
 
 ## 认证策略
 Kubernetes可以使用**client certificates**，**bearer tokens**，**authenticating proxy**，**HTTP basic auth**等方式来认证API请求。
