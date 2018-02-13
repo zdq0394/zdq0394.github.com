@@ -73,7 +73,34 @@ password,user,uid,"group1,group2,group3"
 
 当一个HTTP请求使用basic auth认证时，API Server期望存在请求头`Authorization Basic BASE64ENCODED(USER:PASSWORD)`。
 ### Service Account Tokens
+一个Service Account是一个自动enabled的authenticator，它使用signed bearer tokens验证requests。
 
+该plugin使用两个optional flags：
+* **--service-account-key-file** PEM编码的key文件，用来签名bearer tokens，如果没有指定，将使用API Server的TLS private key。
+* **--service-account-lookup** 如果enabled，API删除的tokens将被revoked。
+
+Service accounts通常由API Server通过[Service Account Admission Controller](../serviceaccounts/admin-guide-to-sa.md)自动创建，并关联到pod里面。
+
+Bearer tokens将自动mount到Pod中容器的指定位置，并且允许in-cluster processes与API Server交互。
+
+Account也可以使用PodSpec.serviceAccountName显式的绑定到pods中。
+```yaml
+apiVersion: apps/v1 # this apiVersion is relevant as of Kubernetes 1.9
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: default
+spec:
+  replicas: 3
+  template:
+    metadata:
+    # ...
+    spec:
+      serviceAccountName: bob-the-bot
+      containers:
+      - name: nginx
+        image: nginx:1.7.9
+```
 ### OpenID Connect Tokens
 
 ### Webhook Token Authentication
