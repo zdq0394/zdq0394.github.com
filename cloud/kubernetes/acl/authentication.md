@@ -138,8 +138,4 @@ extra:
 
 ## 匿名请求
 
-## User impersonation（扮演）
-
-
-
-
+## [User impersonation](impersonation.md)
