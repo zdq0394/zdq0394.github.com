@@ -137,5 +137,13 @@ extra:
 ### Keystone Password
 
 ## 匿名请求
+如果允许匿名请求，所有没有被认证模块`拒绝`的请求，都被认为是匿名请求。
+对于匿名请求：
+* username: system:anonymous
+* group: system.unauthenticated
+
+举个例子，如果API Server提供了token authentication，并且允许匿名请求。
+* 如果一个请求，带着一个invalid token，API Server将返回401 `unauthorized`。
+* 如果一个请求，没有提供token，API Server将把它作为匿名请求。
 
 ## [User impersonation](impersonation.md)
