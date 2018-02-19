@@ -101,9 +101,40 @@ spec:
       - name: nginx
         image: nginx:1.7.9
 ```
-### OpenID Connect Tokens
 
-### Webhook Token Authentication
+Service account bearer tokens非常适合在集群外部使用，适合于long standing jobs认证。
+可以通过命令行`kubectl create serviceaccount (NAME)` 在当前namespace创建一个service account，并关联一个secret。
+
+```sh
+$ kubectl create serviceaccount jenkins
+serviceaccount "jenkins" created
+$ kubectl get serviceaccounts jenkins -o yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  # ...
+secrets:
+- name: jenkins-token-1yvwg
+```
+
+创建的secret包含API Server的public CA和一个签名的JSON Web Token(JWT)。
+```
+$ kubectl get secret jenkins-token-1yvwg -o yaml
+apiVersion: v1
+data:
+  ca.crt: (APISERVER'S CA BASE64 ENCODED)
+  namespace: ZGVmYXVsdA==
+  token: (BEARER TOKEN BASE64 ENCODED)
+kind: Secret
+metadata:
+  # ...
+type: kubernetes.io/service-account-token
+```
+签名的JSON Web Token可以作为bearer token来认证当前的service account。
+
+Service Account会被认证为：
+* username：system:serviceaccount:(NAMESPACE):(SERVICEACCOUNT)
+* group： system:serviceaccounts，system:serviceaccounts:(NAMESPACE)
 
 ### 认证代理（Authenticating Proxy）
 API server可以配置成从HTTP Header中获取user信息，比如`X-Remote-User`。Kubernetes结合一个认证代理，认证代理拦截所有的API请求，认证通过之后，并设置相应的HTTP Header，然后将请求转发给API Server。
@@ -133,9 +164,6 @@ extra:
   - openid
   - profile
 ```
-
-### Keystone Password
-
 ## 匿名请求
 如果允许匿名请求，所有没有被认证模块`拒绝`的请求，都被认为是匿名请求。
 对于匿名请求：
