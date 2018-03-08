@@ -1,6 +1,6 @@
 # 以太坊私有链搭建
 ## 准备条件
-Ubuntu 14.04操作系统
+Ubuntu 14.04 操作系统
 ## 安装
 执行以下命令：
 ``` bash
@@ -24,7 +24,7 @@ apt-get install ethereum
 1、创建如下文件piccgenes.json
 ```json
 {
-  "config": {
+    "config": {
         "chainId": 15,
         "homesteadBlock": 0,
         "eip155Block": 0,
@@ -44,12 +44,12 @@ apt-get install ethereum
 
 2、初始化数据目录：
 ```
-geth --datadir /mystore/ethereum/chain init piccgenesis.json
+geth --datadir /mystore/mynet/chain init piccgenesis.json
 ```
 
-3、 启动geth
+3、启动geth
 ```
-geth --identity "PICCetherumTestNode"  --rpc  --rpccorsdomain "*" --datadir "/mystore/ethereum/chain" --port "30303"  --rpcapi "db,eth,net,web3" --networkid 95518 --nodiscover console
+geth --identity "MyTestNode"  --rpc  --rpccorsdomain "*" --datadir "/mystore/mynet/chaindata" --port "30303"  --rpcapi "db,eth,net,web3" --networkid 95518 --nodiscover console
 ```
 console进入命令控制台
 ```
