@@ -1,9 +1,9 @@
 # 网络负载均衡（network load balancing）和代理（proxying）
 ## 负载均衡
 *Wikipedia*对负载均衡（load balancing）定义如下：
-``` english
+
 In computing, load balancing improves the distribution of workloads across multiple computing resources, such as computers, a computer cluster, network links, central processing units, or disk drives. Load balancing aims to optimize resource use, maximize throughput, minimize response time, and avoid overload of any single resource. Using multiple components with load balancing instead of a single component may increase reliability and availability through redundancy. Load balancing usually involves dedicated software or hardware, such as a multilayer switch or a Domain Name System server process.
-```
+
 从上面的定义可以看出，负载均衡牵涉到计算的方方面面，不止是网络。
 操作系统使用负载均衡把任务调度到CPU群组上。
 容器编排其，比如kubernetes，使用负载均衡把任务调度到计算机集群上。
