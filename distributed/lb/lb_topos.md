@@ -4,34 +4,42 @@
 Figure 4: Middle proxy load balancing topology
 
 图4所示的部署方式：middle proxy是最常见的。
-比如，硬件方案如：Cisco, Juniper, F5等；云部署方案如Amazon的ALB和NLB，Google的云负载均衡器（Cloud Load Balancer)，以及纯软件部署方案HAProxy和NGINX等。
+* 硬件方案：Cisco, Juniper, F5等
+* 云部署方案：Amazon的ALB和NLB，Google的云负载均衡器（Cloud Load Balancer)
+* 软件部署方案：HAProxy和NGINX等。
 
-* 优势：对用户简单。用户通过DNS连接到负载均衡器即可，不需要关系其它的。
-* 劣势：proxy是个单点；扩展的瓶颈；黑盒子，难以定位问题：不知道是客户端、物理链路还是proxy或者backend的问题。 
+* 优势：对用户简单。用户通过DNS连接到负载均衡器即可，不需要关心其它的。
+* 劣势：proxy是个单点；扩展瓶颈；黑盒子，难以定位问题：不知道是客户端、物理链路还是proxy或者backend的问题。 
 
 ## Edge proxy
 ![](pics/lb5.png)
 Figure 5: Edge proxy load balancing topology
 
-The edge proxy topology shown in figure 5 is really just a variant of the middle proxy topology in which the load balancer is accessible via the Internet. In this scenario the load balancer typically must provide additional “API gateway” features such as TLS termination, rate limiting, authentication, and sophisticated traffic routing. The pros and cons of the edge proxy are the same as the middle proxy. A caveat is that it is typically unavoidable to deploy a dedicated edge proxy in a large Internet-facing distributed system. Clients typically need to access the system over DNS using arbitrary network libraries that the service owner does not control (making the embedded client library or sidecar proxy topologies described in the following sections impractical to run directly on the client). Additionally, for security reasons it is desirable to have a single gateway by which all Internet-facing traffic ingresses into the system.
+**Edge proxy**是**middle proxy**的一个变种：负载均衡器可以通过internet访问。
+在该场景下，负载均衡器另外提供API gateway以支持TLS termination, rate limiting, authentication等流量路由技术。
+Edge Proxy的优势和劣势与middle proxy相同。
 
 ## Embedded client library
 ![](pics/lb6.png)
 Figure 6: Load balancing via embedded client library
 
-To avoid the single point of failure and scaling issues inherent in middle proxy topologies, more sophisticated infrastructures have moved towards embedding the load balancer directly into services via a library, as shown in figure 6. Libraries vary greatly in supported features, but some of the most well known and feature-rich in this category are Finagle, Eureka/Ribbon/Hystrix, and gRPC (loosely based on an internal Google system called Stubby). The main pro of a library based solution is that it fully distributes all of the functionality of the load balancer to each client, thus removing the single point of failure and scaling issues previously described. The primary con of a library-based solution is the fact that the library must be implemented in every language that an organization uses. Distributed architectures are becoming increasingly “polyglot” (multilingual). In this environment, the cost of reimplementing an extremely sophisticated networking library in many different languages can become prohibitive. Finally, deploying library upgrades across a large service architecture can be extremely painful, making it highly likely that many different versions of the library will be running concurrently in production, increasing operational cognitive load.
-With all of that said, the libraries mentioned above have been successful for companies that have been able to limit programming language proliferation and overcome library upgrade pains.
+**Middle proxy**具有单点故障和扩展性问题，为了避免这两个问题，可以把负载均衡功能作为一个library嵌入到客户端程序中，如图6所示。
+* 优势：把负载均衡功能嵌入到各个客户端中，消除了单点故障和扩展问题。
+* 劣势：负载均衡功能的library必须通过每个编程语言实现一次；潜在的升级问题。
 
 ## Sidecar proxy
 ![](pics/lb7.png)
 Figure 7: Load balancing via sidecar proxy
 
-A variant of the embedded client library load balancer topology is the sidecar proxy topology shown in figure 7. In recent years, this topology has been popularized as the “service mesh.” The idea behind the sidecar proxy is that at the cost of a slight latency penalty via hopping to a different process, all of the benefits of the embedded library approach can be obtained without any programming language lock-in. The most popular sidecar proxy load balancers as of this writing are Envoy, NGINX, HAProxy, and Linkerd. For a more detailed treatment of the sidecar proxy approach please see my blog post introducing Envoy as well as my post on the service mesh data plane vs. control plane.
+**Sidecar proxy**是**client library**模式的一个变种。
+近年来，这种部署方式以**service mesh**流行起来。
+背后的思想是：通过转嫁到一个不同的流程，牺牲轻微的延迟，以获取**client library**模式的所有优势，并且消除了编程语言锁定。
+比较流行的sidecar proxy包括：NGINX，HAPROXY和Linkerd。
 
 ## Summary and pros/cons of the different load balancer topologies
-* The middle proxy topology is typically the easiest load balancing topology to consume. It falls short due to being a single point of failure, scaling limitations, and black box operation.
-* The edge proxy topology is similar to middle proxy but typically cannot be avoided.
-* The embedded client library topology offers the best performance and scalability, but suffers from the need to implement the library in every language as well as the need to upgrade the library across all services.
-* The sidecar proxy topology does not perform as well as the embedded client library topology, but does not suffer from any of the limitations.
+* **middle proxy**最典型易用，但是存在单点故障和扩展性限制，以及黑盒操作。
+* **edge proxy**和**middle proxy**类似，但是无法避免。
+* **embedded client library topology**提供了好的性能和扩展性，但是需要各种语言实现，并存在升级问题。
+* **sidecar proxy** 避免了**client library**的缺点，但是存在轻微的性能损失。
 
-Overall, I think the sidecar proxy topology (service mesh) is gradually going to replace all other topologies for service-to-service communication. The edge proxy topology will always be required prior to traffic entering the service mesh.
+综合来看，sidecar proxy（service mesh）将逐渐在service-to-servcie communication中代替其它的部署方式；而**edge proxy**部署在service mesh之前，对流量进行一层均衡和过滤。
