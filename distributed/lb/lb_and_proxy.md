@@ -44,17 +44,18 @@ L4负载均衡器对其搬运的bytes的应用层含义一无所知。
 
 
 ### L7负载均衡 (application)
-L4负载均衡简单并且使用很广。
-但是L4负载均衡存在负载不均的问题，比如：
-两个gRPC/HTTP2客户端要和backend通信。他们通过一个L4负载均衡器。
-L4负载均衡器针对每一个进来的TCP连接建立一条出去的TCP连接到后端。
-然后，Client A每分钟发送一个请求，Client B每秒钟发送50个请求。
+L4负载均衡简单并且使用很广。但是L4负载均衡存在负载不均的问题。
+
+比如：两个gRPC/HTTP2客户端要和backend通信。
+
+他们通过一个L4负载均衡器。L4负载均衡器针对每一个进来的TCP连接建立一条出去的TCP连接到后端。
+然而，Client A每分钟发送一个请求，Client B每秒钟发送50个请求。
 
 在这种情况下，接受Client A请求的backend压力时接受Client B请求的后端的3000倍。
 
 负载严重不均衡。
 
-在所有multiplexing，kept-alive协议中都存在这个问题。
+在所有multiplexing，kept-alive的协议中都存在这个问题。
 
 ![](pics/lb3.png)
 Figure 3: HTTP/2 L7 termination load balancing
