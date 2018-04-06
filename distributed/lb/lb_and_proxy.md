@@ -43,18 +43,22 @@ L4负载均衡器对其搬运的bytes的应用含义一无所知。
 这些bytes可以是HTTP, Redis, MongoDB等任何应用层协议。
 
 ###　L7负载均衡 (application)
-L4 load balancing is simple and still sees wide use. What are the shortcomings of L4 load balancing that warrant investment in L7 (application) load balancing? Take the following L4 specific case as an example:
-Two gRPC/HTTP2 clients want to talk to a backend so they connect through an L4 load balancer.
-The L4 load balancer makes a single outgoing TCP connection for each incoming TCP connection, resulting in two incoming and two outgoing connections.
-However, client A sends 1 request per minute (RPM) over its connection, while client B sends 50 requests per second (RPS) over its connection.
-In the previous scenario, the backend selected to handle client A will be handling approximately 3000x less load then the backend selected to handle client B! This is a large problem and generally defeats the purpose of load balancing in the first place. Note also that this problem happens for any multiplexing, kept-alive protocol. (Multiplexing means sending concurrent application requests over a single L4 connection, and kept-alive means not closing the connection when there are no active requests). All modern protocols are evolving to be both multiplexing and kept-alive for efficiency reasons (it is generally expensive to create connections, especially when the connections are encrypted using TLS), so the L4 load balancer impedance mismatch is becoming more pronounced over time. This problem is fixed by the L7 load balancer.
+L4负载均衡简单并且使用很广。
+但是L4负载均衡存在负载不均的问题，比如：
+两个gRPC/HTTP2客户端要和backend通信。他们通过一个L4负载均衡器。
+L4负载均衡器针对每一个进来的TCP连接建立一条出去的TCP连接到后端。
+然后，Client A每分钟发送一个请求，Client B每秒钟发送50个请求。
 
+在这种情况下，接受Client A请求的backend压力时接受Client B请求的后端的3000倍。
+
+负载严重不均衡。
+
+在所有multiplexing，kept-alive协议中都存在这个问题。
+
+![](pics/lb3.png)
 Figure 3: HTTP/2 L7 termination load balancing
-Figure 3 shows an L7 HTTP/2 load balancer. In this case, the client makes a single HTTP/2 TCP connection to the load balancer. The load balancer then proceeds to make two backend connections. When the client sends two HTTP/2 streams to the load balancer, stream 1 is sent to backend 1 while stream 2 is sent to backend 2. Thus, even multiplexing clients that have vastly different request loads will be balanced efficiently across the backends. This is why L7 load balancing is so important for modern protocols. (L7 load balancing yields a tremendous amount of additional benefits due to its ability to inspect application traffic, but that will be covered in more detail below).
-L7 load balancing and the OSI model
-As I said above in the section on L4 load balancing, using the OSI model for describing load balancing features is problematic. The reason is that L7, at least as described by the OSI model, itself encompasses multiple discrete layers of load balancing abstraction. e.g., for HTTP traffic consider the following sublayers:
-Optional Transport Layer Security (TLS). Note that networking people argue about which OSI layer TLS falls into. For the sake of this discussion we will consider TLS L7.
-Physical HTTP protocol (HTTP/1 or HTTP/2).
-Logical HTTP protocol (headers, body data, and trailers).
-Messaging protocol (gRPC, REST, etc.).
-A sophisticated L7 load balancer may offer features related to each of the above sublayers. Another L7 load balancer might only have a small subset of features that place it in the L7 category. In short, the L7 load balancer landscape is vastly more complicated from a feature comparison perspective than the L4 category. (And of course this section has just touched on HTTP; Redis, Kafka, MongoDB, etc. are all examples of L7 application protocols that benefit from L7 load balancing).
+
+图3是一个L7 HTTP/2负载均衡器。
+客户端发起和负载均衡器建立一条HTTP/2的TCP连接。
+负载均衡器然后建立2条后台连接。
+当客户端向负载均衡器发送两个HTTP/2 stream时，stream 1被发送到backend 1，同时stream2被发送到backend2。
