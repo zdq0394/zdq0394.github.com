@@ -17,8 +17,10 @@
 负载均衡器选择可用backend的策略很多：简单的如随机选择、round robin；复杂的如：考虑延迟、backend load等。
 
 ## Session粘性：Sticky sessions
-对某些应用来说，同一个session的请求达到同一个backend非常重要。这或许和cache、临时复杂状态等相关。
-Session一般包括：HTTP cookies，Client Connection的属性等。很多L7负载均衡器对sticky session都有一定的支持。
+对某些应用来说，同一个session的请求到达同一个backend非常重要。这或许和cache、临时复杂状态等相关。
+Session一般包括：HTTP cookies，Client Connection的属性等。
+
+很多L7负载均衡器对sticky session都有一定的支持。
 
 ## TLS termination
 多数L7负载均衡器对TLS处理做了大量工作：termination、证书验证和绑定，certificate serving using SNI等。
