@@ -216,7 +216,7 @@ FLANNEL_MTU=1400
 FLANNEL_IPMASQ=false
 ```
 
-修改docker启动项目：
+修改docker启动项目，增加：**--bip=172.30.100.1/24 --ip-masq=false --mtu=1400**
 ```text
 # /etc/sysconfig/docker
 
