@@ -15,6 +15,13 @@
 # sed -i.bak 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
 ```
 
+### 在所有节点修改/etc/hosts
+增加entry:
+```config
+192.168.100.100 kube-master
+192.168.100.101 kube-node1
+```
+
 ## 安装Kubernetes、etcd和flannel
 说明：默认安装的CentOS 7.2最小系统即包含可用于安装docker等软件的yum源。 
 
