@@ -2,6 +2,7 @@
 ## 集群节点
 * 192.168.100.100 kube-master
 * 192.168.100.101 kube-node1
+* 192.168.100.102 kube-node2
 
 ## 部署前的准备
 ### 关闭防火墙
@@ -20,6 +21,7 @@
 ```config
 192.168.100.100 kube-master
 192.168.100.101 kube-node1
+192.168.100.102 kube-node2
 ```
 
 ## 安装Kubernetes、etcd和flannel
@@ -189,7 +191,9 @@ kube-node1   Ready     1m
 ## 问题
 本文来源于：https://blog.csdn.net/u012066426/article/details/72770426
 
-**实际操作中碰到问题docker无法启动的情况**
+实际操作过程碰到如下问题：
+
+### docker无法启动
 
 解决方式：
 disable docker配置中的SELinux。
@@ -200,3 +204,22 @@ disable docker配置中的SELinux。
 OPTIONS='--selinux-enabled=false --log-driver=journald --signature-verification=false'
 ```
 
+### 跨节点无法ping通容器
+需要修改docker启动参数，使用flannel网络。
+
+执行如下命令，查询本机的subnet：
+```sh
+cat /run/flannel/subnet.env 
+FLANNEL_NETWORK=172.30.0.0/16
+FLANNEL_SUBNET=172.30.100.1/24
+FLANNEL_MTU=1400
+FLANNEL_IPMASQ=false
+```
+
+修改docker启动项目：
+```text
+# /etc/sysconfig/docker
+
+# Modify these options if you want to change the way the docker daemon runs
+OPTIONS='--selinux-enabled=false --log-driver=journald --signature-verification=false --bip=172.30.100.1/24 --ip-masq=false --mtu=1400'
+```
