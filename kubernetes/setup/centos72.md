@@ -1,7 +1,7 @@
 # 在CentOS 7.2上部署Kubernetes集群
 ## 集群节点
-192.168.100.100 kube-master
-192.168.100.101 kube-node1
+* 192.168.100.100 kube-master
+* 192.168.100.101 kube-node1
 
 ## 部署前的准备
 ### 关闭防火墙
