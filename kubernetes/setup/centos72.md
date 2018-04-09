@@ -34,15 +34,15 @@
 
 ``` sh
 # rpm -qa | grep -E 'kube|docker|etcd|flannel'
-docker-common-1.12.6-16.el7.centos.x86_64
-kubernetes-master-1.5.2-0.5.gita552679.el7.x86_64
-docker-1.12.6-16.el7.centos.x86_64
-kubernetes-1.5.2-0.5.gita552679.el7.x86_64
-flannel-0.7.0-1.el7.x86_64
-kubernetes-client-1.5.2-0.5.gita552679.el7.x86_64
-docker-client-1.12.6-16.el7.centos.x86_64
-kubernetes-node-1.5.2-0.5.gita552679.el7.x86_64
-etcd-3.1.3-1.el7.x86_64
+kubernetes-master-1.5.2-0.7.git269f928.el7.x86_64
+kubernetes-client-1.5.2-0.7.git269f928.el7.x86_64
+docker-client-1.13.1-53.git774336d.el7.centos.x86_64
+kubernetes-1.5.2-0.7.git269f928.el7.x86_64
+etcd-3.2.15-1.el7.x86_64
+flannel-0.7.1-2.el7.x86_64
+docker-common-1.13.1-53.git774336d.el7.centos.x86_64
+docker-1.13.1-53.git774336d.el7.centos.x86_64
+kubernetes-node-1.5.2-0.7.git269f928.el7.x86_64
 ```
 
 Kubernetes软件包提供了一些服务：
