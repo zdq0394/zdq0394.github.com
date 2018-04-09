@@ -116,8 +116,8 @@ KUBE_CONTROLLER_MANAGER_ARGS="--service_account_private_key_file=/var/run/kubern
 ### 配置flannel服务
 参照以下内容编辑/etc/sysconfig/flanneld：
 ```config
-FLANNEL_ETCD="http://kube-master:2379"
-FLANNEL_ETCD_KEY="/kube-centos/network
+FLANNEL_ETCD_ENDPOINTS="http://kube-master:2379"
+FLANNEL_ETCD_PREFIX="/kube-centos/network
 ```
 
 ### (重新）启动所有的服务
@@ -159,8 +159,8 @@ KUBELET_ARGS=""
 
 参照以下内容编辑/etc/sysconfig/flanneld：
 ```config
-FLANNEL_ETCD="http://kube-master:2379"
-FLANNEL_ETCD_KEY="/kube-centos/network
+FLANNEL_ETCD_ENDPOINTS="http://kube-master:2379"
+FLANNEL_ETCD_PREFIX="/kube-centos/network
 ```
 
 ### 启动服务
