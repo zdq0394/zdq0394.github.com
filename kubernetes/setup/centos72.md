@@ -118,6 +118,7 @@ KUBE_CONTROLLER_MANAGER_ARGS="--service_account_private_key_file=/var/run/kubern
 ```config
 FLANNEL_ETCD_ENDPOINTS="http://kube-master:2379"
 FLANNEL_ETCD_PREFIX="/kube-centos/network
+FLANNEL_OPTIONS="-iface=eth0"
 ```
 
 ### (重新）启动所有的服务
@@ -161,6 +162,7 @@ KUBELET_ARGS=""
 ```config
 FLANNEL_ETCD_ENDPOINTS="http://kube-master:2379"
 FLANNEL_ETCD_PREFIX="/kube-centos/network
+FLANNEL_OPTIONS="-iface=eth0"
 ```
 
 ### 启动服务
