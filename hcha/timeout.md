@@ -17,5 +17,5 @@ resolver_timeout 30s
 
 ### 代理超时设置
 * proxy_connect_timeout： 和后端服务器建立连接的超时时间，不超过75s。
-* proxy_read_timeout： Defines a timeout for reading a response from the proxied server. The timeout is set only between two successive read operations, not for the transmission of the whole response. If the proxied server does not transmit anything within this time, the connection is closed.
-* proxy_send_timeout： Sets a timeout for transmitting a request to the proxied server. The timeout is set only between two successive write operations, not for the transmission of the whole request. If the proxied server does not receive anything within this time, the connection is closed.
+* proxy_read_timeout： 设置从后端服务读取响应的时间。这个时间不是整个响应的传输时间，而是两次连续的读操作的间隔时间。
+* proxy_send_timeout： 设置向后端服务发送数据的时间。这个时间不是整个请求的传输时间，而是两次连续的写操作的间隔时间。
