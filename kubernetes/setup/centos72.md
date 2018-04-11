@@ -220,5 +220,5 @@ FLANNEL_IPMASQ=false
 
 在docker.service的启动配置文件：/usr/lib/systemd/system/docker.service，增加flannel网络配置
 ```text
-EnvironmentFile=-/run/flannel/docker'
+EnvironmentFile=-/run/flannel/docker
 ```
