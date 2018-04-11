@@ -218,10 +218,7 @@ FLANNEL_MTU=1400
 FLANNEL_IPMASQ=false
 ```
 
-修改docker启动项目，增加：**--bip=172.30.100.1/24 --ip-masq=false --mtu=1400**
+在docker.service的启动配置文件：/usr/lib/systemd/system/docker.service，增加flannel网络配置
 ```text
-# /etc/sysconfig/docker
-
-# Modify these options if you want to change the way the docker daemon runs
-OPTIONS='--selinux-enabled=false --log-driver=journald --signature-verification=false --bip=172.30.100.1/24 --ip-masq=false --mtu=1400'
+EnvironmentFile=-/run/flannel/docker'
 ```
