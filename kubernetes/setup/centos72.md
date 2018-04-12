@@ -241,7 +241,7 @@ WorkingDirectory=/var/lib/etcd/
 EnvironmentFile=-/etc/etcd/etcd.conf
 User=etcd
 # set GOMAXPROCS to number of processors
-OPTS="--listen-peer-urls=\"${ETCD_LISTEN_PEER_URLS}\" --initial-advertise-peer-urls=\"${ETCD_INITIAL_ADVERTISE_PEER_URLS}\" --advertise-client-urls=\"${ETCD_ADVERTISE_CLIENT_URLS}\" --initial-cluster-token=\"${ETCD_INITIAL_CLUSTER_TOKEN}\" --initial-cluster=\"${ETCD_INITIAL_CLUSTER_STATE}\" initial-cluster-state=\"${ETCD_INITIAL_CLUSTER_STATE}\""
+OPTS="--listen-peer-urls=\"${ETCD_LISTEN_PEER_URLS}\" --initial-advertise-peer-urls=\"${ETCD_INITIAL_ADVERTISE_PEER_URLS}\" --advertise-client-urls=\"${ETCD_ADVERTISE_CLIENT_URLS}\" --initial-cluster-token=\"${ETCD_INITIAL_CLUSTER_TOKEN}\" --initial-cluster=\"${ETCD_INITIAL_CLUSTER}\" initial-cluster-state=\"${ETCD_INITIAL_CLUSTER_STATE}\""
 ExecStart=/bin/bash -c "GOMAXPROCS=$(nproc) /usr/bin/etcd --name=\"${ETCD_NAME}\" --data-dir=\"${ETCD_DATA_DIR}\" --listen-client-urls=\"${ETCD_LISTEN_CLIENT_URLS}\" ${OPTS}"
 Restart=on-failure
 LimitNOFILE=65536
