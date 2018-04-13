@@ -1,4 +1,4 @@
-# Kubernetes使用ELM
+# Kubernetes使用ELK
 Kubernetes集群中的日志收集解决方案如下：
 | 编号 | 方案 | 优点 | 缺点 | 
 | ----- | ----- | ------ | ----- |
