@@ -8,10 +8,8 @@ $ redis-cli
 启动redis客户端，打开终端并输入命令redis-cli。该命令会连接**本地的redis服务**。
 
 ```
-$redis-cli
-redis 127.0.0.1:6379>
-redis 127.0.0.1:6379> PING
-
+$src/redis-cli 
+127.0.0.1:6379> ping
 PONG
 ```
 
@@ -22,9 +20,7 @@ $ redis-cli -h host -p port -a password
 ```
 
 ```
-$redis-cli -h 127.0.0.1 -p 6379 -a "mypass"
-redis 127.0.0.1:6379>
-redis 127.0.0.1:6379> PING
-
+$src/redis-cli -h 172.20.4.204 -p 6379
+172.20.4.204:6379> ping
 PONG
 ```
