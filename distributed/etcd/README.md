@@ -1,4 +1,9 @@
 # ETCD
+## Raft
+* [Raft算法](raft/algorithm.md)
+* [Raft选举](raft/leader_election.md)
+* [日志复制](raft/log_replication.md)
+
 ## etcd基础
 * [etcd简介](intro.md)
 * [etcd动画](http://thesecretlivesofdata.com/raft/)
