@@ -3,6 +3,7 @@
 * [Raft算法](raft/algorithm.md)
 * [Raft选举](raft/leader_election.md)
 * [日志复制](raft/log_replication.md)
+* [Raft状态机safty property](raft/property.md)
 
 ## etcd基础
 * [etcd简介](intro.md)
