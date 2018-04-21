@@ -1,5 +1,5 @@
 # Redis连接
-Redis连接命令主要是用于连接redis服务。
+Redis连接命令主要是用于**连接redis服务**。
 
 ## 示例
 ```sh
@@ -8,7 +8,6 @@ OK
 redis 127.0.0.1:6379> PING
 PONG
 ```
-
 ## Redis连接命令
 * AUTH password：验证密码是否正确。
 * ECHO message：打印字符串。
