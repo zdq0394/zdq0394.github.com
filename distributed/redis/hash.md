@@ -1,5 +1,6 @@
 # Redis哈希(Hash)
 Redis hash是一个string类型的field和value的映射表，**hash特别适合用于存储对象**。
+
 Redis中每个hash可以存储**2的32次幂-1**个键值对（40多亿）。
 ## 示例
 ```
