@@ -1,23 +1,16 @@
 # Redis脚本
-Redis脚本使用Lua解释器来执行脚本。 
+Redis脚本使用**Lua解释器**来执行脚本。 
 
-Reids 2.6版本通过内嵌支持Lua环境。执行脚本的常用命令为EVAL。
-
-```
-redis 127.0.0.1:6379> EVAL script numkeys key [key ...] arg [arg ...]
-```
-
+Reids 2.6版本通过内嵌支持Lua环境。
+执行脚本的常用命令为**EVAL**。
 ## 实例
-
 ```
-redis 127.0.0.1:6379> EVAL "return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}" 2 key1 key2 first second
-
+127.0.0.1:6379> eval "return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}" 2 key1 key2 first second
 1) "key1"
 2) "key2"
 3) "first"
 4) "second"
 ```
-
 ## Redis脚本命令
 * EVAL script numkeys key [key ...] arg [arg ...]：执行Lua脚本。
 * EVALSHA sha1 numkeys key [key ...] arg [arg ...]：执行Lua脚本。
