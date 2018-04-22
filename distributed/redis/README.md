@@ -27,3 +27,6 @@
 * [Redis管道技术](pipeline.md)
 * [Redis分区](shard.md)
 * [Redis性能测试](perf.md)
+
+## Redis进阶
+* [Redis持久化](persist.md)
