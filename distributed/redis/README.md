@@ -1,4 +1,5 @@
 # Redis
+Redis是一个开源的、使用C语言编写的、支持网络交互的、可基于内存也可持久化的Key-Value数据库。
 ## Redis基础
 * [Redis简介](introduction.md)
 * [Redis安装](install.md)
