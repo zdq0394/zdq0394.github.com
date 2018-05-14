@@ -101,3 +101,6 @@ grep -n '^'[a-Z] /etc/zabbix/zabbix_agentd.conf
 systemctl enable zabbix-agent.service
 systemctl restart zabbix-agent.service
 ```
+
+## 参考
+https://blog.csdn.net/xiegh2014/article/details/77571965
