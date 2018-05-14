@@ -102,5 +102,15 @@ systemctl enable zabbix-agent.service
 systemctl restart zabbix-agent.service
 ```
 
+## 安装zabbix_sender
+zabbix获取数据有超时时间，如果一些数据需要执行比较长的时间才能获取的话，那么zabbix会出现异常，考虑到这种情况，zabbix增加了**Trapper**功能，客户端自己提交数据给zabbix，这个通道便是trapper。
+
+使用trapper的步骤如下：
+1. 在zabbix中配置trapper监控项
+2. 传递数据到zabbix中
+```sh
+rpm -ivh http://mirrors.aliyun.com/zabbix/zabbix/3.0/rhel/7/x86_64/zabbix-sender-3.0.5-1.el7.x86_64.rpm
+```
+
 ## 参考
 https://blog.csdn.net/xiegh2014/article/details/77571965
