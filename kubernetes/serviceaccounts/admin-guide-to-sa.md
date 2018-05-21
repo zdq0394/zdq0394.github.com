@@ -37,6 +37,7 @@ Token Controller异步执行。
 启动apiserver时，通过`--service-account-key-file`指定public key，用来验证token controller颁发的token是否有效。
 
 **为Service Account另外创建api token**
+
 一个**controller loop**确保么每个service account都存在一个API token。
 
 要为某个service account新创建一个API token，首先，创建一个`ServiceAccountToken`类型的secret，并且在该secret中通过`annotation`的方式引用`service account`。
