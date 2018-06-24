@@ -40,7 +40,6 @@
 
 ### 其它
 * [Pod设置时区](others/Pod-timezone.md)
-* [Pod的命令设置](others/Define-a-Command-and-arguments-for-a-container.md)
 
 ## GPU使用
 * [GPU使用](gpu/gpu.md)
@@ -50,4 +49,13 @@
 * [flannel](network/flannel.md)
 
 ## 集群部署
+### Kubernetes部署
 * [Centos 7.2集群部署](setup/centos72.md)
+
+### Storage集成
+* [NFS集成](storage/nfs/nfs.md)
+* [Ceph RBD集成](storage/ceph/rbd/rbd.md)
+* [CephFS集成](storage/ceph/cephfs/cephfs.md)
+
+### Ingress Controller部署
+* [Nginx](setup/ingress_nginx_controller.md)
