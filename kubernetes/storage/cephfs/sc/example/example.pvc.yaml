@@ -1,0 +1,12 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: cephfs-pvc-example
+  namespace: dqtest
+spec:
+  storageClassName: "uat-cephfs-kubeuat"
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 128Mi
