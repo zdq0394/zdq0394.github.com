@@ -61,8 +61,8 @@
 
 ### Storage集成
 * [NFS集成](storage/nfs/nfs.md)
-* [Ceph RBD集成](storage/ceph/rbd/rbd.md)
-* [CephFS集成](storage/ceph/cephfs/cephfs.md)
+* [Ceph RBD集成](storage/ceph_rbd/rbd.md)
+* [CephFS集成](storage/cephfs/cephfs.md)
 
 ### Ingress Controller部署
 * [Nginx](setup/ingress_nginx_controller.md)
