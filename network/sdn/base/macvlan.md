@@ -2,13 +2,13 @@
 ## 环境说明
 VirtualBox虚拟机，Centos 7.2。
 ```sh
-# uname -r
+uname -r
 3.10.0-862.el7.x86_64
 ```
 0. 检查内核是否支持macvlan
 ```sh
-# modprobe macvlan
-# lsmod | grep macvlan
+modprobe macvlan
+lsmod | grep macvlan
 macvlan                19239  0 
 ```
 如果第一个命令报错，或者第二个命令没有返回，则说明当前系统不支持macvlan，需要升级系统或者升级内核。
