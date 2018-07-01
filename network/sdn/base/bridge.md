@@ -53,7 +53,8 @@ commands:
 
 ## 实践
 以下将按照下图构建网络
-![](pics/bridge.png)
+![](pics/bridge1.png)
+
 创建一个网桥
 ```sh
 brctl addbr br0
