@@ -47,6 +47,8 @@ cat /proc/sys/net/ipv4/ip_forward
 1
 ```
 ## 实践
+下面将按照如下图构建网络。
+![](pics/vlan_case.png)
 ### 创建虚拟设备
 创建网桥，用来将2个vlan合在一起实现交换功能。
 ```sh
