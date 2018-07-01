@@ -1,5 +1,7 @@
 # Bridge之间通过路由联通
 ## 实践
+以下按照下图构建网络
+![](pics/bridge_router.png)
 ### 创建两个namespace
 ```sh
 ip netns add net100
@@ -56,6 +58,11 @@ ip link add dev r201 type  veth peer name r202
 ip link set r201 master br200
 ip link set r202 netns routerns
 ip netns exec routerns ip addr add 192.168.200.1/24 dev r202
+```
+配置路由
+```sh
+ip netns exec routerns ip route add 192.168.200.0/24 via 192.168.200.1 dev r202
+ip netns exec routerns ip route add 192.168.100.0/24 via 192.168.100.1 dev r102
 ```
 启用设备
 ```sh
