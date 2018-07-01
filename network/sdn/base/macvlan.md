@@ -22,6 +22,8 @@ ip link set enp0s9 promisc on
     link/ether 08:00:27:d1:61:81 brd ff:ff:ff:ff:ff:ff
 ```
 ## 创建macvlan网络
+以下将按照下图构建网络
+![](pics/macvlan1.png)
 1. 创建两个命名空间
 ```sh
 ip netns add net1
