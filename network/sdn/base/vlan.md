@@ -47,10 +47,88 @@ cat /proc/sys/net/ipv4/ip_forward
 1
 ```
 ## 实践
-创建vlan虚拟设备
+### 创建虚拟设备
+创建网桥，用来将2个vlan合在一起实现交换功能。
 ```sh
-ip link add enp0s9.100 link enp0s9 type vlan id 100
-ip link add enp0s9.200 link enp0s9 type vlan id 200
+ip link add dev br0 type bridge
 ```
+创建2个network namespace。
+```sh
+ip netns add net1
+ip netns add net2
+```
+创建第一个虚拟交换机
+```sh
+ip link add dev veth101 type veth peer name veth102
+ip link set dev veth101 master br0
+ip link set dev veth102 netns net1
+
+ip netns exec net1 ip link add dev veth102.100 link veth102 type vlan id 100
+ip netns exec net1 ip link add dev veth102.200 link veth102 type vlan id 200
+
+ip netns exec net1 ip addr add 192.168.100.2/24 dev veth102.100
+ip netns exec net1 ip addr add 192.168.200.2/24 dev veth102.200
+
+ip netns exec net1 ip link set dev veth102 up
+ip netns exec net1 ip link set dev veth102.100 up
+ip netns exec net1 ip link set dev veth102.200 up
+ip link set veth101 up
+```
+创建第二个虚拟交换机
+```sh
+ip link add dev veth201 type veth peer name veth202
+ip link set dev veth201 master br0
+ip link set dev veth202 netns net2
+
+ip netns exec net2 ip link add dev veth202.100 link veth202 type vlan id 100
+ip netns exec net2 ip link add dev veth202.200 link veth202 type vlan id 200
+
+ip netns exec net2 ip addr add 192.168.100.3/24 dev veth202.100
+ip netns exec net2 ip addr add 192.168.200.3/24 dev veth202.200
+
+ip netns exec net2 ip link set dev veth202 up
+ip netns exec net2 ip link set dev veth202.100 up
+ip netns exec net2 ip link set dev veth202.200 up
+ip link set veth201 up
+```
+启用br0设备
+```sh
+ip link set br0 up
+```
+
+### 连通性
+1. 从net1中的虚拟子网(100)中的设备veth102.100 ping net2中虚拟子网(100)中的ip
+```sh
+ip netns exec net1 ping 192.168.100.3 -c 4 -I veth102.100
+PING 192.168.100.3 (192.168.100.3) from 192.168.100.2 veth102.100: 56(84) bytes of data.
+64 bytes from 192.168.100.3: icmp_seq=1 ttl=64 time=0.129 ms
+64 bytes from 192.168.100.3: icmp_seq=2 ttl=64 time=0.118 ms
+64 bytes from 192.168.100.3: icmp_seq=3 ttl=64 time=0.118 ms
+64 bytes from 192.168.100.3: icmp_seq=4 ttl=64 time=0.131 ms
+```
+2. 从net1中的虚拟子网(200)中的设备veth102.200 ping net2中虚拟子网(100)中的ip
+```sh
+ip netns exec net1 ping 192.168.100.3 -c 4 -I veth102.200
+PING 192.168.100.3 (192.168.100.3) from 192.168.200.2 veth102.200: 56(84) bytes of data.
+^C
+--- 192.168.100.3 ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 1999ms
+```
+3. 从net1中的虚拟子网(200)中的设备veth102.200 ping net2中虚拟子网(200)中的ip
+```sh
+ip netns exec net1 ping 192.168.200.3 -c 4 -I veth102.200
+PING 192.168.200.3 (192.168.200.3) from 192.168.200.2 veth102.200: 56(84) bytes of data.
+64 bytes from 192.168.200.3: icmp_seq=1 ttl=64 time=0.086 ms
+64 bytes from 192.168.200.3: icmp_seq=2 ttl=64 time=0.156 ms
+```
+4. 从net1中的虚拟子网(100)中的设备veth102.100 ping net2中虚拟子网(200)中的ip
+```sh
+ip netns exec net1 ping 192.168.200.3 -c 4 -I veth102.100
+PING 192.168.200.3 (192.168.200.3) from 192.168.100.2 veth102.100: 56(84) bytes of data.
+^C
+--- 192.168.200.3 ping statistics ---
+2 packets transmitted, 0 received, 100% packet loss, time 999ms
+```
+
 
 
