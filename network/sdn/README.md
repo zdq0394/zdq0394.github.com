@@ -6,3 +6,4 @@
 * [vlan简单实践](base/vlan.md)
 ## macvlan
 * [macvlan简单实践](base/macvlan.md)
+* [macvlan与vlan实现多租户网络](base/macvlan_vlan.md)
