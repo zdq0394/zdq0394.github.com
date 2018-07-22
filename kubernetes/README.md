@@ -7,9 +7,9 @@
 * [cloud-controller-manager](components/cloud-controller-manager.md)
 
 ### Node Components
-* [kubelet](kubelet.md)
-* [kube-proxy](kube-proxy.md)
-* [Container Runtime](container-runtime.md)
+* [kubelet](components/kubelet.md)
+* [kube-proxy](components/kube-proxy.md)
+* [Container Runtime](components/container-runtime.md)
 
 ### Addons
 * [kube-dns](kube-dns.md)
