@@ -191,26 +191,28 @@ The duration to cache 'unauthorized' responses from the webhook authorizer.
 ### storage
 * --storage-backend string: The storage backend for persistence. Options: 'etcd3' (default), 'etcd2'.
 * --storage-media-type string: Default: "application/vnd.kubernetes.protobuf". The media type to use to store objects in storage. Some resources or storage backends may only support a specific media type and will ignore this setting.
-* --storage-versions string: Default: "admission.k8s.io/v1beta1,
-admissionregistration.k8s.io/v1beta1,
-apps/v1,
-authentication.k8s.io/v1,
-authorization.k8s.io/v1,
-autoscaling/v1,
-batch/v1,
-certificates.k8s.io/v1beta1,
-componentconfig/v1alpha1,
-events.k8s.io/v1beta1,
-extensions/v1beta1,
-imagepolicy.k8s.io/v1alpha1,
-networking.k8s.io/v1,
-policy/v1beta1,
-rbac.authorization.k8s.io/v1,
-scheduling.k8s.io/v1beta1,
-settings.k8s.io/v1alpha1,
-storage.k8s.io/v1,
-v1"
-The per-group version to store resources in. Specified in the format "group1/version1,group2/version2,...". In the case where objects are moved from one group to the other, you may specify the format "group1=group2/v1beta1,group3/v1beta1,...". You only need to pass the groups you wish to change from the defaults. It defaults to a list of preferred versions of all known groups.
+* --storage-versions string: The per-group version to store resources in. Specified in the format "group1/version1,group2/version2,...". In the case where objects are moved from one group to the other, you may specify the format "group1=group2/v1beta1,group3/v1beta1,...". You only need to pass the groups you wish to change from the defaults. It defaults to a list of preferred versions of all known groups.
+    Default:"
+    * admission.k8s.io/v1beta1,
+    * admissionregistration.k8s.io/v1beta1,
+    * apps/v1,
+    * authentication.k8s.io/v1,
+    * authorization.k8s.io/v1,
+    * autoscaling/v1,
+    * batch/v1,
+    * certificates.k8s.io/v1beta1,
+    * componentconfig/v1alpha1,
+    * events.k8s.io/v1beta1,
+    * extensions/v1beta1,
+    * imagepolicy.k8s.io/v1alpha1,
+    * networking.k8s.io/v1,
+    * policy/v1beta1,
+    * rbac.authorization.k8s.io/v1,
+    * scheduling.k8s.io/v1beta1,
+    * settings.k8s.io/v1alpha1,
+    * storage.k8s.io/v1,
+    * v1
+"
 * --target-ram-mb int: Memory limit for apiserver in MB (used to configure sizes of caches, etc.)
 * --tls-cert-file string: File containing the default x509 Certificate for HTTPS. (CA cert, if any, concatenated after server cert). If HTTPS serving is enabled, and --tls-cert-file and --tls-private-key-file are not provided, a self-signed certificate and key are generated for the public address and saved to the directory specified by --cert-dir.
 * --tls-cipher-suites stringSlice: Comma-separated list of cipher suites for the server. If omitted, the default Go cipher suites will be use. 
