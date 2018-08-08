@@ -40,8 +40,9 @@ Kube-controller-manager部署在k8s master节点上，用来控制controllers。
 * --configure-cloud-routes: Default: true. Should CIDRs allocated by allocate-node-cidrs be configured on the cloud provider.
 * --contention-profiling: Enable lock contention profiling, if profiling is enabled
 * --controller-start-interval duration. Interval between starting controller managers.
-* --controllers stringSlice: Default: [*]. A list of controllers to enable. '*' enables all on-by-default controllers, 'foo' enables the controller named 'foo', '-foo' disables the controller named 'foo'.
-
+* --controllers stringSlice: Default: `[*]`. A list of controllers to enable. '*' enables all on-by-default controllers, 'foo' enables the controller named 'foo', '-foo' disables the controller named 'foo'.
+    Disabled-by-default controllers: **bootstrapsigner, tokencleaner**
+    
     All controllers: 
     * attachdetach
     * bootstrapsigner
@@ -75,7 +76,6 @@ Kube-controller-manager部署在k8s master节点上，用来控制controllers。
     * statefulset
     * tokencleaner
     * ttl
-Disabled-by-default controllers: **bootstrapsigner, tokencleaner**
 * --deployment-controller-sync-period duration: Default: 30s. Period for syncing the deployments.
 * --disable-attach-detach-reconcile-sync: Disable volume attach detach reconciler sync. Disabling this may cause volumes to be mismatched with pods. Use wisely.
 * --enable-dynamic-provisioning: Default: true. Enable dynamic provisioning for environments that support it.
