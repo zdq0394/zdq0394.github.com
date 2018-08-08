@@ -3,6 +3,40 @@
 Kube-apiserver部署在k8s master节点上。
 Kube-apiserver对外暴露kubernetes API，是kubernetes控制层的**前端**。
 ## kube-apiserver options
+* --admission-control stringSlice: Admission is divided into two phases. (default [AlwaysAdmit])
+    In the first phase, only mutating admission plugins run. In the second phase, only validating admission plugins run. The names in the below list may represent a validating plugin, a mutating plugin, or both. Within each phase, the plugins will run in the order in which they are passed to this flag. Comma-delimited list of: 
+    * AlwaysAdmit
+    * AlwaysDeny
+    * AlwaysPullImages
+    * DefaultStorageClass
+    * DefaultTolerationSeconds
+    * DenyEscalatingExec
+    * DenyExecOnPrivileged
+    * EventRateLimit
+    * ExtendedResourceToleration
+    * ImagePolicyWebhook
+    * InitialResources
+    * Initializers
+    * LimitPodHardAntiAffinityTopology
+    * LimitRanger
+    * MutatingAdmissionWebhook
+    * NamespaceAutoProvision
+    * NamespaceExists
+    * NamespaceLifecycle
+    * NodeRestriction
+    * OwnerReferencesPermissionEnforcement
+    * PVCProtection
+    * PersistentVolumeClaimResize
+    * PersistentVolumeLabel
+    * PodNodeSelector
+    * PodPreset
+    * PodSecurityPolicy
+    * PodTolerationRestriction
+    * Priority
+    * ResourceQuota
+    * SecurityContextDeny
+    * ServiceAccount
+    * ValidatingAdmissionWebhook
 * --admission-control-config-file string: File with admission control configuration.
 * --advertise-address ip: The IP address on which to advertise the apiserver to members of the cluster. This address must be reachable by the rest of the cluster. If blank, the --bind-address will be used. If --bind-address is unspecified, the host's default interface will be used.
 * --**allow-privileged**: If true, allow privileged containers. [default=false]
