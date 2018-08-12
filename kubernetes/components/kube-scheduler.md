@@ -7,10 +7,9 @@ The scheduler needs to take into account individual and collective resource requ
 Workload-specific requirements will be exposed through the API as necessary.
 
 ## Options
-* --address string: The IP address to serve on (set to 0.0.0.0 for all interfaces)
-* --algorithm-provider string: The scheduling algorithm provider to use, one of: ClusterAutoscalerProvider | DefaultProvider
-* --azure-container-registry-config string: Path to the file container Azure container registry configuration information.
-* --config string: The path to the configuration file.
+* --address string: 监听的IP地址，默认是`0.0.0.0`，监听所有接口。
+* --algorithm-provider string: 调度算法provider，包括`ClusterAutoscalerProvider`和`DefaultProvider`两个选项。
+* --config string: kube-scheduler的配置文件
 * --contention-profiling: Enable lock contention profiling, if profiling is enabled
 * --feature-gates mapStringBool: A set of key=value pairs that describe feature gates for alpha/experimental features. 
     Options are:
@@ -51,23 +50,18 @@ Workload-specific requirements will be exposed through the API as necessary.
     * TaintBasedEvictions=true|false (ALPHA - default=false)
     * TaintNodesByCondition=true|false (ALPHA - default=false)
     * VolumeScheduling=true|false (ALPHA - default=false)
-* --google-json-key string: The Google Cloud Platform Service Account JSON Key to use for authentication.
 * --kube-api-burst int32: Burst to use while talking with kubernetes apiserver (default 100)
 * --kube-api-content-type string: Content type of requests sent to apiserver. (default "application/vnd.kubernetes.protobuf")
 * --kube-api-qps float32: QPS to use while talking with kubernetes apiserver (default 50)
-* --kubeconfig string: Path to kubeconfig file with authorization and master location information.
+* --kubeconfig string: 访问apiserver的配置，包括认证信息和master地址。
 * --leader-elect: Start a leader election client and gain leadership before executing the main loop. Enable this when running replicated components for high availability.
-* --leader-elect-lease-duration duration: The duration that non-leader candidates will wait after observing a leadership renewal until attempting to acquire leadership of a led but unrenewed leader slot. This is effectively the maximum duration that a leader can be stopped before it is replaced by another candidate. This is only applicable if leader election is enabled. (default 15s)
-* --leader-elect-renew-deadline duration: The interval between attempts by the acting master to renew a leadership slot before it stops leading. This must be less than or equal to the lease duration. This is only applicable if leader election is enabled. (default 10s)
-* --leader-elect-resource-lock endpoints: The type of resource object that is used for locking during leader election. Supported options are endpoints (default) and `configmaps`. (default "endpoints")
-* --leader-elect-retry-period duration: The duration the clients should wait between attempting acquisition and renewal of a leadership. This is only applicable if leader election is enabled. (default 2s)
 * --lock-object-name string: Define the name of the lock object. (default "kube-scheduler")
 * --lock-object-namespace string: Define the namespace of the lock object. (default "kube-system")
-* --master string: The address of the Kubernetes API server (overrides any value in kubeconfig)
+* --master string: kube-apiserver的地址。
 * --policy-config-file string: File with scheduler policy configuration. This file is used if policy ConfigMap is not provided or --use-legacy-policy-config==true
 * --policy-configmap string: Name of the ConfigMap object that contains scheduler's policy configuration. It must exist in the system namespace before scheduler initialization if --use-legacy-policy-config==false. The config must be provided as the value of an element in 'Data' map with the key='policy.cfg'
 * --policy-configmap-namespace string: The namespace where policy ConfigMap is located. The system namespace will be used if this is not provided or is empty.
-* --port int32: The port that the scheduler's http service runs on (default 10251)
+* --port int32: kube-scheduler的HTTP服务监听的端口，默认是10251。 
 * --profiling: Enable profiling via web interface host:port/debug/pprof/
 * --scheduler-name string: Name of the scheduler, used to select which pods will be processed by this scheduler, based on pod's "spec.SchedulerName". (default "default-scheduler")
 * --use-legacy-policy-config: When set to true, scheduler will ignore policy ConfigMap and uses policy config file
