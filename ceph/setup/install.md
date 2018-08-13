@@ -111,6 +111,10 @@ ceph-deploy forgetkeys && rm ceph.*
 vi ceph.conf
 加入下面一行
 osd pool default size = 3
+
+如果是ext4文件系统，需要加入下面2行：
+osd max object name len = 256
+osd max object namespace len = 64
 ```
 
 5. 如果你有多个网卡，可以把 public network 写入 Ceph 配置文件的 [global] 段下
