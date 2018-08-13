@@ -36,7 +36,7 @@ setenforce 0
 ```
 2. 在各节点上安装安装ntp
 ```sh
-yum install ntp ntpdate ntp-doc
+yum install ntp ntpdate ntp-doc -y
 
 ```
 
