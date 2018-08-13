@@ -1,198 +1,162 @@
-# Ceph集群部署
-## 基本环境配置
-### 1.1 环境准备
+# Centos 7.3安装ceph集群
+## 准备系统
+1. 操作系统Centos 7.3，3台节点如下：
+* 172.20.5.206  keceph1
+* 172.20.5.207  keceph2
+* 172.20.5.208  keceph3
+2. 配置各个节点的hosts
+keceph1:
+```
+172.20.5.206   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+172.20.5.206 keceph1
+172.20.5.207 keceph2
+172.20.5.208 keceph3
+```
+3. 关闭防火墙
+```sh
+systemctl  stop firewalld
+systemctl   disable firewalld
+```
+4. 关闭selinux
+```sh
+setenforce 0
+```
+5. 以keceph1作为部署节点，设置对另外2个节点的免密钥访问权限。
 
-3台主机，信息如下：
+## 安装CEPH部署工具源
+1. 在各节点上安装启用ceph软件仓库，启用可选软件库
+```sh
+ yum install yum-utils -y 
 
-| hostname | IP           | 配置                        |
-| -------- | ------------ | ------------------------- |
-| ceph0    | 172.20.0.196 | 4核，4GB内存，ubuntu 14.04 LTS |
-| ceph1    | 172.20.0.197 | 4核，4GB内存，ubuntu 14.04 LTS |
-| ceph2    | 172.20.0.198 | 4核，4GB内存，ubuntu 14.04 LTS |
+ yum-config-manager --add-repo https://dl.fedoraproject.org/pub/epel/7/x86_64/ && yum install --nogpgcheck -y epel-release && rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7 && rm -fr /etc/yum.repos.d/dl.fedoraproject.org*
 
-每台主机挂载一块200G的硬盘，开一个主分区，设备信息如下：
+ yum install yum-plugin-priorities -y
 
 ```
-# lsblk
-NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
-vda    253:0    0    20G  0 disk 
-├─vda1 253:1    0     2M  0 part 
-├─vda2 253:2    0   476M  0 part /boot
-└─vda3 253:3    0  19.5G  0 part /
-vdb    253:16   0   200G  0 disk 
-└─vdb1 253:17   0 186.3G  0 part
-```
-
-### 1.2 设置免密登录
-
-​	选定一个节点作为主控节点（这里选的ceph0主机），建立从主控节点到其他节点的免密登录。
-
-**1 生成秘钥：ssh-keygen**
+2. 在各节点上安装安装ntp
+```sh
+yum install ntp ntpdate ntp-doc
 
 ```
-root@ceph0:~# ssh-keygen
+
+## 设置yum源并安装ceph-deploy
+1. 在各个节点的/etc/yum.repos.d/目录下创建ceph.repo然后写入以下内容
+vim /etc/yum.repos.d/ceph.repo
+```sh
+[Ceph]
+name=Ceph packages for $basearch
+baseurl=http://mirrors.163.com/ceph/rpm-jewel/el7/$basearch
+enabled=1
+gpgcheck=0
+type=rpm-md
+gpgkey=https://mirrors.163.com/ceph/keys/release.asc
+priority=1
+
+[Ceph-noarch]
+name=Ceph noarch packages
+baseurl=http://mirrors.163.com/ceph/rpm-jewel/el7/noarch
+enabled=1
+gpgcheck=0
+type=rpm-md
+gpgkey=https://mirrors.163.com/ceph/keys/release.asc
+priority=1
+
+[ceph-source]
+name=Ceph source packages
+baseurl=http://mirrors.163.com/ceph/rpm-jewel/el7/SRPMS
+enabled=1
+gpgcheck=0
+type=rpm-md
+gpgkey=https://mirrors.163.com/ceph/keys/release.asc
+priority=1
 ```
 
-**2 拷贝密钥：ssh-copy-id your_dst_node**
-
+2. 在部署节点上进行安装准备
+在当前用户root目录下：
+```sh
+mkdir ceph-cluster
+cd ceph-cluster
+yum install ceph-deploy -y
 ```
-root@ceph0:~# ssh-copy-id root@172.20.0.197
-root@ceph0:~# ssh-copy-id root@172.20.0.198
+## 安装ceph创建集群
+1. 在部署节点上修改~/.ssh/config文件(若没有则创建)增加一下内容
 ```
+Host    keceph1
+Hostname  172.20.5.206
+User    root
 
-**3 修改使hostname和ip对应**
+Host    keceph2
+Hostname  172.20.5.207
+User    root
 
-在 `/etc/hosts` 里追加以下信息
-
+Host    keceph3
+Hostname  172.20.5.208
+User    root
 ```
-172.20.0.196    ceph0
-172.20.0.197    ceph1
-172.20.0.198    ceph2
+2. 进入到创建的ceph-cluster文件夹下，执行命令
+```sh
+ceph-deploy new keceph1 keceph2 keceph3
 ```
-
-### 1.3 防火墙及安全设置（所有节点）
-
-**1 防火墙相关**
-
-​	Ceph Monitors 之间默认使用 6789 端口通信， OSD 之间默认用 6800:7300 这个范围内的端口通信。
-
-```
-root@ceph0:~# sudo firewall-cmd --zone=public --add-port=6789/tcp --permanent
-sudo: firewall-cmd: command not found
-```
-
-**2 selinux相关**
-​	设置selinux，如果报命令不存在，可以忽略这一步。
-
-```
-root@ceph0:~# sudo setenforce 0
-sudo: setenforce: command not found
+另外，如果在任何时候遇到问题并想重新开始，请执行以下操作清除Ceph软件包，并清除所有数据和配置：
+```sh
+ceph-deploy purge keceph1 keceph2 keceph3
+ceph-deploy purgedata keceph1 keceph2 keceph3
+ceph-deploy forgetkeys && rm ceph.*
 ```
 
-​	如果命令存在，执行如下操作
-
+3. 安装集群
+在生成的ceph.conf中加入（写入[global] 段下）
 ```
-sudo setenforce 0
-```
-
-​	如果希望永久生效，则修改 /etc/selinux/config
-
-```
-This file controls the state of SELinux on the system.
-SELINUX= can take one of these three values:
-	enforcing - SELinux security policy is enforced.
-	permissive - SELinux prints warnings instead of enforcing.
-    disabled - No SELinux policy is loaded.
-SELINUX=disabled
-SELINUXTYPE= can take one of these two values:
-    targeted - Targeted processes are protected,
-    minimum - Modification of targeted policy. Only selected 
-processes are protected.
-    mls - Multi Level Security protection.
-SELINUXTYPE=targeted
+vi ceph.conf
+加入下面一行
+osd pool default size = 3
 ```
 
-### 1.4 安装ntp服务（所有节点）
-
-​	主要是用于ceph-mon之间的时间同步。在所有 Ceph 节点上安装 NTP 服务（特别是 Ceph Monitor 节点），以免因时钟漂移导致故障。确保在各 Ceph 节点上启动了 NTP 服务，并且要使用同一个 NTP 服务器。
-
+5. 如果你有多个网卡，可以把 public network 写入 Ceph 配置文件的 [global] 段下
 ```
-sudo apt-get install ntp
+#public network = {ip-address}/{netmask}
 ```
 
-### Ceph相关配置和安装
-
-### 1.5 添加ceph用户（所有节点）
-
-1、在各 Ceph 节点创建新用户
-
+6. 部署ceph
 ```
-root@ceph0:~# sudo useradd -d /home/ceph -m ceph
+ceph-deploy install keceph1 keceph2 keceph3
 ```
 
-2、确保各 Ceph 节点上新创建的用户都有 sudo 权限
-
-```
-root@ceph0:~# echo "ceph ALL = (root) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/ceph
-ceph ALL = (root) NOPASSWD:ALL
-root@ceph0:~# sudo chmod 0440 /etc/sudoers.d/ceph 
-```
-
-### 1.6 添加ceph安装源（所有节点）
-
-**注**：建议直接写国内源，安装会比较快，填写初始源的话速度比较慢超过300秒后安装不成功。
-
-国内源
-
-```
-wget -q -O- 'http://mirrors.163.com/ceph/keys/release.asc' > test.asc | sudo apt-key add -
-echo deb http://mirrors.163.com/ceph/debian-jewel/ $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/ceph.list
-```
-
-初始源
-
-```
-wget -q -O- 'https://download.ceph.com/keys/release.asc' 
-echo deb https://download.ceph.com/debian-jewel/ $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/ceph.list
-```
-
-### 1.7 安装ceph-deploy部署工具(仅主控节点)
-
-更新仓库，并安装 ceph-deploy：
-
-```
-sudo apt-get update
-sudo apt-get install ceph-deploy
-```
-
-### 1.8 ceph安装
-
-**1 创建部署目录**
-
-```
-mkdir my-cluster && cd my-cluster/
-```
-
-**2 配置新节点**
-
-```
-root@ceph0:~/my-cluster# ceph-deploy new ceph0 ceph1 ceph2
-root@ceph0:~/my-cluster# ls
-ceph.conf  ceph-deploy-ceph.log  ceph.mon.keyring  release.asc
-```
-
-**3 安装**
-
-```
-root@ceph0:~/my-cluster# ceph-deploy install ceph0 ceph1 ceph2
-……
-……
-[ceph2][INFO  ] Running command: ceph --version
-[ceph2][DEBUG ] ceph version 10.2.5 (ecc23778eb545d8dd55e2e4735b53cc93f92e65b)
-```
-
-都出现如上输出表示成功安装完成。
-
-### 1.9 配置并启动ceph-mon
-
-```
+7. 配置初始 monitor(s)、并收集所有密钥
+```sh
 ceph-deploy mon create-initial
 ```
 
-至此，ceph集群的安装工作完毕。
+8. 新建osd
+添加三个 OSD ，登录到Ceph节点、并给OSD守护进程创建一个目录。
+``` sh
+#ssh keceph1
+#mkdir /var/local/osd0
+#chown -R ceph:ceph /var/local/osd0/
 
-​	运行 ceph -s可以看到当前集群的状态，3个mon，暂时没添加osd，有1个pool，pool的pg数目是64个。
+#ssh keceph2
+#mkdir /var/local/osd1
+#chown -R ceph:ceph /var/local/osd1/
 
+#ssh keceph3
+#mkdir /var/local/osd2
+#chown -R ceph:ceph /var/local/osd1/
 ```
-root@ceph0:~/my-cluster# ceph -s
-    cluster 4d7e1b04-2a4c-45aa-b6fe-a98241db0c2f
-     health HEALTH_ERR
-            no osds
-     monmap e1: 3 mons at {ceph0=172.20.0.196:6789/0,ceph1=172.20.0.197:6789/0,ceph2=172.20.0.198:6789/0}
-            election epoch 4, quorum 0,1,2 ceph0,ceph1,ceph2
-     osdmap e1: 0 osds: 0 up, 0 in
-            flags sortbitwise
-      pgmap v2: 64 pgs, 1 pools, 0 bytes data, 0 objects
-            0 kB used, 0 kB / 0 kB avail
-                  64 creating
+9. 从部署节点执行ceph-deploy来准备OSD
+```sh
+ceph-deploy osd prepare keceph1:/var/local/osd0 keceph2:/var/local/osd1 keceph3:/var/local/osd2
 ```
+10. 激活OSD
+```sh
+ceph-deploy osd activate keceph1:/var/local/osd0 keceph2:/var/local/osd1 keceph3:/var/local/osd2
+```
+11. 确保你对ceph.client.admin.keyring有正确的操作权限
+```sh
+chmod +r /etc/ceph/ceph.client.admin.keyring
+```
+
+
+
+
+
