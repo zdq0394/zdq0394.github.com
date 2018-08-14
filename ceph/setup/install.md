@@ -16,7 +16,7 @@ keceph1:
 3. 关闭防火墙
 ```sh
 systemctl  stop firewalld
-systemctl   disable firewalld
+systemctl  disable firewalld
 ```
 4. 关闭selinux
 ```sh
