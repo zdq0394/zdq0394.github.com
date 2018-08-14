@@ -102,7 +102,7 @@ ceph-deploy new keceph1 keceph2 keceph3
 ```sh
 ceph-deploy purge keceph1 keceph2 keceph3
 ceph-deploy purgedata keceph1 keceph2 keceph3
-ceph-deploy forgetkeys && rm ceph.*
+ceph-deploy forgetkeys && rm -fr ceph.*
 ```
 
 3. 安装集群
