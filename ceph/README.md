@@ -8,3 +8,5 @@
 * [Ceph-deploy based ansible](https://github.com/zdq0394/ansible-deployment/tree/master/projects/ceph)
 
 ## 运维管理
+* [Ceph后台进程管理](process.md)
+* [Ceph集群状态](monitoring.md)
