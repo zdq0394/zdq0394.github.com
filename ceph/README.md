@@ -5,5 +5,6 @@
 
 ## 部署和调优
 * [Ceph安装和部署](setup/install.md)
+* [Ceph-deploy based ansible](https://github.com/zdq0394/ansible-deployment/tree/master/projects/ceph)
 
 ## 运维管理
