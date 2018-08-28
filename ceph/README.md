@@ -10,3 +10,4 @@
 ## 运维管理
 * [Ceph后台进程管理](process.md)
 * [Ceph集群状态](monitoring.md)
+* [Ceph集群默认行为干预](overrides.md)
