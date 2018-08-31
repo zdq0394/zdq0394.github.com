@@ -12,3 +12,4 @@
 * [Ceph集群状态](monitoring.md)
 * [Ceph集群默认行为干预](overrides.md)
 * [Ceph用户和keyring](user_keyring.md)
+* [Ceph参数调整](ceph_config_adjust.md)
