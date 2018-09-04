@@ -28,11 +28,11 @@ spec:
             - name: PROVISIONER_NAME
               value: nfs/nexta
             - name: NFS_SERVER
-              value: 10.130.44.20
+              value: 10.10.10.10
             - name: NFS_PATH
               value: /test/mynfs-exports
       volumes:
         - name: nfs-client-root
           nfs:
-            server: 10.130.44.20
+            server: 10.10.10.10
             path: /test/mynfs-exports
