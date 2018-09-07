@@ -5,7 +5,7 @@ metadata:
   name: test-pod-rbd
 spec:
   containers:
-  - image: docker-registry.saicstack.com/library/ubuntu-saic:16.04 
+  - image: ubuntu-saic:16.04 
     name: test-container
     command:
       - "/bin/sh"

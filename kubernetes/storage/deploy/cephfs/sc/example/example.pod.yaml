@@ -6,9 +6,9 @@ metadata:
   namespace: dqtest
 spec:
   nodeSelector:
-    kubernetes.io/hostname: "10.130.33.13"
+    kubernetes.io/hostname: "10.10.10.13"
   containers:
-  - image: docker-registry.saicstack.com/library/ubuntu-saic:16.04 
+  - image: ubuntu-saic:16.04 
     name: cephfs-container
     command:
       - "/bin/sh"
@@ -17,7 +17,7 @@ spec:
       - "sleep 3600"
     volumeMounts:
       - name: pvc
-        mountPath: "/mnt/saic"
+        mountPath: "/mnt"
   restartPolicy: "Never"
   volumes:
     - name: pvc

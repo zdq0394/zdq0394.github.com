@@ -4,7 +4,7 @@ metadata:
   name: uat-rbd-kubeuat
 provisioner: ceph.com/rbd
 parameters:
-  monitors: 10.129.31.14:6789,10.129.31.15:6789,10.129.31.16:6789
+  monitors: 10.10.10.14:6789,10.10.10.15:6789,10.10.10.16:6789
   adminId: admin
   adminSecretName: ceph-secret-admin
   adminSecretNamespace: kube-system
