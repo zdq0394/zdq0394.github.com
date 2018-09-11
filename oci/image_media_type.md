@@ -12,4 +12,4 @@
 
 ## 各Media Types之间关系
 以上各个Image Type之间的关系如下图所示：
-![](picsmedia-types.png)
+![](pics/media-types.png)
