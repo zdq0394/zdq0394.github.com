@@ -1,4 +1,4 @@
-# Volume Manager
+# Kubelet Volume Manager
 ## Volume Manager
 Volume Manager是Kubelet中的一个重要后台组件。
 Volume Manager运行着一系列的异步后台goroutine，根据调度到所在node节点的pods及pods对volume的引用来attach/detach/mount/umount对应的卷。
