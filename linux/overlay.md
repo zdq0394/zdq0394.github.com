@@ -201,7 +201,34 @@ OverlayFS需要首先在upper中删掉同名文件/目录，然后再创建同�
 **OverlayFS**在读取上下层存在同名目录的目录项时，如果upper层的目录被设置了opaque属性，它将忽略这个目录在下层的所有同名目录中的目录项，以保证新建的目录是一个空的目录。
 
 ### 修改文件
-用户在修改文件时，如果文件来自upper层，那直接写入即可。但是如果文件来自lower层，由于lower层文件无法修改，因此需要先复制到upper层，然后再往其中写入内容，这就是overlayfs的写时复制（copy-up）特性。
+1. 如果文件来自upper层，那直接写入即可。
+2. 如果文件来自lower层，由于lower层文件无法修改，因此需要先复制到upper层，然后再往其中写入内容，这就是OverlayFS的写时复制（copy-up）特性。
+
+## Copyup特性
+OverlayFS触发Copyup特性的操作如下：
+1. 用户以写方式打开来自lower层的文件时，对该文件执行copyup，即open()系统调用时带有O_WRITE或O_RDWR等标识；
+2. 修改来自lower层文件或目录属性或者扩展属性时，对该文件或目录触发copyup，例如chmod、chown或设置acl属性等；
+3. rename来自lower层文件时，对该文件执行copyup；
+4. 对来自lower层的文件创建硬链接时，对链接原文件执行copyup；
+5. 在来自lower层的目录里创建文件、目录、链接等内容时，对其父目录执行copyup；
+6. 对来自lower层某个文件或目录进行删除、rename、或其它会触发copy-up的动作时，其对应的父目录会至下而上递归执行copy-up。
+
+## Rename特性
+**mv**命令移动或rename文件时，首先会尝试调用`rename`系统调用直接由内核完成文件的renmae操作，但对于个别文件系统内核如果不支持rename系统调用，那由mv工具操作，它会首先复制一个一模一样的文件到目标位置，然后删除原来的文件，从而模拟达到类似的效果，但是这有一个很大的缺点就是无法保证整个rename过程的原子性。
+
+对于OverlayFS来说，`文件`的rename系统调用是支持的，但是`目录`的rename系统调用支持需要分情况讨论。
+
+在挂载文件系统时，内核提供了一个挂载选项"redirect_dir=on/off"，默认的启用情况由内核的OVERLAY_FS_REDIRECT_DIR配置选项决定。
+1. 在未启用情况下，针对单纯来自upper层的目录是支持rename系统调用的，而对于来自lower层的目录或是上下层合并的目录则不支持，rename系统调用会返回-EXDEV，由mv工具负责处理；
+2. 在启用的情况下，无论目录来自哪一层，是否合并都将支持rename系统调用，但是该特性非向前兼容，目前内核中默认是关闭的，用户可手动开启。
+
+当开启redirect_dir属性时，OverlayFS设计了一种redirect xattr的扩展属性，其内容是lower层原始目录的相对路径（相对lower层挂载根目录或当前rename目录的父目录），设置在`upper层中的目标目录上`，并不会copyup原始目录中的子目录或文件。
+用户通过merge目录扫描目录项时，overlayfs在扫描upper层目录时会检查它的redirect xattr扩展属性并找到原始lower层目录，同时将原始目录下的目录项也返回给用户。
+
+## 原子性保证
+我们在挂载overlay文件系统到merged时，还指定了一个work目录。
+原子性保证由借助work目录实现。
+
 
 
 
