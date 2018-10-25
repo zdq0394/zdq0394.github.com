@@ -1,64 +1,27 @@
 # Storage Driver overlay/overlay2
-OverlayFS是一个现代的`union filesystem`。
-与`AUFS`文件系统相似，但是比AUFS实现更简单、性能更好。
+**OverlayFS**是联合文件系统（union filesystem）的一种。
+与其说是一种文件系统，不如说是一种mounting机制（It is more of a mounting mechanism than a file system）。
 
-## How the `overlay` driver works
-OverlayFS layers `two directories` on a single Linux host and presents them as `a single directory`。
-这些目录被称为`layers`，unification process被成为`union mount`。
+**OverlayFS**是一种堆叠文件系统，它依赖并建立在其它的文件系统之上（ext4/xfs等）。
+并不直接参与磁盘空间结构的划分，仅仅是将来自底层文件系统中不同的目录进行“合并”，然后向用户呈现。
+因此，对于用户来说，见到的OverlayFS文件系统根目录下的内容就来自挂载时指定的不同目录的“合集”。
 
-在OverlayFS中：
-* lower directory称为`lowerdir`。
-* upper directory称为`updir`。
-* The unified view is exposed through its own directory called `merged`。
+**OverlayFS**最基本的特性，简单的总结为以下3点：
+* 上下层同名目录合并
+* 上下层同名文件覆盖
+* lower dir文件写时拷贝
+以上这三点对用户都是不被感知的。
 
-下图展示了Docker的镜像和容器层是如何分层的。
-镜像layer是`lowerdir`；
-容器layer是`upperdir`；
-统一的view通过`merged`目录暴露出来，这也是container的mount point。
-
-![](pics/overlay_constructs.jpg)
-
-如果image layer和container layer包含同名的文件，那么container layers中的文件将把image layer中的文件隐藏。
-
-Docker `overlay storage driver`只支持**two layers**。
-这就意味镜像的多个层不能简单的实现为OverlayFS文件系统的多个层。
-相反，每个镜像layer都是`/var/lib/docker/overlay`下的一个目录。
-`Hard links are then used as a space-efficient way to reference data shared with lower layers. `
-
-创建一个容器时，`overlay`将combines the directory representing the image’s top layer plus a new directory for the container：
-* The image’s top layer is the `lowerdir` in the overlay and is `read-only`。
-* The new directory for the container is the `upperdir` and is `writable`。
-
-### Image and container layers on-disk
-**The image layers**
-
-每个镜像layer都是`/var/lib/docker/overlay`下的一个目录。
-The image layer directories contain the files unique to that layer as well as hard links to the data that is shared with lower layers. This allows for efficient use of disk space。
-
-**The container layer**
-Containers also exist on-disk in the Docker host’s filesystem under `/var/lib/docker/overlay/`。
-```sh
-$ ls -l /var/lib/docker/overlay/<directory-of-running-container>
-
-total 16
--rw-r--r-- 1 root root   64 Jun 20 16:39 lower-id
-drwxr-xr-x 1 root root 4096 Jun 20 16:39 merged
-drwxr-xr-x 4 root root 4096 Jun 20 16:39 upper
-drwx------ 3 root root 4096 Jun 20 16:39 work
-```
-解释如下：
-* lower-id： 文件，contains the ID of the top layer of the image the container is based on, which is the OverlayFS lowerdir。
-* upper： directory， contains the contents of the container’s read-write layer, which corresponds to the OverlayFS upperdir.
-* merged： directory， is the union mount of the lowerdir and upperdir, which comprises the view of the filesystem from within the running container.
-* work： directory， is internal to OverlayFS.
-
+由于overlay2技术已经相对成熟，并且主流linux发行版都已经支持，我们只讨论overlay2。
+不建议使用overlay。
 ## How the `overlay2` driver works
-OverlayFS layers **two directories** on a single Linux host and presents them as **a single directory**。这些目录被称为`layers`，unification process被成为`union mount`。
-在OverlayFS中，lower directory称为`lowerdir`；upper directory称为`updir`；联合后的统一的视图称为`merged`。
+在OverlayFS中
+* lower directory称为`lowerdir`，可以有多个层次，并且层次之间具有依赖关系；
+* upper directory称为`updir`；
+* 联合后的统一的视图称为`merged`；
+* 另外`work`目录由OverlayFS使用（可以借助此来实现一致性）
 
-`overlay` driver仅仅支持一个lower OverlayFS layer，因此需要hard links去实现一个多层的镜像。
-
-`overlay2` driver原生支持128个lower OverlayFS层。这大大提高了layer-related的docker命令：比如docker build，docker commit的性能，并减少了backing filesystem中inodes的消耗。
+`overlay2` driver原生支持128个lower OverlayFS层。
 
 ### Image and container layers on-disk
 首先`docker pull`一个镜像
@@ -89,7 +52,8 @@ drwx------  5 root root 4096 Dec 22 10:49 c9952ce59340a5d317861b538a143225e9516c
 drwx------  3 root root 4096 Dec 22 10:49 f32d5e1f81cfa514bb2fadc1047312853f745f5d48148d8ab21d3352b06c3946/
 drwx------  2 root root 4096 Dec 22 10:49 l/
 ```
-查看`l`目录可见，包含了6个符号链接，分别指向6个层的diff目录。
+查看`l`目录可见，包含了6个符号链接，分别指向6个层的diff目录。这主要时为了简化overlayfs挂载时的路径长度。
+
 ```sh
 /var/lib/docker/overlay2# ls -la l
 total 32
@@ -127,14 +91,14 @@ diff  link
 l:
 2TX5XYYH36IZFXMYZLSKXNBR5Z  76HFDMVWSRDLXRA434A342QVAG  KJE7GZXOVHR52Y3QV6LZ245SW3  U2FDPHHAMBUCNLRHN3MJXTA5JX  XS2PHAZZD744O3EKI4QR3VWKJX  ZEEWKZCFLEZFQHH74UA5M5S7V2
 ```
-可见f32d5e1f81cfa514bb2fadc1047312853f745f5d48148d8ab21d3352b06c3946是最lowest的一层，包含2个元素：
+可见f32d5e1f81cfa514bb2fadc1047312853f745f5d48148d8ab21d3352b06c3946是最底的一层，包含2个元素：
 * link：文件，包含的是short identifier，和l中软链接一致。
-* diff：包含本层的内容
+* diff：包含本层的内容，也就是OverlayFS中的upperdir。
 
-除了最lowest的一层，其它各层又包含了lower文件和merged、work两个目录。
-* lower：文件，包含该层依赖的所有底层的short identifier。
-* merged：包含的是本层和所有底层的union
-* work： 被OverlayFS内部使用的目录
+除了最底的一层，其它各层又包含了lower文件和merged、work两个目录。
+* lower：文件，包含该层依赖的所有底层的short identifier，指定了OverlayFS中的lowerdir。
+* merged：OverlayFS的挂载点，包含的是diff和lower文件中指定的层中的内容。
+* work： 被OverlayFS内部使用的目录。
 
 ## How container reads and writes work with overlay or overlay2
 ### Reading files
@@ -157,8 +121,7 @@ OverlayFS works at the `file level` rather than the `block level`。
 
 **Renaming directories**
 
-Calling rename(2) for a directory is allowed only when both the source and the destination path are on the top layer. Otherwise, it returns EXDEV error (“cross-device link not permitted”). 
+Calling rename(2) for a directory is allowed only when both the source and the destination path are on the top layer. Otherwise, it returns EXDEV error (“cross-device link not permitted”)。
 
-## OverlayFS and Docker Performance
-`overlay`和`overlay2` storage driver都比`aufs`性能好。
-在某些情况下，`overlay2`甚至比`btrfs`性能都好。
+## 参考
+* [Linux OverlayFS](../../linux/overlayfs.md)
