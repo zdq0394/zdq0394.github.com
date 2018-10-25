@@ -1,10 +1,10 @@
 # devicemapper
-[Device Mapper](../../../linux/devicemapper.md)是Linux系统中基于内核的**高级卷管理技术框架**。
-它是内核中支持逻辑卷管理的**通用设备映射机制**，为实现**块设备驱动**提供了一个高度模块化的内核架构，包含三个重要的对象概念：Mapped Device、Mapping Table、Target device。
+[Device Mapper](../../../linux/devicemapper.md)是Linux系统中基于内核的高级卷管理技术框架。
+它是内核中支持逻辑卷管理的通用设备映射机制，为实现块设备驱动提供了一个高度模块化的内核架构，包含三个重要的对象概念：Mapped Device、Mapping Table、Target device。
 
-Docker的**devicemapper storage driver**基于该框架的**thin-provisioning**和**snapshotting**功能来实现对镜像和容器的管理。
+Docker的devicemapper storage driver基于该框架的thin-provisioning和snapshotting功能来实现对镜像和容器的管理。
 
-Docker Engine的**devicemapper**使用专用**块设备**来存储数据而非文件系统。
+Docker Engine的devicemapper使用专用块设备来存储数据而非文件系统。
 `devicemapper`工作在`block level`，而不是`file level`。
 块设备可以通过增加物理磁盘扩展。
 
@@ -21,7 +21,7 @@ xvdf                    202:80   0  100G  0 disk
 └─docker-thinpool_tdata 253:1    0   95G  0 lvm
   └─docker-thinpool     253:2    0   95G  0 lvm
 ```
-当使用devicemapper时，Docker把镜像和层的内容存储在thinpool中，然后mount到`/var/lib/docker/devicemapper`下的子目录上，以此把数据暴露给容器。
+当使用devicemapper时，Docker把镜像和容器层的内容存储在thinpool中，然后mount到`/var/lib/docker/devicemapper`下的子目录上，以此把数据暴露给容器。
 
 ### Image and Container Layers on-disk
 `/var/lib/docker/devicemapper/metadata`目录包含关于Devicemapper配置本身和每个镜像和容器层的元数据。
@@ -40,7 +40,7 @@ xvdf                    202:80   0  100G  0 disk
 ### devicemapper workflow
 当以`devicemapper`作为存储驱动时，关于镜像和容器的所有对象都存放在目录`/var/lib/docker/devicemapper`中，which is backed by one or more block-level devices, either loopback devices (testing only) or physical disks。
 
-* `base device`是lowest-level对象。这是thin poll本身。它包含一个文件系统。`base device`是每个镜像和容器层的起点。`base device` is a Device Mapper implementation detail, rather than a Docker layer.
+* `base device`是lowest-level对象。这是thin pool本身。它包含一个文件系统。`base device`是每个镜像和容器层的起点。`base device` is a Device Mapper implementation detail, rather than a Docker layer.
 * 关于`base device`和每个镜像／容器层的元数据以JSON格式存储在目录 /var/lib/docker/devicemapper/metadata/中。这些层都是copy-on-write snapshots。
 * 每个容器的writable layer都被挂载到/var/lib/docker/devicemapper/mnt/下的一个mount point上。每个镜像层和不在运行的容器层都有一个空的目录。
 
