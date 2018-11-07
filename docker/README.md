@@ -26,12 +26,8 @@
     * [Bind mounts使用](storage/mnt_bindmounts.md)
     * [tmpfs使用](storage/mnt_tmpfs.md)
 * [Storage Drivers概述](storage/sd_drivers.md)
-    * [aufs](storage/sd_aufs.md)
     * [devicemapper](storage/sd_devicemapper.md)
-    * [btrfs](storage/sd_btrfs.md)
-    * [overlay](storage/sd_overlay.md)
-    * [zfs](storage/sd_zfs.md)
-    * [vfs](storage/sd_vfs.md)
+    * [overlay2](storage/sd_overlay2.md)
 * Storage Driver实践分析
     * [Ubuntu 14.04下的Docker AUFS存储](storage/action_aufs_ubuntu_14_04.md)
 * [如何选择Storage driver](storage/sd_select.md)
