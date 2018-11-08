@@ -21,16 +21,19 @@
     * [SHELL](dockerfile/shell.md)
 
 ## Docker存储
-* [Docker数据存储](storage/mnt_overview.md)
-    * [Volumes使用](storage/mnt_volumes.md)
-    * [Bind mounts使用](storage/mnt_bindmounts.md)
-    * [tmpfs使用](storage/mnt_tmpfs.md)
+### 系统存储
 * [Storage Drivers概述](storage/sd_drivers.md)
     * [devicemapper](storage/sd_devicemapper.md)
     * [overlay2](storage/sd_overlay2.md)
 * Storage Driver实践分析
     * [Ubuntu 14.04下的Docker AUFS存储](storage/action_aufs_ubuntu_14_04.md)
 * [如何选择Storage driver](storage/sd_select.md)
+
+### 数据存储
+* [Docker数据存储](storage/mnt_overview.md)
+    * [Volumes使用](storage/mnt_volumes.md)
+    * [Bind mounts使用](storage/mnt_bindmounts.md)
+    * [tmpfs使用](storage/mnt_tmpfs.md)
 
 ## Docker网络
 * [Docker网络概述](networks/overview.md)
