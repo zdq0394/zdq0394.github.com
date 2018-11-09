@@ -1,5 +1,7 @@
 # Containerd和Runc相关分析
 本文接着[容器及其layer存储分析](container_layout.md)继续讲解容器是如何启动的。
+
+Docker daemon并不直接管理容器，管理镜像和容器的
 ## containerd
 进入`/var/run/docker/libcontainerd/containerd`可以发现如下目录：`4f0e4cc32ad2e846f0df0ca08df4be38b7a17876f66dfe055feab55ac527be3c`。
 这个是前面启动的nginx容器的ID。
