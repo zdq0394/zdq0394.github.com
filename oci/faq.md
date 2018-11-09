@@ -12,4 +12,4 @@ Containerd fully leverages the Open Container Initiative’s (OCI) runtime, imag
 
 Because of its massive adoption, Containerd is the industry standard for implementing OCI.
 
-**总结：OCI规范包括runtime-spec、image-spec、distribution-spec等。Runc仅仅实现了runtime-spec规范，而Containerd实现了完整的规范——并且在runtime-spec规范利用了Runc。**
+**总结：OCI规范包括runtime-spec、image-spec、distribution-spec等。Runc仅仅实现了runtime-spec规范，而Containerd实现了完整的规范——并且在实现runtime-spec时借助了Runc。**
