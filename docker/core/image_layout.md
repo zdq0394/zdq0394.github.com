@@ -1,4 +1,4 @@
-# 镜像存储分析
+# 镜像及其layer存储分析
 本文以一个镜像为例来分析镜像如何存储在磁盘上的。
 ## 环境定义
 * Centos 7.4; 内核版本4.17.3-1.el7.elrepo.x86_64
@@ -133,14 +133,27 @@ imagedb下面保存的是image的config信息，layerdb下面保存的是各层�
 进入该文件夹可以发现一个一个的sha256格式的目录，那这个sha256格式的名字是layerID还是chainID呢？
 其实都不是，还记的每层下面都有一个cache-id的文件么？对，cache-id文件中的sha256内容指出了在overlay2文件系统中该层对应的目录。
 ```sh
-[root@dqvm overlay2]# ls ef8fb5e2c72a523c58c247aeb9bbb36d691ce7720145ff378ebf3714fa8d3e7f
+[root@localhost overlay2]# ls ef8fb5e2c72a523c58c247aeb9bbb36d691ce7720145ff378ebf3714fa8d3e7f
 diff  link
-[root@dqvm overlay2]# ls bd937f18fcefe148e2ec10f3ee40dc39b984802824b6dc6856a637f150ba95b8
+[root@localhost overlay2]# cat ef8fb5e2c72a523c58c247aeb9bbb36d691ce7720145ff378ebf3714fa8d3e7f/link 
+MVB5STDEZWHO54D642CLYZYNEH
+
+[root@localhost overlay2]# ls bd937f18fcefe148e2ec10f3ee40dc39b984802824b6dc6856a637f150ba95b8
 diff  link  lower  merged  work
-[root@dqvm overlay2]# ls 85e9e12c94ffd03ff388234a1eb68c13d70a72d4c413aaffeee6d81632c495c5
+[root@localhost overlay2]# cat bd937f18fcefe148e2ec10f3ee40dc39b984802824b6dc6856a637f150ba95b8/link 
+NUMROUBW7TBBLT56IWT4OL53EZ
+[root@localhost overlay2]# cat bd937f18fcefe148e2ec10f3ee40dc39b984802824b6dc6856a637f150ba95b8/lower 
+l/MVB5STDEZWHO54D642CLYZYNEH
+
+[root@localhost overlay2]# ls 85e9e12c94ffd03ff388234a1eb68c13d70a72d4c413aaffeee6d81632c495c5
 diff  link  lower  merged  work
+[root@localhost overlay2]# cat 85e9e12c94ffd03ff388234a1eb68c13d70a72d4c413aaffeee6d81632c495c5/link 
+V47ZAVU47VNVE3B7TVCZIGKGOV
+[root@localhost overlay2]# cat 85e9e12c94ffd03ff388234a1eb68c13d70a72d4c413aaffeee6d81632c495c5/lower 
+l/NUMROUBW7TBBLT56IWT4OL53EZ:l/MVB5STDEZWHO54D642CLYZYNEH
 ```
 如果你熟悉overlay2文件系统，那么对上述格式就不会陌生，可以参见：
 * [docker overlay2](../storage/sd_overlay2.md)
+
 
 
