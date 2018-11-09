@@ -10,6 +10,7 @@
 ## 云计算
 * [虚拟化](cloud/virt/README.md)
 * [Docker](docker/README.md)
+* [Open Container Initiative](oci/README.md)
 * [Kubernetes](kubernetes/README.md)
 * [Ceph](ceph/README.md)
 
