@@ -5,6 +5,7 @@
 * [Distribution-Spec](https://github.com/opencontainers/distribution-spec/blob/master/spec.md)
 ## Runtime
 * [Runtime](runtime_spec.md)
+* [Filesystem Bundle](filesystem_bundle.md)
 * [Runc](runc.md)
 
 ## Image
