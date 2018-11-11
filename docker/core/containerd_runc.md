@@ -36,6 +36,8 @@ containerd对容器runtime的管理是借助runc实现。
 该文件描述了启动容器所需要的几乎所有信息。
 最关键的一部分是`root`属性，指定了要启动的容器的文件系统。
 
+参考[runc](../../oci/runc.md)
+
 不难发现，这正是上节提到的容器的layer的目录，其中merged是overlay2文件系统的挂载目录。
 ```json
     "root": {
