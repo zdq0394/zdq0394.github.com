@@ -12,7 +12,7 @@
 * [Image规范](image_spec.md)
 
 ## 分发
-
+* [分发规范](distribution_spec.md)
 
 ## OCI
 * [Containerd](containerd.md)
