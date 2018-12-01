@@ -1,5 +1,5 @@
 Redis安装
-## Linux下安装
+## Linux下二进制安装
 ### 下载
 下载地址：http://redis.io/download
 ```sh
@@ -35,3 +35,12 @@ OK
 (nil)
 127.0.0.1:6379> 
 ```
+
+## Docker容器化部署
+* 单机部署
+```sh
+REDIS_IMAGE=registry.docker-cn.com/library/redis:5.0.1
+docker run -d --name=redis0 --hostname=redis0 $REDIS_IMAGE
+```
+* [master-slave模式部署](docker/conf_master_slave.sh)
+* [master-slave+哨兵模式部署](docker/master_slave_sentinel.sh)

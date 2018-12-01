@@ -1,7 +1,6 @@
 # Redis
-Redis是一个开源的、使用C语言编写的、支持网络交互的、可基于内存也可持久化的Key-Value数据库。
+Redis是一个开源的（BSD许可）的，内存中的数据结构存储系统，它可以用作`数据库`、`缓存`和`消息中间件`。
 ## Redis基础
-* [Redis简介](introduction.md)
 * [Redis安装](install.md)
 * [Redis配置](config.md)
 * [Redis数据类型](datatype.md)
