@@ -1,4 +1,4 @@
-Redis安装
+# Redis部署
 ## Linux下二进制安装
 ### 下载
 下载地址：http://redis.io/download
