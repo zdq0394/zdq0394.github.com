@@ -44,3 +44,4 @@ docker run -d --name=redis0 --hostname=redis0 $REDIS_IMAGE
 ```
 * [master-slave模式部署](docker/conf_master_slave.sh)
 * [master-slave+哨兵模式部署](docker/master_slave_sentinel.sh)
+* [cluster部署示例](cluster/cluster.sh)
