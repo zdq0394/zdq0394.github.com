@@ -24,16 +24,9 @@ Redis内置了`复制（replication）`，`LUA脚本（Lua scripting）`，`LRU�
 * [Redis连接](connection.md)
 * [Redis服务器](server.md)
 
-## Redis高级功能
-* [Redis数据备份与恢复](backup.md)
-* [Redis安全](security.md)
-* [Redis客户端连接](client_connection.md)
-* [Redis管道技术](pipeline.md)
-* [Redis分区](shard.md)
-* [Redis性能测试](perf.md)
-
 ## Redis进阶
 * [Redis高可用：持久化](ha-persistence.md)
 * [Redis高可用：复制](ha-replication.md)
 * [Redis高可用：哨兵](ha-sentinel.md)
 * [Redis高可用：集群](ha-cluster.md)
+* [Redis性能测试](perf.md)
