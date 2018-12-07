@@ -18,3 +18,9 @@
 * [redis](redis/README.md)
 * [mongo](mongo/README.md)
 
+## 技术文章
+* [分布式系统之缓存的微观应用经验谈（一）:基础细节](http://www.cnblogs.com/bsfz/p/9568591.html)
+* [分布式系统之缓存的微观应用经验谈（二）:主从和主备高可用](https://www.cnblogs.com/bsfz/p/9769503.html)
+* [分布式系统之缓存的微观应用经验谈（三）:数据分片和集群](https://www.cnblogs.com/bsfz/p/9833600.html)
+* [分布式系统之缓存的微观应用经验谈（四）:交互场景](https://www.cnblogs.com/bsfz/p/9867952.html)
+
