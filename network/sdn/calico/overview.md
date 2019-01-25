@@ -30,3 +30,9 @@ It is a BGP client: read routing state that Felix programs into the Kernel and d
 ### BGP Route Reflector
 A BGP client configured as a reflector
 * centralized route distribution
+
+### etcd
+etcd is a distributed key-value store that has a focus on consistency. 
+Calico uses etcd to provide the communication between components and as a consistent data store, which ensures Calico can always build an accurate network.
+* data storage
+* communication: etcd is also used as a communication bus between components.
