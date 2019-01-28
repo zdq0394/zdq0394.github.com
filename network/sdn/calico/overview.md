@@ -36,3 +36,8 @@ etcd is a distributed key-value store that has a focus on consistency.
 Calico uses etcd to provide the communication between components and as a consistent data store, which ensures Calico can always build an accurate network.
 * data storage
 * communication: etcd is also used as a communication bus between components.
+
+## 技术原理
+1. responding to workload ARP requests with the host MAC
+2. IP routing tables: for connectivity
+3. iptables: for isolation
