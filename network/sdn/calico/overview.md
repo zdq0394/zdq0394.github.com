@@ -41,3 +41,5 @@ Calico uses etcd to provide the communication between components and as a consis
 1. responding to workload ARP requests with the host MAC
 2. IP routing tables: for connectivity
 3. iptables: for isolation
+
+In a Calico network, each compute server acts as a **router** for all of the endpoints that are hosted on that compute server.
