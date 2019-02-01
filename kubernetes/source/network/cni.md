@@ -1,92 +1,65 @@
-# cniNetworkPlugin分析
-## 基本定义
-dockerservice通过networkpluginmanager来管理网络。
-networkpluginmanager是networkplugin的一个包装类，具体功能都由networkplugin实现。
-
-cniNetworkPlugin是networkplugin的一个实现类。
-代码在kubelet/dockershim/network/cni包中。
-```go
-type cniNetworkPlugin struct {
-	network.NoopNetworkPlugin
-
-	loNetwork *cniNetwork
-
-	sync.RWMutex
-	defaultNetwork *cniNetwork
-
-	host        network.Host
-	execer      utilexec.Interface
-	nsenterPath string
-	confDir     string
-	binDirs     []string
-	podCidr     string
-}
-
-type cniNetwork struct {
-	name          string
-	NetworkConfig *libcni.NetworkConfigList
-	CNIConfig     libcni.CNI
-}
-
-```
-cniNetworkPlugin里面定义了2个cniNetwork：
-1. loNetwork，主要是在linux系统的环回接口。
-2. defaultNetwork，真正的cni网络接口，比如calico网络。
-
-cniNetwork的属性CNIConfig，包含了具体网络实现的插件二进制，并提供了标准的接口：
+# CNI
+本部分属于[containernetworking/cni](https://github.com/containernetworking/cni)。
+## CNI接口定义
 ```go
 type CNI interface {
-	AddNetworkList(net *NetworkConfigList, rt *RuntimeConf) (types.Result, error)
-	DelNetworkList(net *NetworkConfigList, rt *RuntimeConf) error
+	AddNetworkList(ctx context.Context, net *NetworkConfigList, rt *RuntimeConf) (types.Result, error)
+	CheckNetworkList(ctx context.Context, net *NetworkConfigList, rt *RuntimeConf) error
+	DelNetworkList(ctx context.Context, net *NetworkConfigList, rt *RuntimeConf) error
 
-	AddNetwork(net *NetworkConfig, rt *RuntimeConf) (types.Result, error)
-	DelNetwork(net *NetworkConfig, rt *RuntimeConf) error
+	AddNetwork(ctx context.Context, net *NetworkConfig, rt *RuntimeConf) (types.Result, error)
+	CheckNetwork(ctx context.Context, net *NetworkConfig, rt *RuntimeConf) error
+	DelNetwork(ctx context.Context, net *NetworkConfig, rt *RuntimeConf) error
+	GetNetworkCachedResult(net *NetworkConfig, rt *RuntimeConf) (types.Result, error)
+
+	ValidateNetworkList(ctx context.Context, net *NetworkConfigList) ([]string, error)
+	ValidateNetwork(ctx context.Context, net *NetworkConfig) ([]string, error)
 }
-
+```
+然而CNI插件里却不是具体实现上述接口，CNI框架定义了CNIConfig代理实现上述接口。
+```go
 type CNIConfig struct {
 	Path []string
+	exec invoke.Exec
 }
 
 // CNIConfig implements the CNI interface
 var _ CNI = &CNIConfig{}
 ```
 
-
-## cniNetworkPlugin的实例化
-cniNetworkPlugin的实例化是在dockerservice(kubelet/dockershim/docker_service.go)中进行的。
+## 添加网络
 ```go
-cniPlugins := cni.ProbeNetworkPlugins(pluginSettings.PluginConfDir, pluginSettings.PluginBinDirs)
-```
-ProbeNetworkPlugin通过syncNetworkConfig加载配置的cni插件，返回一个cniNetworkPlugin实例。
+func (c *CNIConfig) addNetwork(ctx context.Context, name, cniVersion string, net *NetworkConfig, prevResult types.Result, rt *RuntimeConf) (types.Result, error) {
+	c.ensureExec()
+	pluginPath, err := c.exec.FindInPath(net.Network.Type, c.Path)
+	if err != nil {
+		return nil, err
+	}
 
-## 主要方法：
-### SetUpPod
-SetUpPod方法调用plugin.addToNetwork将当前容器加入到某个网络。
+	newConf, err := buildOneConfig(name, cniVersion, net, prevResult, rt)
+	if err != nil {
+		return nil, err
+	}
 
-在addToNetwork中，会生成runtimeConf和netConf参数，调用cni插件的标准接口:AddNetworkList。
-
-```go
-func (plugin *cniNetworkPlugin) addToNetwork(network *cniNetwork, podName string, podNamespace string, podSandboxID kubecontainer.ContainerID, podNetnsPath string, annotations, options map[string]string) (cnitypes.Result, error) {
-	rt, err := plugin.buildCNIRuntimeConf(podName, podNamespace, podSandboxID, podNetnsPath, annotations, options)
-	....
-	netConf, cniNet := network.NetworkConfig, network.CNIConfig
-	....
-	res, err := cniNet.AddNetworkList(netConf, rt)
-	....
+	return invoke.ExecPluginWithResult(ctx, pluginPath, newConf.Bytes, c.args("ADD", rt), c.exec)
 }
 ```
-
-### TearDownPod
-TearDownPod方法调用plugin.deleteFromNetwork将当前容器从某个网络中删除。
-在deleteFromNetwork中，会生成runtimeConf和netConf参数，调用cni插件的标准接口:DelNetworkList。
+添加网络会通过二进制引擎调用具体插件的二进制文件，并提供"ADD"动作。
+## 删除网络
 ```go
-func (plugin *cniNetworkPlugin) deleteFromNetwork(network *cniNetwork, podName string, podNamespace string, podSandboxID kubecontainer.ContainerID, podNetnsPath string, annotations map[string]string) error {
-	rt, err := plugin.buildCNIRuntimeConf(podName, podNamespace, podSandboxID, podNetnsPath, annotations, nil)
-	....
-	netConf, cniNet := network.NetworkConfig, network.CNIConfig
-	....
-	err = cniNet.DelNetworkList(netConf, rt)
-	....
+func (c *CNIConfig) delNetwork(ctx context.Context, name, cniVersion string, net *NetworkConfig, prevResult types.Result, rt *RuntimeConf) error {
+	c.ensureExec()
+	pluginPath, err := c.exec.FindInPath(net.Network.Type, c.Path)
+	if err != nil {
+		return err
+	}
+
+	newConf, err := buildOneConfig(name, cniVersion, net, prevResult, rt)
+	if err != nil {
+		return err
+	}
+
+	return invoke.ExecPluginWithoutResult(ctx, pluginPath, newConf.Bytes, c.args("DEL", rt), c.exec)
 }
 ```
-
+删除网络会通过二进制引擎调用具体插件的二进制文件，并提供"DEL"动作。
