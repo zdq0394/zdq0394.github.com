@@ -1,0 +1,7 @@
+# cniNetworkPlugin分析
+## NetworkPlugin
+dockerservice通过networkpluginmanager来管理网络。
+networkpluginmanager是networkplugin的一个包装类，具体功能都由networkplugin实现。
+
+cniNetworkPlugin是networkplugin的一个实现类。
+代码在kubelet/dockershim/network/cni包中。

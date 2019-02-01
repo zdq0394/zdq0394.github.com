@@ -74,15 +74,61 @@ func (ds *dockerService) StopPodSandbox(ctx context.Context, r *runtimeapi.StopP
 StopPodSandbox是CRI接口。dockerservice在该方法中通过调用network(networkpluginmanager)将pod离开网络。
 
 ## networkpluginmanager
-
-
-## cniNetworkPlugin
-源码kubelet/dockershim/network/cni/cni.go中`cniNetworkPlugin`包括两个主要方法：
-1. SetUpPod
+networkpluginmanager逻辑相对简单，就是一个networkplugin的包装类。
+kubelet/dockershim/network/plugins.go
 ```go
-func (plugin *cniNetworkPlugin) SetUpPod(namespace string, name string, id kubecontainer.ContainerID, annotations, options map[string]string) error
+// The PluginManager wraps a kubelet network plugin and provides synchronization
+// for a given pod's network operations.  Each pod's setup/teardown/status operations
+// are synchronized against each other, but network operations of other pods can
+// proceed in parallel.
+type PluginManager struct {
+	// Network plugin being wrapped
+	plugin NetworkPlugin
+
+	// Pod list and lock
+	podsLock sync.Mutex
+	pods     map[string]*podLock
+}
 ```
-2. TearDownPod
+networkpluginmanager主要实现了2个方法。
+当然，都是通过调用networkplugin实现的。
 ```go
-func (plugin *cniNetworkPlugin) TearDownPod(namespace string, name string, id kubecontainer.ContainerID) error
+func (pm *PluginManager) SetUpPod(podNamespace, podName string, id kubecontainer.ContainerID, annotations, options map[string]string) error
+func (pm *PluginManager) TearDownPod(podNamespace, podName string, id kubecontainer.ContainerID) error 
 ```
+
+networkplugin定义了如下接口：
+```go
+// Plugin is an interface to network plugins for the kubelet
+type NetworkPlugin interface {
+	// Init initializes the plugin.  This will be called exactly once
+	// before any other methods are called.
+	Init(host Host, hairpinMode kubeletconfig.HairpinMode, nonMasqueradeCIDR string, mtu int) error
+
+	// Called on various events like:
+	// NET_PLUGIN_EVENT_POD_CIDR_CHANGE
+	Event(name string, details map[string]interface{})
+
+	// Name returns the plugin's name. This will be used when searching
+	// for a plugin by name, e.g.
+	Name() string
+
+	// Returns a set of NET_PLUGIN_CAPABILITY_*
+	Capabilities() utilsets.Int
+
+	// SetUpPod is the method called after the infra container of
+	// the pod has been created but before the other containers of the
+	// pod are launched.
+	SetUpPod(namespace string, name string, podSandboxID kubecontainer.ContainerID, annotations, options map[string]string) error
+
+	// TearDownPod is the method called before a pod's infra container will be deleted
+	TearDownPod(namespace string, name string, podSandboxID kubecontainer.ContainerID) error
+
+	// GetPodNetworkStatus is the method called to obtain the ipv4 or ipv6 addresses of the container
+	GetPodNetworkStatus(namespace string, name string, podSandboxID kubecontainer.ContainerID) (*PodNetworkStatus, error)
+
+	// Status returns error if the network plugin is in error state
+	Status() error
+}
+```
+
