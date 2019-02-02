@@ -22,21 +22,20 @@ Calico网络示例：
 * Orchestrator Plugin
 
 ### Felix
-每个宿主节点上都要运行的一个daemon进程。
-Felix会根据workload endpoints的网络需求（联通和限制）管理宿主机的routes/iptables等信息。
+Felix是一个守护程序，它在每个提供endpoints资源的计算机上运行。在大多数情况下，这意味着它需要在托管容器或VM的宿主机节点上运行。 Felix 负责编制路由和ACL规则以及在该主机上所需的任何其他内容，以便为该主机上的endpoints资源正常运行提供所需的网络连接。
 
-主要包括一下四个功能：
-* interface management
-* route programming
-* acl programming
-* state reporting
+根据特定的编排环境，Felix负责以下任务：
+* 管理网络接口，Felix将有关接口的一些信息编程到内核中，以使内核能够正确处理该endpoint发出的流量。特别是，它将确保主机正确响应来自每个工作负载的ARP请求，并将为其管理的接口启用IP转发支持。它还监视网络接口的出现和消失，以便确保针对这些接口的编程得到了正确的应用。
+* 编写路由，Felix负责将到其主机上endpoints的路由编写到Linux内核FIB（转发信息库）中。 这可以确保那些发往目标主机的endpoints的数据包被正确地转发。
+* 编写ACLs，Felix还负责将ACLs编程到Linux内核中。这些ACLs用于确保只能在endpoints之间发送有效的网络流量，并确保endpoints无法绕过Calico的安全措施。
+* 报告状态，Felix负责提供有关网络健康状况的数据。特别是，它将报告配置其主机时发生的错误和问题。该数据会被写入etcd，以使其对网络中的其他组件和操作可见。
 
 ### BIRD
-每个宿主节点上都要运行的一个daemon进程。每个运行Felix的宿节点都要运行Bird。
+Calico在每个运行Felix服务的节点上都部署一个BGP客户端。BGP客户端的作用是读取Felix程序编写到内核中的路由信息，并在数据中心内分发这些路由信息。
 
-It is a BGP client: read routing state that Felix programs into the Kernel and distribute it around the data center。就是说，Bird把Felix生成的RIB等信息通过BGP协议分发到整个数据中心。
+BGP客户端负责执行以下任务：
 
-* route distribution
+* 路由信息分发，当Felix将路由插入Linux内核FIB时，BIRD将接收它们并将它们分发到集群中的其他工作节点。
 
 ### BGP Route Reflector
 A BGP client configured as a reflector。
@@ -54,3 +53,6 @@ Calico uses etcd to provide the communication between components and as a consis
 3. iptables: for isolation
 
 In a Calico network, each compute server acts as a **router** for all of the endpoints that are hosted on that compute server.
+
+## 参考信息
+* https://www.kubernetes.org.cn/4960.html
