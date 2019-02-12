@@ -1,15 +1,25 @@
 # Kubernetes
-## 概念
-
-## 组件
-
+## 基础和概念
+### 概念
+### 组件
 ## 部署
-
+* [自定义ansible脚本]
+## 镜像
+* [Registry]
 ## 计算
-
+* [Docker]
+* [文件系统]
+* [CRI]
+* [Namespace/Cgroup]
 ## 存储
-
+* [volume]
+* [CSI]
+* [Ceph]
 ## 网络
+### service
+* [clusterip]
+* [nodeport]
+### cni
 * [kubernetes网络约束](network/constraints.md)
 * [cni概述](network/cni/cni.md)
 * [cni网络入口流程分析](source/network/entry.md)
@@ -17,8 +27,19 @@
 * [cni实现](source/network/cni.md)
 ### Calico
 * [Calico概述](network/cni/calico/calico.md)
+### Ingress
+* [NginxController]
 ## 安全
-
+* Authenticate
+* Authorize
+* Quota
+## 监控告警
+## 日志分析
+## 应用市场
+* [helm]
+* [Operator]
+## 微服务
+* [istio]
 ## [Kubernetes源码分析](source/README.md)
 
 
