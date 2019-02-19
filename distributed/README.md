@@ -12,11 +12,12 @@
 * [Write Ahead Log](wal.md)
 
 ## 分布式系统
-* [etcd](etcd/README.md)
+* [etcd](middleware/etcd/README.md)
 * zookeeper
 * consul
-* [redis](redis/README.md)
-* [mongo](mongo/README.md)
+* [redis](middleware/redis/README.md)
+* [mongo](middleware/mongo/README.md)
+* [rabbitmq](middleware/rabbitmq/README.md)
 
 ## 技术文章
 * [分布式系统之缓存的微观应用经验谈（一）:基础细节](http://www.cnblogs.com/bsfz/p/9568591.html)
