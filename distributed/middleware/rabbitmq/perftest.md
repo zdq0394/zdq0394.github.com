@@ -1,5 +1,6 @@
 # 吞吐量测试
 ## 测试工具
+```sh
 bin/runjava com.rabbitmq.perf.PerfTest --help
 usage: <program>
  -?,--help                                   show usage
@@ -64,3 +65,4 @@ usage: <program>
  -y,--consumers <arg>                        consumer count
  -Y,--consumer-channel-count <arg>           channels per consumer
  -z,--time <arg>                             run duration in seconds (unlimited by default)
+```sh
