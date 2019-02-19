@@ -1,7 +1,8 @@
 # 吞吐量测试
 ## 测试工具
-[官方测试工具](https://rabbitmq.github.io/rabbitmq-perf-test/snapshot/htmlsingle/#running-producers-and-consumers-on-different-machines)
+[官方测试工具:RabbitMQ PerfTest](https://rabbitmq.github.io/rabbitmq-perf-test/snapshot/htmlsingle/#running-producers-and-consumers-on-different-machines)
 
+## 命令行详解
 ```sh
 bin/runjava com.rabbitmq.perf.PerfTest --help
 usage: <program>
