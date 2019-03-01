@@ -36,15 +36,12 @@
 ## 监控告警
 ## 日志分析
 ## 中间件部署
-### 手动部署
 * [ETCD](https://github.com/zdq0394/scripts/tree/master/middleware/etcd/kubernetes)
 * [Redis](https://github.com/zdq0394/scripts/tree/master/middleware/redis/cluster/kubernetes)
 * [Consul](https://github.com/zdq0394/scripts/tree/master/middleware/consul/kubernetes)
 * [RabbitMQ](https://github.com/zdq0394/scripts/tree/master/middleware/rabbitmq/kubernetes)
 * [ZooKeeper](https://github.com/zdq0394/scripts/tree/master/middleware/zookeeper/kubernetes)
 * [Kafka](https://github.com/zdq0394/scripts/tree/master/middleware/kafka/kubernetes)
-### Operator方式
-
 ## 微服务
 * [istio]
 ## [Kubernetes源码分析](source/README.md)
