@@ -13,8 +13,8 @@
 
 ## 分布式系统
 * [etcd](middleware/etcd/README.md)
-* zookeeper
-* consul
+* [zookeeper](middleware/zookeeper/README.md)
+* [consul](middleware/consul/README.md)
 * [redis](middleware/redis/README.md)
 * [mongo](middleware/mongo/README.md)
 * [rabbitmq](middleware/rabbitmq/README.md)
