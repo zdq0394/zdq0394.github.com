@@ -11,15 +11,6 @@
 * [三阶段提交协议](3pc.md)
 * [Write Ahead Log](wal.md)
 
-## 分布式系统
-* [etcd](middleware/etcd/README.md)
-* [zookeeper](middleware/zookeeper/README.md)
-* [consul](middleware/consul/README.md)
-* [redis](middleware/redis/README.md)
-* [mongo](middleware/mongo/README.md)
-* [rabbitmq](middleware/rabbitmq/README.md)
-* [kafka](middleware/kafka/README.md)
-
 ## 技术文章
 * [分布式系统之缓存的微观应用经验谈（一）:基础细节](http://www.cnblogs.com/bsfz/p/9568591.html)
 * [分布式系统之缓存的微观应用经验谈（二）:主从和主备高可用](https://www.cnblogs.com/bsfz/p/9769503.html)
