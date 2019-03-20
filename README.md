@@ -20,6 +20,7 @@
 * [zookeeper](middleware/zookeeper/README.md)
 * [consul](middleware/consul/README.md)
 * [redis](middleware/redis/README.md)
+* [memcached](middleware/memcached/README.md)
 * [mongo](middleware/mongo/README.md)
 * [rabbitmq](middleware/rabbitmq/README.md)
 * [kafka](middleware/kafka/README.md)
