@@ -9,6 +9,7 @@ stress-ng -i 1 --hdd 1 --timeout 600  #模拟磁盘IO
 ```
 ## CPU性能分析工具
 | 性能指标 | 工具 | 说明 |
+| ------ | ------ | ------ |
 | 平均负载 | uptime、top  | uptime最简单；top提供了更全的指标 |
 | 系统整体CPU使用率 | top、mpstat、vmstat、sar、/proc/stat | top、vmstat和mpstat只可以动态查看，而sar还可以记录历史数；/proc/stat是其它性能工具的数据来源 |
 | 进程CPU使用率 | top、pidstat、ps、htop、atop | top和ps可以按cpu使用率给进程排序，而pidstat只显示实际使用了cpu的进程；htop和atop以不同颜色显示更直观 |
