@@ -21,3 +21,19 @@ stress-ng -i 1 --hdd 1 --timeout 600  #模拟磁盘IO
 | IO | dstat、sar | dstat和sar都提供了IO的总体情况 |
 | CPU个数 | lscpu、/proc/cpuinfo | lscpu更简单 |
 | 事件分析 | perf、execsnoop | perf可以用来分析CPU的缓存以及内核调用链；execsnoop用来监控短时进程 |
+
+## 内存性能分析工具
+| 性能指标 | 工具 | 说明 |
+| ------ | ------ | ------ |
+| 系统已用、可用、剩余内存 | free、vmstat、sar、/proc/meminfo | |
+| 进程虚拟内存、常驻内存、共享内存 | top、ps |  |
+| 进程内存分布 | pmap |  |
+| 进程swap换出内存 | top、/proc/pid/status |  |
+| 进程缺页异常 | ps、top |  |
+| 系统换页情况 | sar |  |
+| 缓存/缓冲区用量 | free、vmstat、sar、cachestat |  |
+| 缓存/缓冲区命中率 | cachetop |  |
+| Swap已用空间和剩余空间 | free、sar |  |
+| Swap换入换出 | vmstat |  |
+| 内存泄漏检测 | memleak、valgrind |  |
+| 指定文件的缓存大小 | pcstat |  |
