@@ -51,3 +51,18 @@ stress-ng -i 1 --hdd 1 --timeout 600  #模拟磁盘IO
 | 块设备I/O事件跟踪 | blktrace | 示例：blktrace -d /dev/sda -o- | blkparse -i- |
 | 进程I/O系统调用跟踪 | strace | 通过系统调用跟踪进程的I/O |
 | 进程块设备I/O大小跟踪 | biosnoop、biotop |  |
+
+## 网络性能分析工具
+| 性能指标 | 工具 | 说明 |
+| ------ | ------ | ------ |
+| 吞吐量(BPS) | sar、nethogs、iftop | 分别可以查看网络接口、进程以及IP地址的网络吞吐量 |
+| PPS | sar、/proc/net/dev | 查看网络接口的PPS |
+| 连接数 | netstat、ss | 查看网络连接数 |
+| 延迟 | ping、hping3 | 通过ICMP、TCP等测试网络延迟 |
+| 连接跟踪数 | conntrack | 查看和管理连接跟踪状况 |
+| 路由 | mtr、route和traceroute | 查看路由并测试链路信息 |
+| DNS | dig、nslookup | 排查DNS解析问题 |
+| 防火墙和NAT | iptables | 配置和管理防火墙及NAT规则 |
+| 网卡功能 | ethtool | 查看和配置网络接口的功能 |
+| 抓包 | tcpdump、wireshark | 抓包分析网络流量 |
+| 内核协议栈跟踪 | bcc、systemtap | 动态跟踪内核协议栈的行为 |
