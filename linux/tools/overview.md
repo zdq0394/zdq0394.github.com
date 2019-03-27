@@ -37,3 +37,17 @@ stress-ng -i 1 --hdd 1 --timeout 600  #模拟磁盘IO
 | Swap换入换出 | vmstat |  |
 | 内存泄漏检测 | memleak、valgrind |  |
 | 指定文件的缓存大小 | pcstat |  |
+
+## 磁盘性能分析工具
+| 性能指标 | 工具 | 说明 |
+| ------ | ------ | ------ |
+| 文件系统空间容量、使用量以及剩余空间 | df |  |
+| 索引节点容量、使用量以及剩余量 | df -i |  |
+| 页缓存和可回收slab缓存 | /proc/meminfo、sar和vmstat | sar -r |
+| 缓冲区 | /proc/meminfo、sar和vmstat | sar -r |
+| 目录项、索引节点以及文件系统的缓存 | /proc/slabinfo、slabtop | slabtop更直观 |
+| 磁盘I/O使用率、IOPS、吞吐量、响应时间、I/O平均大小以及等待队列长度 | iostat、sar和dstat | 使用iostat -d -x或者sar -d 选项 |
+| 进程I/O大小以及I/O延迟 | pidstat、iotop | 使用pidstat -d选项 |
+| 块设备I/O事件跟踪 | blktrace | 示例：blktrace -d /dev/sda -o- | blkparse -i- |
+| 进程I/O系统调用跟踪 | strace | 通过系统调用跟踪进程的I/O |
+| 进程块设备I/O大小跟踪 | biosnoop、biotop |  |
