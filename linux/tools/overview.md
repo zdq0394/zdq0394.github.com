@@ -1,7 +1,7 @@
 # Linux性能分析工具
 ## 压力模拟工具
 stress是一个Linux系统压力测试工具。
-也可以安装stree-ng进行更全面的测试。
+也可以安装stress-ng进行更全面的测试。
 ```sh
 stress --cpu 1 --timeout 600
 stress -c 8 --timeout 600
