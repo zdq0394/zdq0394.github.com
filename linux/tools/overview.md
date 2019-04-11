@@ -52,7 +52,8 @@ stress-ng -i 1 --hdd 1 --timeout 600  #模拟磁盘IO
 | 进程I/O系统调用跟踪 | strace | 通过系统调用跟踪进程的I/O |
 | 进程块设备I/O大小跟踪 | biosnoop、biotop |  |
 
-## 网络性能分析工具
+## 网络性能
+### 分析工具
 | 性能指标 | 工具 | 说明 |
 | ------ | ------ | ------ |
 | 吞吐量(BPS) | sar、nethogs、iftop | 分别可以查看网络接口、进程以及IP地址的网络吞吐量 |
@@ -66,3 +67,27 @@ stress-ng -i 1 --hdd 1 --timeout 600  #模拟磁盘IO
 | 网卡功能 | ethtool | 查看和配置网络接口的功能 |
 | 抓包 | tcpdump、wireshark | 抓包分析网络流量 |
 | 内核协议栈跟踪 | bcc、systemtap | 动态跟踪内核协议栈的行为 |
+
+| 性能工具 | 主要功能 |
+| ------ | ------ |
+| ifconfig、ip | 配置和查看网络接口 |
+| ss | 查看网络连接数 |
+| sar、/proc/net/dev/sys/class/net/eth0/statistics/ | 查看网络接口的网络收发情况 |
+| nethogs | 查看进程的网络收发情况 |
+| iftop | 查看IP的网络收发情况 |
+| ethtool | 查看和配置网络接口 |
+| conntrack | 查看和管理连接跟踪状况 |
+| nslookup、dig | 排查DNS解析问题 |
+| mtr、route、traceroute | 查看路由并测试链路信息 |
+| ping、hping3 | 测试网络延迟 |
+| tcpdump | 网络抓包工具 |
+| wireshark | 网络抓包和图形界面分析工具 |
+| iptables | 配置和管理防火墙及NAT规则 |
+| perf | 剖析内核协议栈的性能 |
+| systemtap | 动态追踪内核协议栈的行为 |
+| bcc | 动态追踪内核协议栈的行为 |
+
+### 性能测试
+网络层：关注的是网络包的处理能力，即PPS。Linux内核自带的工具pktgen可以用来测试网络层的性能。
+传输层：关注的是TCP/UDP的性能，可以通过工具iperf3、netperf等来测试。
+应用层：关注的是并发连接数、qps、处理延迟等，可以通过wrk、Jmeter、ab等工具来模拟用户的负载进行测试。
