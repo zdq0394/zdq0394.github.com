@@ -5,11 +5,16 @@
 * [device mapper](devicemapper.md)
 * [overlayfs](overlayfs.md)
 * [lvm简介](lvm.md)
-## Linux工具
-* [性能分析思路](tools/analysis.md)
+## Linux性能分析工具
 * [性能分析工具汇总](tools/overview.md)
+* [hping3](tools/hping3.md)
+* [dns排查](tools/dns.md)
 * [pidstat](tools/pidstat.md)
 * [vmstat](tools/vmstat.md)
 * [iostat](tools/iostat.md)
 * [ifstat](tools/ifstat.md)
 ## Linux性能分析
+* [性能分析思路](sysperf/overview.md)
+* [性能优化思路](sysperf/tune.md)
+* [性能分析工具汇总](tools/overview.md)
+* [丢包排查](sysperf/packet_loss.md)
