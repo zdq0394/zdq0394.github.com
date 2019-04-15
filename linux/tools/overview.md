@@ -23,6 +23,7 @@ stress-ng -i 1 --hdd 1 --timeout 600  #模拟磁盘IO
 | 事件分析 | perf、execsnoop | perf可以用来分析CPU的缓存以及内核调用链；execsnoop用来监控短时进程 |
 
 ## 内存性能分析工具
+### 工具
 | 性能指标 | 工具 | 说明 |
 | ------ | ------ | ------ |
 | 系统已用、可用、剩余内存 | free、vmstat、sar、/proc/meminfo | |
@@ -37,6 +38,10 @@ stress-ng -i 1 --hdd 1 --timeout 600  #模拟磁盘IO
 | Swap换入换出 | vmstat |  |
 | 内存泄漏检测 | memleak、valgrind |  |
 | 指定文件的缓存大小 | pcstat |  |
+### 分析思路
+1. 先用free和top，查看系统整体的内存使用情况。
+2. 再用vmstat和pidstat，查看一段时间的趋势，从而判断出内存问题的类型。
+3. 最后进行详细分析，比如内存分配分析、缓存/缓冲区分析、具体进程的内存使用分析等。
 
 ## 磁盘性能分析工具
 ### 指标
