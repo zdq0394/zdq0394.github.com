@@ -7,6 +7,8 @@
 * [lvm简介](lvm.md)
 ## Linux性能分析工具
 * [性能分析工具汇总](tools/overview.md)
+* [perf](tools/perf.md)
+
 * [hping3](tools/hping3.md)
 * [dns排查](tools/dns.md)
 * [pidstat](tools/pidstat.md)
