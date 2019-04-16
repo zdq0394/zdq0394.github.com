@@ -8,6 +8,12 @@ stress -c 8 --timeout 600
 stress-ng -i 1 --hdd 1 --timeout 600  #模拟磁盘IO
 ```
 ## CPU性能分析工具
+### CPU性能指标
+* CPU使用率
+* CPU负载
+* 上下文切换
+* CPU缓存命中率
+### 指标和工具
 | 性能指标 | 工具 | 说明 |
 | ------ | ------ | ------ |
 | 平均负载 | uptime、top  | uptime最简单；top提供了更全的指标 |
@@ -22,6 +28,25 @@ stress-ng -i 1 --hdd 1 --timeout 600  #模拟磁盘IO
 | CPU个数 | lscpu、/proc/cpuinfo | lscpu更简单 |
 | 事件分析 | perf、execsnoop | perf可以用来分析CPU的缓存以及内核调用链；execsnoop用来监控短时进程 |
 
+### 工具的指标
+| 性能工具 | CPU性能指标 |
+| ------ | ------ |
+| uptime | 平均负载 |
+| top | 平均负载、运行队列、整体的CPU使用率以及每个进程的状态和CPU使用率 |
+| htop | top增强版，以不同颜色区分不同类型的进程，更直观 |
+| atop | CPU、内存、磁盘和网络等各种资源的全面监控 |
+| vmstat | 系统整体的CPU使用率、上下文切换次数、中断次数，还包括运行中的进程数量、不可中断状态的进程数量 |
+| mpstat | 每个CPU的使用率和软中断次数 |
+| pidstat | 进程和线程的CPU使用率、中断上下文次数 |
+| /proc/softirqs | 软中断类型和在每个CPU上累计的中断次数 |
+| /proc/interrupts | 中断类型和在每个CPU上累计的中断次数 |
+| ps | 每个进程的状态和CPU使用率 |
+| pstree | 进程的父子关系 |
+| dstat | 系统整体的CPU、内存、磁盘和IO状态 |
+| sar | 系统整体的CPU使用率 |
+| strace | 进程的系统调用 |
+| perf | CPU性能事件剖析，如调用链分析、CPU缓存、CPU调度等 |
+| execsnoop | 监控短时进程 |
 ## 内存性能分析工具
 ### 工具
 | 性能指标 | 工具 | 说明 |
