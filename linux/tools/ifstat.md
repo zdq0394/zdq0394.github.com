@@ -1,4 +1,23 @@
-# ifstat命令详解
+# ifstat
+## 使用方法
+`ifstat`是一个统计`网络接口活动状态`的工具。
+
+使用工具`netstat -i`可以达到几乎相同的效果。
+```sh
+Usage: ifstat [OPTION] [ PATTERN [ PATTERN ] ]
+   -h, --help		this message
+   -a, --ignore	ignore history
+   -d, --scan=SECS	sample every statistics every SECS
+   -e, --errors	show errors
+   -n, --nooutput	do history only
+   -r, --reset		reset history
+   -s, --noupdate	don;t update history
+   -t, --interval=SECS	report average over the last SECS
+   -V, --version	output version information
+   -z, --zeros		show entries with zero activity
+```
+
+## 例子
 ```sh
 [root@SCSP01815 ~]# ifstat
 #kernel
