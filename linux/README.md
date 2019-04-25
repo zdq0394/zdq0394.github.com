@@ -22,6 +22,7 @@
 * [sar](tools/sar.md)
 * [slabtop](tools/slabtop.md)
 * [strace](tools/strace.md)
+* [tcpdump](tools/tcpdump.md)
 
 ## Linux性能分析
 * [性能分析思路](sysperf/overview.md)
