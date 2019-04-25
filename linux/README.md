@@ -13,7 +13,10 @@
 * [pidstat](tools/pidstat.md)
 * [vmstat](tools/vmstat.md)
 * [iostat](tools/iostat.md)
+* [iotop](tools.iotop.md)
 * [ifstat](tools/ifstat.md)
+* [iftop](tools/iftop.md)
+* [sar](tools/sar.md)
 * [dstat](tools/dstat.md)
 ## Linux性能分析
 * [性能分析思路](sysperf/overview.md)
