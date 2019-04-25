@@ -20,6 +20,8 @@
 * [ifstat](tools/ifstat.md)
 * [iftop](tools/iftop.md)
 * [sar](tools/sar.md)
+* [slabtop](tools/slabtop.md)
+* [strace](tools/strace.md)
 
 ## Linux性能分析
 * [性能分析思路](sysperf/overview.md)
