@@ -1,0 +1,49 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: local-service
+  namespace: default 
+  labels:
+    app: local-test
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    app: local-test
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: local-test
+spec:
+  serviceName: "local-service"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: local-test
+  template:
+    metadata:
+      labels:
+        app: local-test
+    spec:
+      containers:
+      - name: test-container
+        image: centos:7
+        command:
+        - "/bin/sh"
+        args:
+        - "-c"
+        - "sleep 36000"
+        volumeMounts:
+        - name: local-vol
+          mountPath: /usr/test-pod
+  volumeClaimTemplates:
+  - metadata:
+      name: local-vol
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "fast-disks"
+      resources:
+        requests:
+          storage: 20Gi
