@@ -15,6 +15,7 @@
 * [volume]
 * [CSI]
 * [Ceph]
+* [local volume storage](storage/localvolume/localvolume.md)
 ## 网络
 ### service
 * [clusterip]
