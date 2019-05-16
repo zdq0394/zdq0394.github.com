@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: local-service
-  namespace: default 
+  namespace: default
   labels:
     app: local-test
 spec:
@@ -16,6 +16,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: local-test
+  namespace: default
 spec:
   serviceName: "local-service"
   replicas: 3
