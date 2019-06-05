@@ -8,6 +8,7 @@ Redis内置了`复制（replication）`，`LUA脚本（Lua scripting）`，`LRU�
 ## Redis基础
 * [Redis安装](install.md)
 * [Redis配置](config.md)
+* [Redis数据结构类型](types.md)
 
 ## Redis命令
 * [Redis命令](commands.md)

@@ -11,6 +11,7 @@ $ make
 
 ### 启动方式
 Redis启动有3种方式：
+
 1、默认配置启动
 ```sh
 $ src/redis-server
