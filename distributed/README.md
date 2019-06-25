@@ -1,4 +1,11 @@
 # 分布式
+## 经典论文
+* [The Part-Time Parliament](papers/the_part_time_parliament.pdf)
+* [Paxos Made Simple](papers/paxos_made_simple.pdf)
+* [Fast Paxos](papers/fast_paxos.pdf)
+* [ZooKeeper's atomic broadcast protocol](papers/zab.pdf)
+* [Raft](papers/raft.pdf)
+
 ## 分布式系统理论
 * [ACID](acid.md)
 * [BASE](base.md)
