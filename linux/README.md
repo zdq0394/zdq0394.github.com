@@ -29,3 +29,6 @@
 * [性能优化思路](sysperf/tune.md)
 * [性能分析工具汇总](tools/overview.md)
 * [丢包排查](sysperf/packet_loss.md)
+
+## High Availability
+* http://highscalability.com/
