@@ -161,7 +161,7 @@ mount所达到的效果是：像访问一个普通的文件一样访问位于其
 # mount --make-unbindable /mntU  # 将挂载点设置为不可绑定属性
 ```
 
-注意在设置私有关系属性时，在本命名空间下的这个挂载点是Slave，而父命名空间下这个挂载点是Master，挂载传播的方向只能由Master传给Slave。
+注意在设置slave关系属性时，在本命名空间下的这个挂载点是Slave，而父命名空间下这个挂载点是Master，挂载传播的方向只能由master传给s9lave。
 
 ### 绑定挂载
 绑定挂载的引入使得mount的其中一个参数不一定要是一个特殊文件，也可以是该文件系统上的一个普通文件目录。Linux中绑定挂载的用法如下：
@@ -243,3 +243,6 @@ ID-inside-ns   ID-outside-ns   length
 * 满足如下条件之一: ① 写入的数据将写入进程在Parent Namespace中的有效uid/gid映射到Child Namespace。此条规则允许Child Namespace中的进程为自己设置uid/gid ② 进程在Parent Namespace拥有CAP_SETUID/CAP_SETGID权限，那么它将可以映射到Parent Namespace中的任一uid/gid。不过由于Child Namespace中新创建的进程是没有在Parent Namespace中的权限的，那么此条规则仅用于，位于具有相应权限的Parent Namespace中的进程，来映射同namespace内的任一IDs。
 
 User Namespace除了隔离用户ID和用户组ID之外，还对每个Namespace进行了Capability的隔离和控制，可以通过添加和删除相应的Capability来控制新Namespace中进程所拥有的权限，比如为新的Namespace中增加CAP_CHOWN权限，那么在这个Namespace的进程拥有改变文件属主的权限。
+
+## 参考文献
+* https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt
