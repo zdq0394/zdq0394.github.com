@@ -4,7 +4,8 @@
 * [device mapper](devicemapper.md)
 * [overlayfs](overlayfs.md)
 * [lvm简介](lvm.md)
-* [linux io model](sync_async_b_nb.md)
+* [阻塞/非阻塞、同步/非同步](sync_async_b_nb.md)
+* [select/poll/epoll/kqueue](select_poll_epoll_kqueue.md)
 
 ## 容器核心技术
 * [namespace](namespace.md)
