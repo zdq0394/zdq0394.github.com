@@ -3,8 +3,6 @@
 ## 基础
 * [阻塞/非阻塞、同步/非同步](sync_async_b_nb.md)
 * [select/poll/epoll/kqueue](select_poll_epoll_kqueue.md)
-* [device mapper](devicemapper.md)
-* [lvm](lvm.md)
 
 ## 内存
 * [内存分配回收](malloc_free/README.md)
