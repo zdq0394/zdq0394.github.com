@@ -1,16 +1,10 @@
 # Linux
 
 ## 基础
-* [device mapper](devicemapper.md)
-* [overlayfs](overlayfs.md)
-* [lvm简介](lvm.md)
 * [阻塞/非阻塞、同步/非同步](sync_async_b_nb.md)
 * [select/poll/epoll/kqueue](select_poll_epoll_kqueue.md)
-
-## 容器核心技术
-* [namespace](namespace.md)
-* [cgroup](cgroup.md)
-* [union fs]()
+* [device mapper](devicemapper.md)
+* [lvm简介](lvm.md)
 
 ## Linux性能分析工具
 * [性能分析工具汇总](tools/overview.md)
