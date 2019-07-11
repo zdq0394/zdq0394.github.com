@@ -137,22 +137,22 @@ total 0
 ### 示例
 1. 准备工作
 如下脚本将往设备/dev/tty持续性的写如数据：
+
 ```sh
 #!/bin/bash
-
 while :
 do
     echo "print line" > /dev/tty
     sleep 3
 done
-
 ```
+
 将脚本保存为mytest.sh。
 2. 创建devices资源的cgroup mytest
 在/sys/fs/cgroup/devices/目录下创建croup——mytest（名字不重要）。
+
 ```sh
-/sys/fs/cgroup/devices/mytest
-[mytest]# ll
+[/sys/fs/cgroup/devices/mytest]# ll
 total 0
 -rw-r--r-- 1 root root 0 Jul 11 13:58 cgroup.clone_children
 -rw-r--r-- 1 root root 0 Jul 11 13:58 cgroup.procs
@@ -162,11 +162,14 @@ total 0
 -rw-r--r-- 1 root root 0 Jul 11 13:58 notify_on_release
 -rw-r--r-- 1 root root 0 Jul 11 13:59 tasks
 ```
+
 3. 查看/dev/tty的设备号
+
 ```sh
 ll /dev/tty
 crw-rw-rw- 1 root tty 5, 0 Jul 11 14:00 /dev/tty
 ```
+
 然后将该设备加入devices.deny
 ```sh
 echo "c 5:0 w" > devices.deny
