@@ -135,7 +135,7 @@ total 0
 -rw-r--r-- 1 root root 0 Jul 11 13:53 tasks
 ```
 ### 示例
-1. 准备工作
+* 准备工作
 如下脚本将往设备/dev/tty持续性的写如数据：
 
 ```sh
@@ -148,7 +148,8 @@ done
 ```
 
 将脚本保存为mytest.sh。
-2. 创建devices资源的cgroup mytest
+
+* 创建devices资源的cgroup mytest
 在/sys/fs/cgroup/devices/目录下创建croup——mytest（名字不重要）。
 
 ```sh
@@ -163,7 +164,7 @@ total 0
 -rw-r--r-- 1 root root 0 Jul 11 13:59 tasks
 ```
 
-3. 查看/dev/tty的设备号
+* 查看/dev/tty的设备号
 
 ```sh
 ll /dev/tty
@@ -174,7 +175,8 @@ crw-rw-rw- 1 root tty 5, 0 Jul 11 14:00 /dev/tty
 ```sh
 echo "c 5:0 w" > devices.deny
 ```
-4. 执行1中保存的脚本
+
+* 执行1中保存的脚本
 程序正常执行
 ```sh
 # ./mytest.sh 
@@ -188,7 +190,7 @@ print line
 print line
 ```
 
-5. 查看程序的pid，并将pid加入到mytest/tasks中
+* 查看程序的pid，并将pid加入到mytest/tasks中
 ```sh
 echo "8439" > mytest/tasks
 ```
