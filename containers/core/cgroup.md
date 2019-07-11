@@ -189,20 +189,21 @@ print line
 ```sh
 echo "8439" > mytest/tasks
 ```
-此时观察程序输出，发现访问/dev/tty设备失败（Operation not permitted）。
-```sh
-print line
-print line
-print line
-print line
-print line
-print line
-print line
-./mytest.sh: line 5: /dev/tty: Operation not permitted
-./mytest.sh: line 5: /dev/tty: Operation not permitted
-./mytest.sh: line 5: /dev/tty: Operation not permitted
-./mytest.sh: line 5: /dev/tty: Operation not permitted
-./mytest.sh: line 5: /dev/tty: Operation not permitted
-./mytest.sh: line 5: /dev/tty: Operation not permitted
+此时观察程序输出，发现访问/dev/tty设备失败（Operation not permitted）:
 
+```sh
+# ./mytest.sh 
+print line
+print line
+print line
+print line
+print line
+print line
+print line
+./mytest.sh: line 5: /dev/tty: Operation not permitted
+./mytest.sh: line 5: /dev/tty: Operation not permitted
+./mytest.sh: line 5: /dev/tty: Operation not permitted
+./mytest.sh: line 5: /dev/tty: Operation not permitted
+./mytest.sh: line 5: /dev/tty: Operation not permitted
+./mytest.sh: line 5: /dev/tty: Operation not permitted
 ```
