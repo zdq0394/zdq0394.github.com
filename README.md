@@ -11,8 +11,8 @@
 * [Open Container Initiative](containers/oci/README.md)
 * [Docker](containers/docker/README.md)
 * [Kubernetes](kubernetes/README.md)
-* [Networks](network/README.md)
-* [Ceph](ceph/README.md)
+* [网络](network/README.md)
+* [Ceph](store/ceph/README.md)
 
 ## 分布式系统
 * [etcd](middleware/etcd/README.md)
@@ -29,3 +29,6 @@
 
 ## 运维
 * [devops](devops/README.md)
+
+## 编程语言
+* [golang](programming/go/README.md)
