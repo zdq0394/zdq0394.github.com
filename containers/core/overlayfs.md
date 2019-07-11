@@ -1,15 +1,15 @@
 # OverlayFS
-**OverlayFS**是联合文件系统（union filesystem）的一种。
-与其说是一种文件系统，不如说是一种mounting机制（It is more of a mounting mechanism than a file system）。
+**Union Filesystem**是容器的核心技术之一。**OverlayFS**是联合文件系统（union filesystem）的一种。
+然而，**OverlayFS**与其说是一种文件系统，不如说是一种mounting机制（It is more of a mounting mechanism than a file system）。
 
-**OverlayFS**是一种堆叠文件系统，它依赖并建立在其它的文件系统之上（ext4/xfs等）。
-并不直接参与磁盘空间结构的划分，仅仅是将来自底层文件系统中不同的目录进行“合并”，然后向用户呈现。
-因此，对于用户来说，见到的OverlayFS文件系统根目录下的内容就来自挂载时指定的不同目录的“合集”。
+**OverlayFS**是一种**堆叠**文件系统，它依赖并建立在其它的文件系统之上（ext4/xfs等）。
+**OverlayFS**并不直接参与磁盘空间结构的划分，仅仅是将来自底层文件系统中不同的目录进行**合并**，然后向用户呈现。
+因此，用户见到的OverlayFS文件系统根目录下的内容就来自挂载时指定的不同目录的**合集**。
 
 **OverlayFS**最基本的特性，简单的总结为以下3点：
 * 上下层同名目录合并
 * 上下层同名文件覆盖
-* lower dir文件写时拷贝
+* lower dir的文件写时拷贝
 以上这三点对用户都是不被感知的。
 
 ## 挂载
@@ -20,17 +20,19 @@ mount -t overlay overlay -o lowerdir=lower1:lower2:lower3,upperdir=upper,workdir
 
 其中：
 * lowerdir，"lower1:lower2:lower3"表示不同的lower层目录，不同的目录使用":"分隔；层次关系依次为lower1 > lower2 > lower3（注：多lower层功能支持在Linux-4.0合入，Linux-3.18版本只能指定一个lower dir）
-* upperdir和workdir目录分别表示upper层目录和文件系统挂载后用于存放临时和间接文件的工作基目录（work base dir）。
-* merged目录就是最终的挂载点目录。
+* upperdir，表示upper层目录
+* workdir，文件系统挂载后用于存放临时和间接文件的工作基目录（work base dir）
+* merged目录就是最终的挂载点目录
+
 若一切顺利，在执行以上命令后，overlayfs就成功挂载到merged目录下了。
 
 挂载选项支持（即"-o"参数）：
-1）lowerdir=xxx：指定用户需要挂载的lower层目录（支持多lower，最大支持500层）；
-2）upperdir=xxx：指定用户需要挂载的upper层目录；
-3）workdir=xxx：指定文件系统的工作基础目录，挂载后内容会被清空，且在使用过程中其内容用户不可见；
-4）default_permissions：功能未使用；
-5）redirect_dir=on/off：开启或关闭redirect directory特性，开启后可支持merged目录和纯lower层目录；
-6）index=on/off：开启或关闭index特性，开启后可避免hardlink copyup broken问题；
+1）lowerdir=xxx：指定用户需要挂载的lower层目录（支持多lower，最大支持500层）
+2）upperdir=xxx：指定用户需要挂载的upper层目录
+3）workdir=xxx：指定文件系统的工作基础目录，挂载后内容会被清空，且在使用过程中其内容用户不可见
+4）default_permissions：功能未使用
+5）redirect_dir=on/off：开启或关闭redirect directory特性，开启后可支持merged目录和纯lower层目录
+6）index=on/off：开启或关闭index特性，开启后可避免hardlink copyup broken问题
 
 其中lowerdir、upperdir和workdir为基本的挂载选项。
 `redirect_dir`和`index`涉及`overlayfs`为功能支持选项，除非内核编译时默认启动，否则默认情况下这两个选项不启用。
@@ -104,6 +106,7 @@ drwxr-xr-x 1 root root 42 Oct 24 17:08 hello_dir
 hello1.txt
 ```
 果然如此。
+
 ### 删除文件/文件夹
 1. 文件/文件夹在upperdir目录，且底层的lowerdir中不存在同名的文件/文件夹
 由于upper目录是可以直接`读写`的。当删除这种类型的文件或者文件夹时，会直接从upper目录删除。
@@ -164,7 +167,8 @@ total 0
 **OverlayFS**针对这种情况采用whiteout文件。
 **Whiteout**在upper目录中创建，用于屏蔽底层的同名文件。同时，该文件在merge层是不可见的，所以用户就看不到被删除的文件或者目录了。
 
-**Whiteout**文件并不是普通的文件，而是主次设备号都为0的字符设备（可以通过"mknod <name> c 0 0"命令手工创建）。当用户在merge层通过ls命令检查父目录的目录项时，OverlayFS会自动过滤掉和whiteout文件自身以及和它同名的lower层文件和目录，达到了隐藏文件的目的，让用户以为文件已经删除了。
+**Whiteout**文件并不是普通的文件，而是主次设备号都为0的字符设备（可以通过"mknod <name> c 0 0"命令手工创建）。
+当用户在merge层通过ls命令检查父目录的目录项时，OverlayFS会自动过滤掉和whiteout文件自身以及和它同名的lower层文件和目录，达到了隐藏文件的目的，让用户以为文件已经删除了。
 
 以lower1.txt为例，它来自lower1，并且在upper中不存同名文件。
 ```sh
@@ -226,7 +230,7 @@ OverlayFS触发Copyup特性的操作如下：
 用户通过merge目录扫描目录项时，overlayfs在扫描upper层目录时会检查它的redirect xattr扩展属性并找到原始lower层目录，同时将原始目录下的目录项也返回给用户。
 
 ## 原子性保证
-我们在挂载overlay文件系统到merged时，还指定了一个work目录。
+在挂载overlay文件系统到merged时，还指定了一个work目录。
 原子性保证由借助work目录实现。
 
 
