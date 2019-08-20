@@ -23,8 +23,7 @@
 ### cni
 * [kubernetes网络约束](network/constraints.md)
 * [cni概述](network/cni/cni.md)
-* [cni网络入口流程分析](source/network/entry.md)
-* [cniNetworkPlugin流程分析](source/network/cninetplugin.md)
+* [cni网络调用流程分析](source/network/process.md)
 * [cni实现](source/network/cni.md)
 ### Calico
 * [Calico概述](network/cni/calico/calico.md)
