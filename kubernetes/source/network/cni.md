@@ -1,9 +1,11 @@
 # CNI
 本部分属于[containernetworking/cni](https://github.com/containernetworking/cni)。
-
+CNI主要内容包括两个部分：
+* libcni：主要实现了cniNetworkPlugin调用CNI框架时的入口API。
+* pkg：提供了具体网络机制需要使用的骨架代码。
+## libcni
+### CNI接口
 Kubelet的`cniNetworkPlugin`通过如下的CNI接口调用与具体的网络机制交互。
-
-## CNI接口定义
 ```go
 type CNI interface {
 	AddNetworkList(ctx context.Context, net *NetworkConfigList, rt *RuntimeConf) (types.Result, error)
@@ -30,7 +32,7 @@ type CNIConfig struct {
 var _ CNI = &CNIConfig{}
 ```
 
-## 添加网络
+### 添加网络
 ```go
 func (c *CNIConfig) addNetwork(ctx context.Context, name, cniVersion string, net *NetworkConfig, prevResult types.Result, rt *RuntimeConf) (types.Result, error) {
 	c.ensureExec()
@@ -48,7 +50,7 @@ func (c *CNIConfig) addNetwork(ctx context.Context, name, cniVersion string, net
 }
 ```
 添加网络会通过二进制引擎调用具体插件的二进制文件，并提供"ADD"动作。
-## 删除网络
+### 删除网络
 ```go
 func (c *CNIConfig) delNetwork(ctx context.Context, name, cniVersion string, net *NetworkConfig, prevResult types.Result, rt *RuntimeConf) error {
 	c.ensureExec()
@@ -66,3 +68,9 @@ func (c *CNIConfig) delNetwork(ctx context.Context, name, cniVersion string, net
 }
 ```
 删除网络会通过二进制引擎调用具体插件的二进制文件，并提供"DEL"动作。
+
+## 基础/公共组件
+pkg提供了具体网络机制需要使用的骨架代码。
+[containernetworking/plugins](https://github.com/containernetworking/plugins)中的各种类型的plugin都基于该骨架实现。
+
+
