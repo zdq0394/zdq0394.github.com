@@ -1,5 +1,8 @@
 # CNI
 本部分属于[containernetworking/cni](https://github.com/containernetworking/cni)。
+
+Kubelet的`cniNetworkPlugin`通过如下的CNI接口调用与具体的网络机制交互。
+
 ## CNI接口定义
 ```go
 type CNI interface {
@@ -16,7 +19,7 @@ type CNI interface {
 	ValidateNetwork(ctx context.Context, net *NetworkConfig) ([]string, error)
 }
 ```
-然而CNI插件里却不是具体实现上述接口，CNI框架定义了CNIConfig代理实现上述接口。
+CNIConfig是CNI的一个具体实现类。
 ```go
 type CNIConfig struct {
 	Path []string
