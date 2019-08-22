@@ -117,6 +117,9 @@ type CNIConfig struct {
 // CNIConfig implements the CNI interface
 var _ CNI = &CNIConfig{}
 ```
+CNIConfig包含两个属性：
+* Path：查找网络插件二进制文件的目录。
+* exec：执行引擎，默认是DefaultExec->os/exec。
 
 那CNI如何实现上述接口的呢？我们以addNetwork为例：
 ```go
