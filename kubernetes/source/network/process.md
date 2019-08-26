@@ -188,3 +188,42 @@ func (plugin *cniNetworkPlugin) deleteFromNetwork(network *cniNetwork, podName s
 ```
 
 从以上分析可以看出，kubelet通过调用cniNetworkPlugin来创建/删除网络，cniNetworkPlugin通过调用cni的API与cni框架交互来创建/删除网络。cniNetworkPlugin是kubelet和具体的cni网络方案——比如calico等的适配器。
+
+#### buildCNIRuntimeConf
+运行时通过方法`buildCNIRuntimeConf`构建`RuntimeConf。
+```go
+    rt := &libcni.RuntimeConf{
+		ContainerID: podSandboxID.ID,
+		NetNS:       podNetnsPath,
+		IfName:      network.DefaultInterfaceName,
+		CacheDir:    plugin.cacheDir,
+		Args: [][2]string{
+			{"IgnoreUnknown", "1"},
+			{"K8S_POD_NAMESPACE", podNs},
+			{"K8S_POD_NAME", podName},
+			{"K8S_POD_INFRA_CONTAINER_ID", podSandboxID.ID},
+		},
+	}
+```
+* ContainerID: Pod的Sandbox容器的ID。
+* NetNS: pod的net namespace path。
+* IfName: 设备的名字，比如eth0。
+
+Args包含了一些orchastrotor相关的信息：
+* K8S_POD_NAMESPACE
+* K8S_POD_NAME
+* K8S_POD_INFRA_CONTAINER_ID
+
+RuntimeConf中CapabilityArgs包含portmappings，bandwidth, ipRanges, dns等信息。
+```go
+rt.CapabilityArgs = map[string]interface{}{
+		"portMappings": portMappingsParam,
+}
+...
+rt.CapabilityArgs["bandwidth"] = bandwidthParam
+...
+rt.CapabilityArgs["ipRanges"] = [][]cniIPRange{{{Subnet: plugin.podCidr}}}
+...
+rt.CapabilityArgs["dns"] = *dnsParam
+```
+CapabilityArgs的参数如果NetworkConfig具体的网络支持。
