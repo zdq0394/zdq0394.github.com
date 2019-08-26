@@ -1,6 +1,6 @@
 # VxLan
 ## 概述
-Virutal eXtensible Local Area Network
+Virutal eXtensible Local Area Network。
 ## 基本场景
 ### configure two hosts using remote
 
@@ -129,3 +129,10 @@ ip link set up dev br100
 ip link set up dev veth1001
 ip netns exec net100 ip link set up dev veth1002
 ```
+### 总结
+VxLan是在三层网络上构建二层网络，即L2 Over L3。
+以上所有的容器都在一个二层网络里面。
+
+VxLan的好处是不需要Underlay网络是一个二层网络。VLAN需要Underlay网络是一个二层网络。
+
+VxLan和VLAN都可以进行二层隔离。
