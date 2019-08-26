@@ -61,7 +61,9 @@ ip link set up dev vxlan100
 ## 容器场景
 ### 三节点无多播支持
 网络架构：
+
 ![](pics/vxlan_base.png)
+
 在host1执行如下命令：
 ```sh
 ip link add vxlan100 type vxlan id 100 dstport 0 dev eth0
