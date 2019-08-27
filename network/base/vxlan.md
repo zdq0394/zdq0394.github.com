@@ -59,10 +59,11 @@ ip link set up dev vxlan100
 这种模式下通过手工维护bridge fdb表配置了任何两个host之间的vtep连接。
 
 ## 容器网络场景-大二层网络
-网络架构：
+### 网络架构
 
 ![](pics/vxlan_layer2.png)
 
+### 实践命令
 在host1执行如下命令：
 ```sh
 ip link add vxlan100 type vxlan id 100 dstport 0 dev eth0
@@ -170,10 +171,17 @@ VxLan和VLAN都可以进行二层隔离。
 同理如果底层网络是二层网络，即ethernet fabric，把VxLan换成Vlan也是可以的。
 
 ## 容器网络场景-三层网络
-网络架构：
+### 网络架构
 
 ![](pics/vxlan_layer3.png)
 
+不同点：
+* bridge设备与宿主机上的其它workload形成一个独立的而成网络，bridge设备配置为网关，每个workload增加到网关(bridge)的默认路由。
+* vxlan设备不再加入bridge设备。vxlan和bridge以及宿主机上的workload在二层是不通的。
+* vxlan设备配置ip地址，并且各个宿主机上的vxlan设备的ip地址是一个二层空间内（一个overlay的二层网络，和前面是一样的）
+* 配置iptables和ip routes，并且开启linux的ip_forward功能，是的每个Linux宿主机开启路由转发功能。
+
+### 实践命令
 在host1执行如下命令：
 ```sh
 ip link add vxlan100 type vxlan id 100 dstport 0 dev eth0
@@ -303,3 +311,22 @@ PING 192.169.3.2 (192.169.3.2) 56(84) bytes of data.
 rtt min/avg/max/mdev = 0.381/0.424/0.489/0.042 ms
 
 ```
+
+### 总结
+该网络方案总共牵涉到N+1+1个网络。
+1：一个物理机之间的IP网络。
+2：一个overlay的vxlan网络。
+3：N个宿主机上独立的容器网络。
+
+然后每个宿主机作为vrouter（通过配置路由表和iptables规则）连接宿主机容器网络和vxlan网络，如此所有的网络都是相通的。
+
+上面看到，所有的路由表和iptables以及vxlan的bridge fdb规则都是人工添加的。能不能自动化呢？
+
+当然可以。
+
+如果我们在每个宿主机上运行一个进程，监听这些容器的变化，然后添加相应的规则。如此实现一个基本的的SDN控制器，那么一个简单的SDN网络方案就实现了。
+
+如上所述其实就是Flannel的作用，以上网络方案其实也就是Flannel+VxLAN的方案。
+
+假设物理主机都在一个二层网络里，那么就不需要通过Overlay的方式来构建二层网络，可以直接配置路由表，是宿主机二层相通，那就是Flannel+HostGateway的方式了。
+
