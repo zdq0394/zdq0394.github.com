@@ -83,7 +83,8 @@ ip netns exec net100 ip addr add 192.168.100.2/24 dev veth1002
 ip link set up dev vxlan100
 ip link set up dev br100
 ip link set up dev veth1001
-ip netns exec net100 ip link set up dev veth1002
+ip netns exec net100 ip link set veth1002 name eth0
+ip netns exec net100 ip link set up dev eth0
 ```
 
 在host2执行如下命令：
@@ -105,7 +106,8 @@ ip netns exec net100 ip addr add 192.168.100.3/24 dev veth1002
 ip link set up dev vxlan100
 ip link set up dev br100
 ip link set up dev veth1001
-ip netns exec net100 ip link set up dev veth1002
+ip netns exec net100 ip link set veth1002 name eth0
+ip netns exec net100 ip link set up dev eth0
 ```
 
 在host3执行如下命令：
@@ -127,7 +129,34 @@ ip netns exec net100 ip addr add 192.168.100.4/24 dev veth1002
 ip link set up dev vxlan100
 ip link set up dev br100
 ip link set up dev veth1001
-ip netns exec net100 ip link set up dev veth1002
+ip netns exec net100 ip link set veth1002 name eth0
+ip netns exec net100 ip link set up dev eth0
+```
+
+测试：
+在host1上执行如下命令，验证网络的连通性。
+```sh
+[root@compute3 ~]# ip netns exec net100 ping -c4 192.168.100.3
+PING 192.168.100.3 (192.168.100.3) 56(84) bytes of data.
+64 bytes from 192.168.100.3: icmp_seq=1 ttl=64 time=0.797 ms
+64 bytes from 192.168.100.3: icmp_seq=2 ttl=64 time=0.530 ms
+64 bytes from 192.168.100.3: icmp_seq=3 ttl=64 time=0.460 ms
+64 bytes from 192.168.100.3: icmp_seq=4 ttl=64 time=0.552 ms
+
+--- 192.168.100.3 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3072ms
+rtt min/avg/max/mdev = 0.460/0.584/0.797/0.130 ms
+[root@compute3 ~]# ip netns exec net100 ping -c4 192.168.100.4
+PING 192.168.100.4 (192.168.100.4) 56(84) bytes of data.
+64 bytes from 192.168.100.4: icmp_seq=1 ttl=64 time=0.334 ms
+64 bytes from 192.168.100.4: icmp_seq=2 ttl=64 time=0.373 ms
+64 bytes from 192.168.100.4: icmp_seq=3 ttl=64 time=0.435 ms
+64 bytes from 192.168.100.4: icmp_seq=4 ttl=64 time=0.452 ms
+
+--- 192.168.100.4 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3099ms
+rtt min/avg/max/mdev = 0.334/0.398/0.452/0.051 ms
+
 ```
 ### 总结
 VxLan是在三层网络上构建二层网络，即L2 Over L3。
@@ -136,3 +165,5 @@ VxLan是在三层网络上构建二层网络，即L2 Over L3。
 VxLan的好处是不需要Underlay网络是一个二层网络。VLAN需要Underlay网络是一个二层网络。
 
 VxLan和VLAN都可以进行二层隔离。
+
+以上方案也就是Bridge+VxLan模式实现的容器网络跨主机通信。
