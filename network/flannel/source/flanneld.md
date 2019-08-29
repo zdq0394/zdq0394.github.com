@@ -40,12 +40,11 @@
 
 ## Network的run流程
 ### run框架流程
-以VxLan backend的network为例：
 1. 构建一个Event的buffered chan——events。
 2. 以一个独立goroutine调用subnet的WatchLeases方法，subnet manager 发现（watch）的event注入到events channel。
 3. 当前goroutine陷入循环，执行events channel中的事件。怎么处理呢？请看`nw.handleSubnetEvents(evtBatch)`。
+大致流程代码如下：
 ```go
-//flannel/backend/vxlan/vxlan_network.go
 func (nw *network) Run(ctx context.Context) {
     ...
 	events := make(chan []subnet.Event)
@@ -53,8 +52,6 @@ func (nw *network) Run(ctx context.Context) {
 
 	go func() {
 		subnet.WatchLeases(ctx, nw.subnetMgr, nw.SubnetLease, events)
-		log.V(1).Info("WatchLeases exited")
-		wg.Done()
 	}()
 
 
@@ -69,19 +66,7 @@ func (nw *network) Run(ctx context.Context) {
 	}
 }
 ```
-### 事件处理流程
-VxLan backend的网络如何处理这些事件呢？根据事件类型分两种情况：
-
-#### EventAdded
-* 增加ARP：nw.dev.AddARP
-* 增加FDB：nw.dev.AddARP
-* 增加Route：netlink.RouteReplace
-
-#### EventRemoved
-* 删除ARP：nw.dev.DelARP
-* 删除FDB：nw.dev.DelFDB
-* 删除Route：netlink.RouteDel
-
+不同Backend的Network的`nw.handleSubnetEvents(evtBatch)`方法不一样。
 ## SubnetManager Watch流程
 ### Watch流程
 上一节看到，Network的run流程中，通过一个独立goroutine调用subnet.WatchLeases(ctx, nw.subnetMgr, nw.SubnetLease, events)方法，获取subnetmanager中的events。
@@ -189,7 +174,7 @@ func (ksm *kubeSubnetManager) WatchLeases(ctx context.Context, cursor interface{
 * kubeSubnetManager通过ListWatch机制将Node的变成事件，保存到kubeSubnetManager的events chan中。
 * kubeSubnetManager提供WatchLeases方法，将events chan中的一个event作为LeaseWatchResult返回给外界。
 * 外界方法WatchLeases，循环调用subnetManager的WatchLeases方法，获取event事件，注入到方法提供的receiver chan中。
-* Network中根据receiver chan中的事件进行处理，对ARP/FDB/ROUTE进行增/减。
+* Network中根据receiver chan中的事件进行处理，当然不同类型的Network实现方式不一样。
 
 
 
