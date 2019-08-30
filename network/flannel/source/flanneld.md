@@ -8,6 +8,8 @@ VxLan：Node节点处于一个三层网络，二层不直接相通，那么通�
 
 每个Flanneld管理一个网络（子网）`network`，这个`network`借助`subnet manager`监听集群中各个node的变化，根据`node`的变化然后借助具体的`backend`动作实现网络状态的更新。具体的网络动作包括：路由表、ARP表以及FDB表的增加/删除/更新等。不同的backend实现不太一样。HostGW Backend只需要更新路由表即可；而VxLAN则要同时更新三个表。
 
+![](flanneld_process.png)
+
 ## 基本术语
 * Network：一个节点上的Flanneld管理的一个子网就是一个网络。网络通过Backend实现联通性，通过SubnetManager发现node节点的事件，Network根据事件更新网络状态。
 * SubnetManager：一个node节点分配一个独立的subnet。SubnetManager监听flannel存储（etcd/kubeapi），发现node的Add/Delete/Update等事件。其实就是通知当前网络：一个新的子网加入/离开了，需要配置合适的规则，将当前网络与目标网络联通/断开。
