@@ -11,7 +11,7 @@
     * 删除FDB：nw.dev.DelFDB
     * 删除Route：netlink.RouteDel
 
-针对Vxlan的实现原理，可以参考：[vlan](../../base/vxlan.md)
+针对Vxlan的实现原理，可以参考：[vxlan](../../base/vxlan.md)
 
 ## VxLan Backend
 VxLanBackend的RegisterNetwork方法如下：
