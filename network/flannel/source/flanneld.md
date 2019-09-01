@@ -8,7 +8,7 @@ VxLan：Node节点处于一个三层网络，二层不直接相通，那么通�
 
 每个Flanneld管理一个网络（子网）`network`，这个`network`借助`subnet manager`监听集群中各个node的变化，根据`node`的变化然后借助具体的`backend`动作实现网络状态的更新。具体的网络动作包括：路由表、ARP表以及FDB表的增加/删除/更新等。不同的backend实现不太一样。HostGW Backend只需要更新路由表即可；而VxLAN则要同时更新三个表。
 
-![](flanneld_process.png)
+![](flanneld_daemon.png)
 
 ## 基本术语
 * Network：一个节点上的Flanneld管理的一个子网就是一个网络。网络通过Backend实现联通性，通过SubnetManager发现node节点的事件，Network根据事件更新网络状态。
@@ -194,13 +194,24 @@ KubeSubnetManager本质上是一个对Kubeapi object Node的一个ListWatch控�
 			},
         },
 ```
-## 总结
+## Flanneld流程总结
 * kubeSubnetManager通过ListWatch机制检测Node的事，保存到kubeSubnetManager的events chan中。
 * kubeSubnetManager提供WatchLeases方法，将events chan中的一个event作为LeaseWatchResult返回给外界。
 * Network调用WatchLeases，循环调用subnetManager的WatchLeases方法，采集event事件，注入到方法提供的receiver chan中。
 * Network中根据receiver chan中的事件进行处理，不同Backend的Network实现方式不一样的。HostGW Backend只需要更新路由表；而VxLAN则要同时更新ARP表、FDB表和路由表。
 
+## SubnetFile
+Flanneld默认将把Subnet信息写入到SubnetFile中`/run/flannel/subnet.env`。
 
+内容大概如下：
+```
+FLANNEL_NETWORK=192.169.0.0/16
+FLANNEL_SUBNET=192.169.1.1/24
+FLANNEL_MTU=1450
+FLANNEL_IPMASQ=false
+```
+
+Flannel的CNI插件将使用到该文件。
 
 
 
