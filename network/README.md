@@ -24,6 +24,7 @@
 * [k8s-calico工作流程](calico/k8s_int.md)
 
 ## flannel
+* [flannel网络架构](flannel/flannel.md)
 * [flanneld源码分析](flannel/source/flanneld.md)
 * [flannel hostgw](flannel/source/hostgw.md)
 * [flannel vxlan](flannel/source/vxlan.md)

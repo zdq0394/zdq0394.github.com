@@ -15,7 +15,7 @@ Flannel网络是一个IP网络。
 * [bridge](../base/bridge.md)
 * [bridge 三层网络](../base/bridge_route.md)
 ### vxlan
-[vxlan](../base/vxlan.md)
+* [vxlan](../base/vxlan.md)
 ## hostgw
 Backend `hostgw`形式的网络架构图：
 
