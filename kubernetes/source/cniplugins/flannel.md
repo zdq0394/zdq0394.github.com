@@ -115,6 +115,13 @@ cmdAdd的主要流程：
 
 	return delegateAdd(args.ContainerID, n.DataDir, n.Delegate)
 ```
+## bridge
+Linux bridge是一个网桥设备，可以在linux系统中构建一个二层网络。
+如何通过bridge构建网络可以参考
+* [bridge二层](../../../network/base/bridge.md)
+* [bridge网络](../../../network/base/bridge_route.md)
+
+`bridge plugin`是一个基础的plugin。
 ### bridge.cmdAdd
 1. 创建bridge设备：`br, brInterface, err := setupBridge(n)`
 2. 创建veth pair，并把host端的veth加入到bridge中
