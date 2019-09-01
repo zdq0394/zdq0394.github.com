@@ -12,9 +12,6 @@ Backend `hostgw`形式的网络架构图：
 ![](pics/flannel_hostgw.png)
 
 ## vxlan
-Backend `hostgw`形式的网络架构图：
-
-![](pics/flannel_hostgw.png)
 Backend `vxlan`形式的网络架构图：
 
 ![](pics/flannel_vxlan.png)
