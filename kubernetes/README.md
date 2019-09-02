@@ -57,5 +57,6 @@
 * [cni核心数据结构](source/network/ds.md)
 ### CNI
 * [flannel](source/cniplugins/flannel.md)
+* [calico](source/cniplugins/calico.md)
 
 
