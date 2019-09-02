@@ -21,7 +21,7 @@
 
 ## calico
 * [calico概述](calico/overview.md)
-* [k8s-calico工作流程](calico/k8s_int.md)
+* [calico网络架构](calico/calico.md)
 
 ## flannel
 * [flannel网络架构](flannel/flannel.md)
