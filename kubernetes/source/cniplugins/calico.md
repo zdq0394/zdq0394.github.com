@@ -1,10 +1,24 @@
 # CNI-calico
 ## 概述
-`calico`提供了`calico-ipam`和`calico`两个plugins。`calico-ipam`用来分配IP，`calico`用来配置pod。
+`calico`提供了`calico-ipam`和`calico`两个plugins。
+* `calico-ipam`为workload分配IP。其中IP的信息保存在calico的后端etcd中。
+* `calico`用来配置workload的interface，并构建路由，使得workload和host互通。
 ## calico-ipam
 `calico-ipam`为一个workload分配IP地址。
-
 在calico网络中，每个Node都分配有一个或者多个IPPool，这些信息保存在etcd中。
+可以通过calicoctl命令创建IPPool。
+```json
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: my.ippool-1
+spec:
+  cidr: 10.1.0.0/16
+  ipipMode: CrossSubnet
+  natOutgoing: true
+  disabled: false
+  nodeSelector: all()
+```
 
 calico-ipam就是通过`calico-clitent`获取可用的IP。
 1. 获取当前节点的node name，并确定当前workload的标志符。
@@ -39,7 +53,7 @@ v4pools, err := utils.ResolvePools(ctx, calicoClient, conf.IPAM.IPv4Pools, true)
 calico的网络架构图如下所示：
 ![](calico_bgp.png)
 
-`calico`的作用就是配置图中的路由器之上的部分。
+`calico`的作用就是配置图中的路由器之上的部分包含的设备、IP、MAC和路由以及系统设置（开启IPForward和ARPProxy）。
 ```go
     hostVethName := k8sconversion.VethNameForWorkload(epIDs.Namespace, epIDs.Pod)
     _, contVethMac, err := utils.DoNetworking(args, conf, result, logger, hostVethName, routes)
@@ -192,4 +206,9 @@ Scope: link
         err := netlink.RouteAdd(&route)
 ```
 
-如此,pod和node之间的网络就联通了!
+如此,pod和node之间的网络就联通了。
+
+## 对比Flannel
+* Flannel网络模型下，单个node上的所有pod所有同一个二层网络，有共同的网关。Calico网络模型下，单个node上的各个pod属于自己的一个网络（p2p网络），hostVeth作为网关。
+* Flannel网络模型下，每个主机只需要配置一条通往其它主机subnet的网关的路由即可。Calico网络模型下，理论上需要配置其它node上每个pod的路由，当然可以通过聚合路由进行一定的优化，减少路由表项。
+* 在Ethernet Fabric模式下，Flannel和Calico都不需要特殊配置；但是在IP Fabric模式下，Flannel使用VxLan overlay二层网络；Calico可以通过开启IP Fabric中路由的BGP功能。
