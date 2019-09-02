@@ -41,3 +41,8 @@ BGP具有聚合路由的功能。所以，针对主机外的workload，并不是
 ```sh
 192.168.19.0/26 via 10.130.62.14 dev bond1 proto bird 
 ```
+
+## 对比Flannel
+* Flannel网络模型下，单个node上的所有pod所有同一个二层网络，有共同的网关。Calico网络模型下，单个node上的各个pod属于自己的一个网络（p2p网络），hostVeth作为网关。
+* Flannel网络模型下，每个主机只需要配置一条通往其它主机subnet的网关的路由即可。Calico网络模型下，理论上需要配置其它node上每个pod的路由，当然可以通过聚合路由进行一定的优化，减少路由表项。
+* 在Ethernet Fabric模式下，Flannel和Calico都不需要特殊配置；但是在IP Fabric模式下，Flannel使用VxLan overlay二层网络；Calico可以通过开启IP Fabric中路由的BGP功能。
