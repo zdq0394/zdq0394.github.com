@@ -209,13 +209,14 @@ ip netns exec net100 ip link set up dev eth0
 
 ip netns exec net100 ip route add default via 192.169.1.1 dev eth0
 
-ip route add 192.169.1.0/24 dev br100
 ip route add 192.169.2.0/24 via 192.169.2.0 dev vxlan100
 ip route add 192.169.3.0/24 via 192.169.3.0 dev vxlan100
 
 iptables -t filter -A FORWARD -s 192.169.0.0/16 -j ACCEPT
 iptables -t filter -A FORWARD -d 192.169.0.0/16 -j ACCEPT
 ```
+
+其中路由条目`192.169.1.0/24 dev br100 proto kernel scope link src 192.169.1.1`会在br100 up时自动增加。
 
 在host2执行如下命令：
 ```sh
@@ -244,13 +245,14 @@ ip netns exec net100 ip link set up dev eth0
 
 ip netns exec net100 ip route add default via 192.169.2.1 dev eth0
 
-ip route add 192.169.2.0/24 dev br100
 ip route add 192.169.1.0/24 via 192.169.1.0 dev vxlan100
 ip route add 192.169.3.0/24 via 192.169.3.0 dev vxlan100
 
 iptables -t filter -A FORWARD -s 192.169.0.0/16 -j ACCEPT
 iptables -t filter -A FORWARD -d 192.169.0.0/16 -j ACCEPT
 ```
+
+其中路由条目`192.169.2.0/24 dev br100 proto kernel scope link src 192.169.2.1`会在br100 up时自动增加。
 
 在host3执行如下命令：
 ```sh
@@ -279,13 +281,14 @@ ip netns exec net100 ip link set up dev eth0
 
 ip netns exec net100 ip route add default via 192.169.3.1 dev eth0
 
-ip route add 192.169.3.0/24 dev br100
 ip route add 192.169.1.0/24 via 192.169.1.0 dev vxlan100
 ip route add 192.169.2.0/24 via 192.169.2.0 dev vxlan100
 
 iptables -t filter -A FORWARD -s 192.169.0.0/16 -j ACCEPT
 iptables -t filter -A FORWARD -d 192.169.0.0/16 -j ACCEPT
 ```
+
+其中路由条目`192.169.3.0/24 dev br100 proto kernel scope link src 192.169.3.1`会在br100 up时自动增加。
 
 验证网络联通性
 ```sh
