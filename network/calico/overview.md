@@ -56,3 +56,4 @@ In a Calico network, each compute server acts as a **router** for all of the end
 
 ## 参考信息
 * https://www.kubernetes.org.cn/4960.html
+* https://www.lijiaocn.com/%E9%A1%B9%E7%9B%AE/2017/04/11/calico-usage.html
