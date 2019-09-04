@@ -6,18 +6,18 @@
 * [网络工具](nettools/README.md)
 
 ## bridge
-* [bridge简单实践](base/bridge.md)
-* [bridge之间通过路由联通](base/bridge_route.md)
+* [bridge简单实践](core/bridge.md)
+* [bridge之间通过路由联通](core/bridge_route.md)
 
 ## vlan
-* [vlan简单实践](base/vlan.md)
+* [vlan简单实践](core/vlan.md)
 
 ## vxlan
-* [vxlan简单实践](base/vxlan.md)
+* [vxlan简单实践](core/vxlan.md)
 
 ## macvlan
-* [macvlan简单实践](base/macvlan.md)
-* [macvlan与vlan实现多租户网络](base/macvlan_vlan.md)
+* [macvlan简单实践](core/macvlan.md)
+* [macvlan与vlan实现多租户网络](core/macvlan_vlan.md)
 
 ## calico
 * [calico概述](calico/overview.md)
