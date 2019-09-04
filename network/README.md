@@ -5,19 +5,14 @@
 * [HTTP](http/README.md)
 * [网络工具](nettools/README.md)
 
-## bridge
+## Linux虚拟设备
 * [bridge简单实践](core/bridge.md)
 * [bridge之间通过路由联通](core/bridge_route.md)
-
-## vlan
 * [vlan简单实践](core/vlan.md)
-
-## vxlan
 * [vxlan简单实践](core/vxlan.md)
-
-## macvlan
 * [macvlan简单实践](core/macvlan.md)
 * [macvlan与vlan实现多租户网络](core/macvlan_vlan.md)
+* [ipvlan简单实践](core/ipvlan.md)
 
 ## calico
 * [calico概述](calico/overview.md)

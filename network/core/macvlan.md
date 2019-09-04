@@ -8,6 +8,8 @@
 
 `macvlan子接口具有独立的mac地址`。这一点是macvlan和ipvlan/vlan等技术创建出来的子网卡的最大区别。
 
+父接口要开启`混杂`模式。
+
 ## 四种模式
 * private mode：过滤掉所有来自其它macvlan接口的报文，因此不同的macvlan接口之间无法相互通信。
 * vepa mode：virtual ethernet port aggragator，需要父接口连接的交换机支持vepa/802.1Qbg特性。所有子接口发送出去的报文都会通过父接口然后到达交换机，然后由交换机进行转发，哪怕目的地址是同一个父接口的macvlan子接口，即hairpin mode。这个模式下，所有macvlan子接口之间的通信流量也会经过交换机，适合于交换机进行过滤和统计的功能。
