@@ -10,9 +10,9 @@
 * [bridge之间通过路由联通](core/bridge_route.md)
 * [vlan简单实践](core/vlan.md)
 * [vxlan简单实践](core/vxlan.md)
-* [macvlan简单实践](core/macvlan.md)
+* [macvlan网络实践](core/macvlan.md)
 * [macvlan与vlan实现多租户网络](core/macvlan_vlan.md)
-* [ipvlan简单实践](core/ipvlan.md)
+* [ipvlan网络实践](core/ipvlan.md)
 
 ## calico
 * [calico概述](calico/overview.md)
