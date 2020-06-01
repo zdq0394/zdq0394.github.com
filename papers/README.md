@@ -8,4 +8,4 @@
 
 ## Borg/Kubernetes
 1. [Large-scale cluster management at Google with Borg](borg.pdf)
-2. [Borg:theNextGeneration](borg_ng.pdf) 
+2. [Borg:the Next Generation](borg_ng.pdf) 
