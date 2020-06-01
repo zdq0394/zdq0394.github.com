@@ -5,6 +5,7 @@
 * [网络](network/README.md)
 * [HTTP](network/http/README.md)
 * [分布式计算](distributed/README.md)
+* [经典论文](papers/README.md)
 
 ## 云计算
 * [容器技术基础](containers/core/README.md)

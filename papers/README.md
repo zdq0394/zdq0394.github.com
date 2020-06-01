@@ -1,4 +1,4 @@
-# 论文汇总
+# 经典论文
 ## 分布式共识
 1. [The Part-Time Parliament](the_part_time_parliament.pdf)
 2. [Paxos Made Simple](paxos_made_simple.pdf)
