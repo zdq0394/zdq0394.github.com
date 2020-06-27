@@ -52,7 +52,7 @@ NVIDIA Telsa GPU的驱动在安装过程中需要编译kernel module，需要安
 ```sh
 #> yum -y install dkms
 ```
-2. Q2. 先安装NVIDIA Driver再安装CUDA后，再次使用nvidia-smi报错，报错信息为`Failed to initialize NVML: Driver/library version mismatch`
+2. 先安装NVIDIA Driver再安装CUDA后，再次使用nvidia-smi报错，报错信息为`Failed to initialize NVML: Driver/library version mismatch`
 
 先排查 NVIDIA Driver 对应的 CUDA 版本是否对应，可以在驱动下载官网查看自己下载的驱动版本。
 排除驱动版本不对的问题后，重启机器即可。
