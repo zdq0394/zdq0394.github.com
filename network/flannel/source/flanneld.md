@@ -2,7 +2,7 @@
 ## Flanneld概述
 Flanneld进程以daemon运行在每个node节点上，负责该节点的网络（一个子网Subnet）通过节点上的网卡（External Interface）与其它节点node上的网络联通。
 
-Node节点上的子网与其它节点的子网的联通方式有一下几种，每种称为一个Backend。
+Node节点上的子网与其它节点的子网的联通方式有以下几种，每种称为一个Backend。
 * HostGW：Node节点处于一个二层网络，直接在二层联通。
 * VxLan：Node节点处于一个三层网络，二层不直接相通，那么通过VxLan技术在三层网络上面Overlay一个二层网络，使得各个Host在二层相通。
 
