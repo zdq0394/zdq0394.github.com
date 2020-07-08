@@ -3,12 +3,10 @@ Linux Namespace提供了一种对系统资源进行**隔离**的方法；Linux C
 Linux CGroup不但可以**限制**系统资源，还可以对系统资源进行**计量**、**优先级**和**控制**。
 ## Cgroup子系统
 针对不同的资源，Cgroup提供了不同的子系统：
-可以通过命令
+可以通过命令`/proc/cgroups`查看系统支持的cgroup子系统。
 ```sh
 cat /proc/cgroups 
-```
-来查看。
-```sh
+
 #subsys_name	hierarchy	num_cgroups	enabled
 cpuset	11	38	1
 cpu	2	160	1
@@ -25,7 +23,7 @@ pids	8	160	1
 rdma	6	1	1
 ```
 
-在Centos系统中，cgroup文件系统默认mount到/sys/fs/cgroup。
+在Centos系统中，cgroup文件系统默认mount到`/sys/fs/cgroup`。
 ```sh
 ll /sys/fs/cgroup/
 total 0
@@ -49,7 +47,7 @@ dr-xr-xr-x 4 root root  0 Jul 11 13:44 systemd
 
 其中，各个子系统是相对独立，分别控制不同种类的资源。
 
-如下示例中，cpu和memory控制组分别从CPU和memory两个方面对容器**pod87c850db-76cc-11e9-b277-5254000aaae3/41675c9ebd96e64d40f67b85c4d80cbc8006d3de6f5d3b91f3c8785c5a3de9bd**进行资源限制。
+如下示例中，cpu和memory控制组分别从CPU和memory两个方面对容器`pod87c850db-76cc-11e9-b277-5254000aaae3/41675c9ebd96e64d40f67b85c4d80cbc8006d3de6f5d3b91f3c8785c5a3de9bd`进行资源限制。
 ```sh
 # ll /sys/fs/cgroup/cpu/kubepods/besteffort/pod87c850db-76cc-11e9-b277-5254000aaae3/41675c9ebd96e64d40f67b85c4d80cbc8006d3de6f5d3b91f3c8785c5a3de9bd
 total 0

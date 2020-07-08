@@ -8,9 +8,7 @@
 * [经典论文](papers/README.md)
 
 ## 云计算
-* [容器技术基础](containers/core/README.md)
-* [Open Container Initiative](containers/oci/README.md)
-* [Docker](containers/docker/README.md)
+* [容器技术](containers/README.md)
 * [Kubernetes](kubernetes/README.md)
 * [网络](network/README.md)
 * [Ceph](store/ceph/README.md)
