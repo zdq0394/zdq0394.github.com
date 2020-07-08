@@ -199,14 +199,6 @@ echo "8439" > mytest/tasks
 print line
 print line
 print line
-print line
-print line
-print line
-print line
-./mytest.sh: line 5: /dev/tty: Operation not permitted
-./mytest.sh: line 5: /dev/tty: Operation not permitted
-./mytest.sh: line 5: /dev/tty: Operation not permitted
-./mytest.sh: line 5: /dev/tty: Operation not permitted
 ./mytest.sh: line 5: /dev/tty: Operation not permitted
 ./mytest.sh: line 5: /dev/tty: Operation not permitted
 ```
