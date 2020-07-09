@@ -5,8 +5,7 @@ Linux CGroup不但可以**限制**系统资源，还可以对系统资源进行*
 针对不同的资源，Cgroup提供了不同的子系统：
 可以通过命令`/proc/cgroups`查看系统支持的cgroup子系统。
 ```sh
-cat /proc/cgroups 
-
+cat /proc/cgroups
 #subsys_name	hierarchy	num_cgroups	enabled
 cpuset	11	38	1
 cpu	2	160	1
