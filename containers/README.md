@@ -1,9 +1,9 @@
 # 容器技术
 
 ## 基础
-* [namespace](core\namespace.md)
-* [cgroup](core\cgroup.md)
-* [unionfs-overlayfs](core\overlayfs.md)
+* [namespace](core/namespace.md)
+* [cgroup](core/cgroup.md)
+* [unionfs-overlayfs](core/overlayfs.md)
 
 ## Open Container Initiative
 
@@ -13,19 +13,19 @@
 * [Distribution-Spec](https://github.com/opencontainers/distribution-spec/blob/master/spec.md)
 
 ### 运行时
-* [Runtime规范](oci\runtime_spec.md)
-* [Filesystem Bundle](oci\filesystem_bundle.md)
-* [Runc](oci\runc.md)
+* [Runtime规范](oci/runtime_spec.md)
+* [Filesystem Bundle](oci/filesystem_bundle.md)
+* [Runc](oci/runc.md)
 
 ### 镜像
-* [Image规范](oci\image_spec.md)
+* [Image规范](oci/image_spec.md)
 
 ### 分发
-* [分发规范](oci\distribution_spec.md)
+* [分发规范](oci/distribution_spec.md)
 
 ### OCI
-* [Containerd](oci\containerd.md)
-* [FAQ](oci\faq.md)
+* [Containerd](oci/containerd.md)
+* [FAQ](oci/faq.md)
 
 ## Docker
 
