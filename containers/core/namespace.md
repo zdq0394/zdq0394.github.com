@@ -15,7 +15,9 @@ Linux Namespace提供了一种内核级别**隔离系统资源**的方法，通�
 
 下面简单的介绍一下这些Namespace的使用和功能。
 ## Namespace的使用
-涉及到Namespace的操作接口包括**clone()、setns()、unshare()**以及还有`/proc`下的部分文件。为了使用特定的Namespace，在使用这些接口的时候需要指定以下一个或多个参数：
+涉及到Namespace的操作接口包括`clone()`、`setns()`、`unshare()`以及还有`/proc`下的部分文件。
+
+为了使用特定的Namespace，在使用这些接口的时候需要指定以下一个或多个参数：
 
 * CLONE_NEWNS: 用于指定Mount Namespace。
 * CLONE_NEWUTS: 用于指定UTS Namespace。
@@ -24,20 +26,7 @@ Linux Namespace提供了一种内核级别**隔离系统资源**的方法，通�
 * CLONE_NEWNET: 用于指定Net Namespace。
 * CLONE_NEWUSER: 用于指定User Namespace。
 
-### clone系统调用
-可以通过clone系统调用来创建一个独立Namespace的进程，它的函数描述如下：
-
-```c
-int clone(int (*child_func)(void *), void *child_stack, int flags, void *arg);  
-```
-它通过flags参数来控制创建进程时的特性，比如新创建的进程是否与父进程共享虚拟内存等。比如可以传入CLONE_NEWNS标志使得新创建的进程拥有独立的Mount Namespace，也可以传入多个flags使得新创建的进程拥有多种特性，比如：
-
-```c
-flags = CLONE_NEWNS | CLONE_NEWUTS | CLONE_NEWIPC;  
-```
-传入这个flags，新创建的进程将同时拥有独立的Mount Namespace、UTS Namespace和IPC Namespace。
-
-### 通过/proc文件查看Namespace
+通过/proc文件查看Namespace
 
 从3.8内核开始，用户可以在`/proc/$pid/ns`下看到本进程所属的Namespace的文件信息。
 
@@ -54,50 +43,30 @@ lrwxrwxrwx 1 root root 0 Sep 29 15:19 pid -> pid:[4026531836]
 lrwxrwxrwx 1 root root 0 Sep 29 15:19 user -> user:[4026531837]
 lrwxrwxrwx 1 root root 0 Sep 29 15:19 uts -> uts:[4026531838]
 ```
-其中4026531839表明是Namespace的ID，`如果两个进程的NamespaceID相同表明两个进程同处于一个命名空间中`。
+其中4026531839表明是Namespace的ID，`如果两个进程的NamespaceID相同，表明两个进程同处于一个命名空间中`。
 
-**这里需要注意的是**：只要/proc/$pid/ns/对应的Namespace文件被打开，并且该文件描述符存在，即使该PID对应的进程被销毁，这个Namespace会依然存在。可以通过挂载的方式打开文件描述符：
+`这里需要注意的是`：只要/proc/$pid/ns/对应的Namespace文件被打开，并且该文件描述符存在，即使该PID对应的进程被销毁，这个Namespace会依然存在。
 
+可以通过挂载的方式打开文件描述符：
 ``` c
 touch ~/mnt  
 mount --bind /proc/28634/ns/mnt ~/mnt 
 ``` 
 这样就可以保留住PID为28634的进程的Mount Namespace了，即使28634进程被销毁或者退出，ID为4026531840的Mount Namespace依然会存在。
 
-
-### setns用来加入已存在的Namepspace
 setns()函数可以把进程加入到指定的Namespace中，它的函数描述如下：
 
-``` c
-int setns(int fd, int nstype);  
-```
-它的参数描述如下：
+unshare创建新的Namespace
 
-* fd参数：表示文件描述符，前面提到可以通过打开/proc/$pid/ns/$namespace的方式将指定的Namespace保留下来，也就是说可以通过文件描述符的方式来索引到某个Namespace。
-* nstype参数：用来检查fd关联Namespace是否与nstype表明的Namespace一致，如果填0的话表示不进行该项检查。
-
-### unshare创建新的Namespace
 unshare()系统调用用于将当前进程和所在的Namespace分离，并加入到一个新的Namespace中，相对于setns()系统调用来说，unshare()不用关联之前存在的Namespace，只需要指定需要分离的Namespace就行，该系统调用会自动创建一个新的Namespace。
-
-unshare()的函数描述如下：
-
-```c
-int unshare(int flags);  
-```
-其中flags用于指明要分离的资源类别，它支持的flags与clone系统调用支持的flags类似，这里简要的叙述一下几种标志：
-
-* CLONE_FILES: 子进程一般会共享父进程的文件描述符，如果子进程不想共享父进程的文件描述符了，可以通过这个flag来取消共享。
-* CLONE_FS: 使当前进程不再与其他进程共享文件系统信息。
-* CLONE_SYSVSEM: 取消与其他进程共享SYS V信号量。
-* CLONE_NEWIPC: 创建新的IPC Namespace，并将该进程加入进来。
 
 与其它的namespace不同，unshare()和setns()系统调用对**PID namespace**时：
 * 调用进程会为它的子进程分配一个新的PID Namespace，但是调用进程本身不会被移到新的Namespace中。
 * 调用进程第一个创建的子进程在新Namespace中的PID为1，并成为新Namespace中的init进程。
 
-setns()系统调用也是类似的，调用者进程并不会进入新的PID Namespace，而是随后创建的子进程会进入。
+为什么创建其他的Namespace时，unshare()和setns()会直接进入新的Namespace，而唯独PID Namespace不是如此呢？
 
-为什么创建其他的Namespace时unshare()和setns()会直接进入新的Namespace，而唯独PID Namespace不是如此呢？因为调用getpid()函数得到的PID是根据调用者所在的PID Namespace而决定返回哪个PID，进入新的PID namespace会导致PID产生变化。而对用户态的程序和库函数来说，他们都认为进程的PID是一个常量，PID的变化会引起这些进程奔溃。换句话说，一旦进程创建以后，那么它的PID namespace的关系就确定下来了，进程不会变更他们对应的PID namespace。
+因为调用getpid()函数得到的PID是根据调用者所在的PID Namespace而决定返回哪个PID，进入新的PID namespace会导致PID产生变化。而对用户态的程序和库函数来说，他们都认为进程的PID是一个常量，PID的变化会引起这些进程奔溃。换句话说，一旦进程创建以后，那么它的PID namespace的关系就确定下来了，进程不会变更他们对应的PID namespace。
 
 ### 小结
 通过上面简单的概述，对于Namespace的操作有以下方式：
@@ -106,6 +75,7 @@ setns()系统调用也是类似的，调用者进程并不会进入新的PID Nam
 2. 通过setns()将进程加入到已有的Namespace中。
 3. 通过unshare()为已存在的进程创建一个或多个新的Namespace。
 4. 可以通过`/proc/$PID/ns`来查看进程所属的Namespace。
+
 ## Mount Namespace
 `Mount Namespace`用来隔离文件系统的挂载点，不同`Mount Namespace`的进程拥有不同的挂载点，同时也拥有了不同的文件系统视图。
 `Mount Namespace`是历史上第一个支持的Namespace，它通过CLONE_NEWNS来标识的。
