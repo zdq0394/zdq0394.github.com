@@ -3,6 +3,9 @@
 大文件下载[参考](https://stackoverflow.com/questions/11692860/how-can-i-efficiently-download-a-large-file-using-go)
 ## 性能测试
 [测试代码](https://github.com/zdq0394/try-in-go/tree/master/bigfiledown)
+
+本测试在windows机器测试(8核16G)，server端使用go fileserver，运行在本地。
+
 ### 文件1G
 | 方法 | 总时间 | 平均时间 |
 | -----| ----- | ------ |
