@@ -8,9 +8,9 @@ Calico每个Node节点作为一个vRouter，并且运行BGP协议（通过Bird�
 ![](pics/calico_bgp.png)
 
 ### 节点和workload之间的链路
-每个workload关联一个veth pair。 workload的一端（wlVeth）深入到workload的namespace之内；另一端留在host上，称为hostVeth。
+每个workload关联一个veth pair。 workload的一端（wlVeth）插入到workload的namespace之内；另一端留在host上，称为hostVeth。
 
-其中wlVeth配置IP/MAC地址，而hostVeth不配置IP，配置MAC(ee:ee:ee:ee:ee:ee)。
+其中wlVeth配置IP/MAC地址，而hostVeth不配置IP，但是配置MAC(ee:ee:ee:ee:ee:ee)。
 
 在workload的namespace中配置路由表：
 ```sh
@@ -19,14 +19,18 @@ default via 169.254.1.1 dev eth0
 169.254.1.1 dev eth0 scope link 
 ```
 
-这样workload出去的流量都会转发到169.254.1.1这个`网关地址`。而这个网关地址并没有配置到hostVeth一端。而是在hostVeth一段配置ARPProxy。当workload发出针对169.254.1.1的ARP请求时，hostVeth以自己的mac地址响应该请求。
+这样workload出去的流量都会转发到169.254.1.1这个`网关地址`。
+
+而这个网关地址并没有配置到hostVeth一端。而是在hostVeth一端配置`ARPProxy`。
+
+当workload发出针对169.254.1.1的ARP请求时，hostVeth以自己的mac地址响应该请求。
 
 ```sh
 # ip neigh
 169.254.1.1 dev eth0 lladdr ee:ee:ee:ee:ee:ee DELAY
 ```
 
-没当一个workload在主机上创建后，在主机的路由表里面，会增加一条针对该workload的路由，该路由直接指向workload对应的hostVeth。
+每当一个workload在主机上创建后，在主机的路由表里面，会增加一条针对该workload的路由，该路由直接指向workload对应的hostVeth。
 ```sh
 192.168.186.66 dev calie56186e54c0 scope link 
 ```
@@ -35,6 +39,7 @@ default via 169.254.1.1 dev eth0
 同时bird通过BGP协议，把该路由信息通告给其它节点，从而同其他节点(vRouter)也就有了到达该workload的路由信息。
 ### 节点和节点之间的链路
 通常来说，每个节点都是一个vRouter，并且拥有全部workload的路由，并且vRouter通过BGP协议把路由通告到所有节点及节点之间的路由器上（这就要求节点之间的路由器支持BGP协议）。
+
 这些由Bird来维护。
 
 当然通过网络聚合功能，可以减少路由条目。
