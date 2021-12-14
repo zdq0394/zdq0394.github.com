@@ -1,4 +1,4 @@
-# 磁盘容量限制
+# 容器磁盘容量限制
 ## 系统要求
 `overlay2.size`: Sets the default max size of the container.
 
