@@ -28,6 +28,12 @@ docker的overlay2需要的是pquota，在/etc/fstab中设置：
 
 `/dev/vdb /data xfs rw,relatime,attr2,inode64,prjquota 0 0`
 
+Report Quota State Information,执行命令查看
+
+```sh
+xfs_quota -x -c state
+```
+
 ## 配置docker daemon
 /etc/docker/daemon.json配置文件如下，这里将每个容器可以使用的磁盘空间设置为1G:
 ```json
@@ -56,6 +62,23 @@ docker的overlay2需要的是pquota，在/etc/fstab中设置：
 dd: writing '/b': No space left on device
 2+0 records in
 0+1 records out
+```
+
+## 另外一个
+```sh
+mkfs.xfs -f /dev/sdb
+
+mkdir /data/ -p
+
+mount -o uquota,prjquota /dev/sdb /data/
+
+mkdir -p /data/docker/
+
+cd /var/lib/
+
+mv docker docker.bak
+
+ln -s /data/docker/  .
 ```
 
 
