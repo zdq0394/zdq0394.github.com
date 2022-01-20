@@ -13,12 +13,6 @@
 * [网络](network/README.md)
 * [Ceph](store/ceph/README.md)
 
-## 服务治理
-* [可观察性](observability/README.md)
-* [链路跟踪](observability/opentracing/README.md)
-* [日志分析](observability/elk/README.md)
-* [监控告警](observability/monitoring/README.md)
-
 ## 分布式系统
 * [etcd](middleware/etcd/README.md)
 * [zookeeper](middleware/zookeeper/README.md)
