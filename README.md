@@ -23,8 +23,5 @@
 * [rabbitmq](middleware/rabbitmq/README.md)
 * [kafka](middleware/kafka/README.md)
 
-## 运维
-* [devops](devops/README.md)
-
 ## 编程语言
 * [golang](programming/go/README.md)
