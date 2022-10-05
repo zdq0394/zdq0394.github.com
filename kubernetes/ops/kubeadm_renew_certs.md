@@ -1,4 +1,4 @@
-# 证书续期
+# Kubeadm证书续期
 ## 查看kubernetes中所有证书的过期时间
 * kubeadm alpha certs check-expiration
 
