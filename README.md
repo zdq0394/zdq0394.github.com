@@ -10,6 +10,7 @@
 ## 云计算
 * [容器技术](containers/README.md)
 * [Kubernetes](kubernetes/README.md)
+* [Harbor](harbor/README.md)
 * [网络](network/README.md)
 * [Ceph](store/ceph/README.md)
 
